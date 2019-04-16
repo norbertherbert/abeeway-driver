@@ -9,6 +9,10 @@
   },
   "author": "Norbert Herbert",
   "license": "ISC",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/norbertherbert/abeeway-driver.git"
+  },
   "devDependencies": {
     "ts-node": "^8.0.3",
     "typescript": "^3.4.2"
