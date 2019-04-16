@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/abeeway-driver.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\"",
+    "test": "echo \"No test specified\"",
     "build": "tsc",
     "preversion": "npm test",
     "version": "npm run build && git add -A .",
