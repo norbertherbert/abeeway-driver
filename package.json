@@ -5,7 +5,10 @@
   "main": "dist/abeeway-driver.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
+    "build": "tsc",
+    "preversion": "npm test",
+    "version": "npm run build && git add -A .",
+    "postversion": "git push && git push --tags && rm -rf build/temp"
   },
   "author": "Norbert Herbert",
   "license": "ISC",
