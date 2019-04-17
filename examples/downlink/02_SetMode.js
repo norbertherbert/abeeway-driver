@@ -1,9 +1,9 @@
 const AD = require('../../dist/abeeway-driver');
 
-let b;
-let setMode;
+let b, msg;
 
-setMode = new AD.DlMsg_SetMode ({
+// Create a new "Set Operating Mode" message object from its components
+msg = new AD.DlMsg_SetMode ({
     header: new AD.DlHeaderShort({
         type:     AD.E_DlMsgType.SET_MODE,
         ackToken: 0x5,
@@ -11,11 +11,16 @@ setMode = new AD.DlMsg_SetMode ({
     }),
     mode:         AD.E_OperatingMode.MOTION_TRACKING, 
 });
-console.log(setMode.toJSON());
 
-b = setMode.toBuffer();
+// Convert the message object to a JSON string
+console.log(msg.toJSON());
+
+// Convert the message object to a Buffer
+b = msg.toBuffer();
 console.log(b.toString('hex'));
 
-setMode = new AD.DlMsg_SetMode(b);
-console.log(setMode.toJSON());
+// Create a new message object from a Buffer
+msg = new AD.DlMsg_SetMode(b);
 
+// Convert the message object to a JSON string again
+console.log(msg.toJSON());

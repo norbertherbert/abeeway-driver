@@ -1,9 +1,9 @@
 const AD = require('../../dist/abeeway-driver');
 
-let b;
-let posOnDem;
+let b, msg;
 
-posOnDem = new AD.DlMsg_PosOnDem ({
+// Create a new "Position On Demand" message object from its components
+msg = new AD.DlMsg_PosOnDem ({
     header: new AD.DlHeaderShort({
         type:     AD.E_DlMsgType.POSITION_ON_DEMAND,
         ackToken: 0x5,
@@ -11,11 +11,15 @@ posOnDem = new AD.DlMsg_PosOnDem ({
     }),
 });
 
-console.log(posOnDem.toJSON());
+// Convert the message object to a JSON string
+console.log(msg.toJSON());
 
-b = posOnDem.toBuffer();
+// Convert the message object to a Buffer
+b = msg.toBuffer();
 console.log(b.toString('hex'));
 
-posOnDem = new AD.DlMsg_PosOnDem(b);
-console.log(posOnDem.toJSON());
-console.log();
+// Create a new message object from a Buffer
+msg = new AD.DlMsg_PosOnDem(b);
+
+// Convert the message object to a JSON string again
+console.log(msg.toJSON());

@@ -1,15 +1,18 @@
 const AD = require('../../dist/abeeway-driver');
 
-let b;
-let setParam;
+let b, msg;
 
-setParam = new AD.DlMsg_SetParam({
+// Create a new "Set Parameter Value" message object from its components
+// Example #1/4 for the following parameters:
+//     UL_PERIOD, LORA_PERIOD, PW_STAT_PERIOD, PERIODIC_POS_PERIOD, GEOLOC_SENSOR
+msg = new AD.DlMsg_SetParam({
     header: new AD.DlHeaderShort({
         type: AD.E_DlMsgType.SET_PARAM,
         ackToken: 0x5,
         optData: 0x0,
     }),
     params: [
+        // Up to 5 parameters can be listed here
         new AD.Parameter({
             id: AD.E_ParameterId.UL_PERIOD,
             value: 60,
@@ -32,26 +35,34 @@ setParam = new AD.DlMsg_SetParam({
         }),
     ]
 });
-console.log(setParam.toJSON());
 
-b = setParam.toBuffer();
+// Convert the message object to a JSON string
+console.log(msg.toJSON());
+
+// Convert the message object to a Buffer
+b = msg.toBuffer();
 console.log(b.toString('hex'));
 
-setParam = new AD.DlMsg_SetParam(b);
-console.log(setParam.toJSON());
+// Create a new message object from a Buffer
+msg = new AD.DlMsg_SetParam(b);
 
-console.log();
+// Convert the message object to a JSON string again
+console.log(msg.toJSON());
 
 
 
 
-setParam = new AD.DlMsg_SetParam({
+// Create a new "Set Parameter Value" message object from its components
+// Example #2/4 for the following parameters:
+//     GEOLOC_METHOD, MOTION_NB_POS, GPS_TIMEOUT, AGPS_TIMEOUT, GPS_EHPE
+msg = new AD.DlMsg_SetParam({
     header: new AD.DlHeaderShort({
         type: AD.E_DlMsgType.SET_PARAM,
         ackToken: 0x5,
         optData: 0x0,
     }),
     params: [
+        // Up to 5 parameters can be listed here
         new AD.Parameter({
             id: AD.E_ParameterId.GEOLOC_METHOD,
             value: AD.E_Param_GeolocMethod.WiFiGPS,
@@ -74,27 +85,34 @@ setParam = new AD.DlMsg_SetParam({
         }),
     ]
 });
-console.log(setParam.toJSON());
 
-b = setParam.toBuffer();
+// Convert the message object to a JSON string
+console.log(msg.toJSON());
+
+// Convert the message object to a Buffer
+b = msg.toBuffer();
 console.log(b.toString('hex'));
 
-setParam = new AD.DlMsg_SetParam(b);
-console.log(setParam.toJSON());
+// Create a new message object from a Buffer
+msg = new AD.DlMsg_SetParam(b);
 
-console.log();
+// Convert the message object to a JSON string again
+console.log(msg.toJSON());
 
 
 
 
-setParam = new AD.DlMsg_SetParam({
+// Create a new "Set Parameter Value" message object from its components
+// Example #3/4 for the following parameters:
+//     GPS_CONVERGENCE, CONFIG_FLAGS, TRANSMIT_STRAT, BLE_BEACON_COUNT, BLE_BEACON_TIMEOUT
+msg = new AD.DlMsg_SetParam({
     header: new AD.DlHeaderShort({
         type: AD.E_DlMsgType.SET_PARAM,
         ackToken: 0x5,
         optData: 0x0,
     }),
     params: [
-
+        // Up to 5 parameters can be listed here
         new AD.Parameter({
             id: AD.E_ParameterId.GPS_CONVERGENCE,
             value: 60,
@@ -124,26 +142,34 @@ setParam = new AD.DlMsg_SetParam({
         }),
     ]
 });
-console.log(setParam.toJSON());
 
-b = setParam.toBuffer();
+// Convert the message object to a JSON string
+console.log(msg.toJSON());
+
+// Convert the message object to a Buffer
+b = msg.toBuffer();
 console.log(b.toString('hex'));
 
-setParam = new AD.DlMsg_SetParam(b);
-console.log(setParam.toJSON());
+// Create a new message object from a Buffer
+msg = new AD.DlMsg_SetParam(b);
 
-console.log();
+// Convert the message object to a JSON string again
+console.log(msg.toJSON());
 
 
 
 
-setParam = new AD.DlMsg_SetParam({
+// Create a new "Set Parameter Value" message object from its components
+// Example #4/4 for the following parameters:
+//     GPS_STANDBY_TIMEOUT, CONFIRMED_UL_BITMAP, CONFIRMED_UL_RETRY
+msg = new AD.DlMsg_SetParam({
     header: new AD.DlHeaderShort({
         type: AD.E_DlMsgType.SET_PARAM,
         ackToken: 0x5,
         optData: 0x0,
     }),
     params: [
+        // Up to 5 parameters can be listed here
         new AD.Parameter({
             id: AD.E_ParameterId.GPS_STANDBY_TIMEOUT,
             value: 10,
@@ -158,11 +184,16 @@ setParam = new AD.DlMsg_SetParam({
         }),
     ]
 });
-console.log(setParam.toJSON());
 
-b = setParam.toBuffer();
+// Convert the message object to a JSON string
+console.log(msg.toJSON());
+
+// Convert the message object to a Buffer
+b = msg.toBuffer();
 console.log(b.toString('hex'));
 
-setParam = new AD.DlMsg_SetParam(b);
-console.log(setParam.toJSON());
+// Create a new message object from a Buffer
+msg = new AD.DlMsg_SetParam(b);
 
+// Convert the message object to a JSON string again
+console.log(msg.toJSON());

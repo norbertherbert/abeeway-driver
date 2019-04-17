@@ -1,9 +1,9 @@
 const AD = require('../../dist/abeeway-driver');
 
-let b;
-let debugCmd;
+let b, msg;
 
-debugCmd = new AD.DlMsg_DebugCmd ({
+// Create a new "Set Debug Command" message object from its components
+msg = new AD.DlMsg_DebugCmd ({
     header: new AD.DlHeaderShort({
         type:     AD.E_DlMsgType.DEBUG_COMMAND,
         ackToken: 0x5,
@@ -11,10 +11,16 @@ debugCmd = new AD.DlMsg_DebugCmd ({
     }),
     debugCmd:     AD.E_DebugCmd.RESET_DEVICE
 });
-console.log(debugCmd.toJSON());
 
-b = debugCmd.toBuffer();
+// Convert the message object to a JSON string
+console.log(msg.toJSON());
+
+// Convert the message object to a Buffer
+b = msg.toBuffer();
 console.log(b.toString('hex'));
 
-debugCmd = new AD.DlMsg_DebugCmd(b);
-console.log(debugCmd.toJSON());
+// Create a new message object from a Buffer
+msg = new AD.DlMsg_DebugCmd(b);
+
+// Convert the message object to a JSON string again
+console.log(msg.toJSON());
