@@ -800,7 +800,7 @@ export class UlMsg_Debug extends BufferTempl<I_MsgDebug> implements I_MsgDebug {
 
 }
 
-export let decodeUlMsg = (buf: Buffer):string => {
+export let decodeUlMsg = (buf: Buffer):object => {
 
     let msg: any;
     switch(buf[0]) {
@@ -875,9 +875,9 @@ export let decodeUlMsg = (buf: Buffer):string => {
     }
 
     if (msg) {
-        return msg.toJSON();
+        return msg.toComponents();
     } else {
-        return JSON.stringify({ error: "Unknown message type: "+E_UlMsgType[buf[0]] }, null, 4);
+        return { error: "Unknown message type: "+E_UlMsgType[buf[0]] };
     }
 
 }

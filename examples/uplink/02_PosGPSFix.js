@@ -1,4 +1,6 @@
 const AD = require('../../dist/abeeway-driver');
+// Replace the above line with the following line if you use the module from the public npm repository
+// const AD = require('abeeway-driver');
 
 let b;
 let gpsPosFix;

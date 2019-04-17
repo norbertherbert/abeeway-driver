@@ -280,7 +280,7 @@ export class DlMsg_DebugCmd extends BufferTempl<I_DlMsgDebugCmd> implements I_Dl
 }
 
 
-export let decodeDlMsg = (buf: Buffer):string => {
+export let decodeDlMsg = (buf: Buffer):object => {
     let msg: any;
     switch(buf[0]) {
         case E_DlMsgType.POSITION_ON_DEMAND:
@@ -308,9 +308,9 @@ export let decodeDlMsg = (buf: Buffer):string => {
     }
 
     if (msg) {
-        return msg.toJSON();
+        return msg.toComponents();
     } else {
-        return JSON.stringify({ error: "Unknown message type: "+E_UlMsgType[buf[0]] }, null, 4);
+        return { error: "Unknown message type: "+E_UlMsgType[buf[0]] };
     }
 
 }

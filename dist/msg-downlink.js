@@ -297,10 +297,10 @@ exports.decodeDlMsg = function (buf) {
             break;
     }
     if (msg) {
-        return msg.toJSON();
+        return msg.toComponents();
     }
     else {
-        return JSON.stringify({ error: "Unknown message type: " + constants_1.E_UlMsgType[buf[0]] }, null, 4);
+        return { error: "Unknown message type: " + constants_1.E_UlMsgType[buf[0]] };
     }
 };
 //# sourceMappingURL=msg-downlink.js.map
