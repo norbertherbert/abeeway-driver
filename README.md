@@ -1,5 +1,5 @@
 # abeeway-driver
-This is an open driver software for Abeeway Micro Tracker and Industrial Tracker devices. The driver can be used to decode LoRaWAN uplink message payload and to encode device configuration commands so that they can be sent as LoRaWAN downlink payload.
+This is an open driver software for Abeeway Micro Tracker and Industrial Tracker devices (with firmware v1.7). The driver can be used to decode LoRaWAN uplink message payload and to encode device configuration commands so that they can be sent as LoRaWAN downlink payload.
 
 For more details on Abeeway tracker devices please visit the 
 [Abeeway](https://www.abeeway.com/products/) 
