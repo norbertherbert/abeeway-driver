@@ -1,8 +1,14 @@
 {
   "name": "abeeway-driver",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "",
-  "keywords:": ["Actility", "Abeeway", "LoRa", "LoRaWAN", "Tracker"],
+  "keywords:": [
+    "Actility",
+    "Abeeway",
+    "LoRa",
+    "LoRaWAN",
+    "Tracker"
+  ],
   "main": "dist/abeeway-driver.js",
   "scripts": {
     "test": "echo \"No test specified\"",
