@@ -1,27 +1,31 @@
-const AD = require('../../dist/abeeway-driver');
-// Replace the above line with the following line if you use the module from the public npm repository
-// const AD = require('abeeway-driver');
+const {
+    DPDU_SetParam, 
+    CPDU_DlHeaderShort, E_DPDUType, 
+    CPDU_Parameter, E_ParameterId, 
+    E_Param_TransmitStrat, CPDU_ParamConfigFlags
+} = require('../../dist/abeeway-driver');
+// if you use the module from the public npm repository use require('abeeway-driver') instead.
 
 let msg, msg1, buffer;
 
 // Create a new "Set Parameter Value" message object from its components
 // Example #3/4 for the following parameters:
 //     GPS_CONVERGENCE, CONFIG_FLAGS, TRANSMIT_STRAT, BLE_BEACON_COUNT, BLE_BEACON_TIMEOUT
-msg = new AD.DPDU_SetParam({
-    header: new AD.CPDU_DlHeaderShort({
-        type: AD.E_DPDUType.SET_PARAM,
+msg = new DPDU_SetParam({
+    header: new CPDU_DlHeaderShort({
+        type: E_DPDUType.SET_PARAM,
         ackToken: 0x5,
         optData: 0x0,
     }),
     params: [
         // Up to 5 parameters can be listed here
-        new AD.CPDU_Parameter({
-            id: AD.E_ParameterId.GPS_CONVERGENCE,
+        new CPDU_Parameter({
+            id: E_ParameterId.GPS_CONVERGENCE,
             value: 60,
         }),
-        new AD.CPDU_Parameter({
-            id: AD.E_ParameterId.CONFIG_FLAGS,
-            value: new AD.CPDU_ParamConfigFlags({
+        new CPDU_Parameter({
+            id: E_ParameterId.CONFIG_FLAGS,
+            value: new CPDU_ParamConfigFlags({
                  BLEAdvertisingActive:         false,
                  WiFiPayloadCyphered:          true,
                  ConfigReqsAcknoledged:        false,
@@ -30,16 +34,16 @@ msg = new AD.DPDU_SetParam({
                  FramePendingMechanismActive:  true,
             })
         }),
-        new AD.CPDU_Parameter({
-            id: AD.E_ParameterId.TRANSMIT_STRAT,
-            value: AD.E_Param_TransmitStrat.DUAL_FIXED,
+        new CPDU_Parameter({
+            id: E_ParameterId.TRANSMIT_STRAT,
+            value: E_Param_TransmitStrat.DUAL_FIXED,
         }),
-        new AD.CPDU_Parameter({
-            id: AD.E_ParameterId.BLE_BEACON_COUNT,
+        new CPDU_Parameter({
+            id: E_ParameterId.BLE_BEACON_COUNT,
             value: 1,
         }),
-        new AD.CPDU_Parameter({
-            id: AD.E_ParameterId.BLE_BEACON_TIMEOUT,
+        new CPDU_Parameter({
+            id: E_ParameterId.BLE_BEACON_TIMEOUT,
             value: 1,
         }),
     ]
@@ -55,7 +59,7 @@ console.log(msg.toHexString());
 buffer = msg.toBuffer();
 
 // Create a new message object from a Buffer
-msg1 = new AD.DPDU_SetParam(buffer);
+msg1 = new DPDU_SetParam(buffer);
 
 // Convert the message object to a JSON string again
 console.log(msg1.toJSON());

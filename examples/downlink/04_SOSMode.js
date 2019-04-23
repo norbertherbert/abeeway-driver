@@ -1,11 +1,13 @@
-const AD = require('../../dist/abeeway-driver');
-// Replace the above line with the following line if you use the module from the public npm repository
-// const AD = require('abeeway-driver');
+const {
+    DPDU_SOSMode, 
+    CPDU_DlHeaderShort, E_DPDUType
+} = require('../../dist/abeeway-driver');
+// if you use the module from the public npm repository use require('abeeway-driver') instead.
 
 // Create a new "SOS Mode START/STOP" message object from its components
-let msg = new AD.DPDU_SOSMode ({
-    header: new AD.CPDU_DlHeaderShort({
-        type:     AD.E_DPDUType.START_SOS_MODE, // or STOP_SOS_MODE
+let msg = new DPDU_SOSMode ({
+    header: new CPDU_DlHeaderShort({
+        type:     E_DPDUType.START_SOS_MODE, // or STOP_SOS_MODE
         ackToken: 0x5,
         optData:  0x0,
     }),
@@ -21,7 +23,7 @@ console.log(msg.toHexString());
 let buffer = msg.toBuffer();
 
 // Create a new message object from a Buffer
-let msg1 = new AD.DPDU_SOSMode(buffer);
+let msg1 = new DPDU_SOSMode(buffer);
 
 // Convert the message object to a JSON string again
 console.log(msg1.toJSON());

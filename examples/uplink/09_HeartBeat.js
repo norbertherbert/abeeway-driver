@@ -1,12 +1,15 @@
-const AD = require('../../dist/abeeway-driver');
-// Replace the above line with the following line if you use the module from the public npm repository
-// const AD = require('abeeway-driver');
+const {
+    UPDU_HeartBeat, 
+    CPDU_Header, E_UPDUType,
+    CPDU_Status, E_OperatingMode,
+} = require('../../dist/abeeway-driver');
+// if you use the module from the public npm repository use require('abeeway-driver') instead.
 
-let heartBeat = new AD.UPDU_HeartBeat ({
-    header: new AD.CPDU_Header({
-        type:         AD.E_UPDUType.HEART_BEAT,
-        status:       new AD.CPDU_Status({
-            operatingMode:           AD.E_OperatingMode.MOTION_TRACKING,
+let heartBeat = new UPDU_HeartBeat ({
+    header: new CPDU_Header({
+        type:         E_UPDUType.HEART_BEAT,
+        status:       new CPDU_Status({
+            operatingMode:           E_OperatingMode.MOTION_TRACKING,
             sosState:                false,
             trackingState:           false,
             movingState:             false,
@@ -25,5 +28,5 @@ console.log(heartBeat.toJSON());
 console.log(heartBeat.toHexString());
 
 let buffer = heartBeat.toBuffer();
-let heartBeat1 = new AD.UPDU_HeartBeat(buffer);
+let heartBeat1 = new UPDU_HeartBeat(buffer);
 console.log(heartBeat1.toJSON());

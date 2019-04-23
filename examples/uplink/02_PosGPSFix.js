@@ -1,12 +1,15 @@
-const AD = require('../../dist/abeeway-driver');
-// Replace the above line with the following line if you use the module from the public npm repository
-// const AD = require('abeeway-driver');
+const {
+    UPDU_PosGPSFix, 
+    CPDU_Header, E_UPDUType, E_PositionInformation,
+    CPDU_Status, E_OperatingMode, 
+} = require('../../dist/abeeway-driver');
+// if you use the module from the public npm repository use require('abeeway-driver') instead.
 
-let gpsPosFix = new AD.UPDU_PosGPSFix ({
-    header: new AD.CPDU_Header({
-        type:         AD.E_UPDUType.POSITION,
-        status:       new AD.CPDU_Status({
-            operatingMode:           AD.E_OperatingMode.MOTION_TRACKING,
+let gpsPosFix = new UPDU_PosGPSFix ({
+    header: new CPDU_Header({
+        type:         E_UPDUType.POSITION,
+        status:       new CPDU_Status({
+            operatingMode:           E_OperatingMode.MOTION_TRACKING,
             sosState:                false,
             trackingState:           false,
             movingState:             false,
@@ -16,7 +19,7 @@ let gpsPosFix = new AD.UPDU_PosGPSFix ({
         battery:      4.175,
         temperature:  22.5,
         ackToken:     0x5,
-        optData:      AD.E_PositionInformation.GPS_FIX,
+        optData:      E_PositionInformation.GPS_FIX,
     }),
     age:              110,
     latitude:         -17,
@@ -28,5 +31,5 @@ console.log(gpsPosFix.toJSON());
 console.log(gpsPosFix.toHexString());
 
 let buffer = gpsPosFix.toBuffer();
-let gpsPosFix1 = new AD.UPDU_PosGPSFix(buffer);
+let gpsPosFix1 = new UPDU_PosGPSFix(buffer);
 console.log(gpsPosFix1.toJSON());

@@ -1,12 +1,17 @@
-const AD = require('../../dist/abeeway-driver');
-// Replace the above line with the following line if you use the module from the public npm repository
-// const AD = require('abeeway-driver');
+const {
+    UPDU_ConfigReport, 
+    CPDU_Header, E_UPDUType,
+    CPDU_Status, E_OperatingMode,
+    CPDU_Parameter, E_ParameterId,
+    E_Tag, E_Param_TransmitStrat
+} = require('../../dist/abeeway-driver');
+// if you use the module from the public npm repository use require('abeeway-driver') instead.
 
-let configReport = new AD.UPDU_ConfigReport ({
-    header: new AD.CPDU_Header({
-        type:         AD.E_UPDUType.ACTIVITY_OR_CONFIG,
-        status:       new AD.CPDU_Status({
-            operatingMode:           AD.E_OperatingMode.ACTIVITY_TRACKING,
+let configReport = new UPDU_ConfigReport ({
+    header: new CPDU_Header({
+        type:         E_UPDUType.ACTIVITY_OR_CONFIG,
+        status:       new CPDU_Status({
+            operatingMode:           E_OperatingMode.ACTIVITY_TRACKING,
             sosState:                false,
             trackingState:           false,
             movingState:             false,
@@ -18,14 +23,14 @@ let configReport = new AD.UPDU_ConfigReport ({
         ackToken:     0x5,
         optData:      0,
     }),
-    tag:    AD.E_Tag.CONFIG,
+    tag:    E_Tag.CONFIG,
     params: [
-        new AD.CPDU_Parameter({
-            id: AD.E_ParameterId.TRANSMIT_STRAT,
-            value: AD.E_Param_TransmitStrat.DUAL_FIXED,
+        new CPDU_Parameter({
+            id: E_ParameterId.TRANSMIT_STRAT,
+            value: E_Param_TransmitStrat.DUAL_FIXED,
         }),
-        new AD.CPDU_Parameter({
-            id: AD.E_ParameterId.BLE_BEACON_COUNT,
+        new CPDU_Parameter({
+            id: E_ParameterId.BLE_BEACON_COUNT,
             value: 1,
         }),
     ],
@@ -34,5 +39,5 @@ console.log(configReport.toJSON());
 console.log(configReport.toHexString());
 
 let buffer = configReport.toBuffer();
-let configReport1 = new AD.UPDU_ConfigReport(buffer);
+let configReport1 = new UPDU_ConfigReport(buffer);
 console.log(configReport1.toJSON());

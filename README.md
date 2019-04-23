@@ -86,7 +86,3 @@ console.log(pdu.toHexString());
 More examples can be found in the 
 [/examples](https://github.com/norbertherbert/abeeway-driver/tree/master/examples)
 folder.
-
-Examples use constants that are listed in the 
-[/src/constants.ts](https://github.com/norbertherbert/abeeway-driver/tree/master//src/constants.ts)
-file.
