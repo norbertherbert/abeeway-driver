@@ -10,24 +10,35 @@ The code was written based on the reference guides that are available in the
 directory of this repository.
 
 ### Abeeway Application Protocol Data Unit (PDU) Objects
-This driver is built from Protocol Data Unit (PDU) objects that you can create from 
+This driver is introdicing the concept of Protocol Data Unit (PDU) objects that you can create from 
 * number, 
 * buffer, 
 * hex string representation of the buffer, 
 * object, 
 * JSON representation of the object
+
 by using the PDU's constructor method.
+
 If you have an already created PDU object, you can convert it to
 * number (with the .toValue() method of the object), 
 * buffer (with the .toBuffer() method of the object), 
 * hex string representation of the buffer (with the .toHesString() method of the object), 
 * object (with the .toComponents() method of the object), 
 * JSON representation of the object (with the .toJSON() method of the object)
+
 There are 3 types of PDUs
-* UPDU, represents an uplink message
-* DPDU, represents a downlink message
-* CPDU, Component PDU that represents a component of an UPDU or DPDU 
+* [UPDU](https://github.com/norbertherbert/abeeway-driver/tree/master/src/UPDU.ts)
+, represents an uplink message
+* [DPDU](https://github.com/norbertherbert/abeeway-driver/tree/master/src/DPDU.ts)
+, represents a downlink message
+* [CPDU](https://github.com/norbertherbert/abeeway-driver/tree/master/src/CPDU.ts)
+, Component PDU that represents a component of an UPDU or DPDU 
+
 In order to allow programmers to easily recognize the type of PDUs the class names of PDUs always have one of the following prefixes: UPDU_, DPDU_ or CPDU_ 
+
+Beyond PDUs, the driver defines a long list of
+[constants](https://github.com/norbertherbert/abeeway-driver/tree/master/src/constants.ts).
+Please note that all enum constants are referred with prefix E_.
 
 ### Install abeeway-driver
     npm install abeeway-driver --save
@@ -48,7 +59,7 @@ const AD = require('abeeway-driver');
 // Create a new "Set Parameter Value" PDU object from its components
 let msg = new AD.DPDU_SetParam({
     header: new AD.CPDU_DlHeaderShort({
-        type: AD.E_DPDU.SET_PARAM,
+        type: AD.E_DPDUType.SET_PARAM,
         ackToken: 0x5,
         optData: 0x0,
     }),
