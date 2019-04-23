@@ -1,24 +1,23 @@
 import * as assert from 'assert';
 
-/* Importing Constants */
+/* Constants */
 import { 
-    E_UlMsgType, E_Tag, E_OperatingMode, E_PositionInformation, E_WiFiFailure,
-    E_BLEFailure, E_DlMsgType, E_DebugCmd, E_GPSTimeoutCause, E_ParameterId, 
+    E_UPDUType, E_Tag, E_OperatingMode, E_PositionInformation, E_WiFiFailure,
+    E_BLEFailure, E_DPDUType, E_DebugCmd, E_GPSTimeoutCause, E_ParameterId, 
     C_ParameterId, E_Param_GeolocSensor, E_Param_GeolocMethod, E_Param_TransmitStrat,
 } from './constants';
 
-/* Importing Utils */
+/* Utils */
 import { 
-    mt_value_decode, mt_value_encode, isUint8,
-    ValueTempl, BufferTempl,
+    PDUTemplate, mt_value_decode, mt_value_encode, isUint8, 
 } from './utils';
 
 
 // ***************************************************************
-// *** Param_ConfigFlags *****************************************
+// *** CPDU_ParamConfigFlags *****************************************
 // ***************************************************************
 
-export interface I_Param_ConfigFlags {                     // 1 byte
+export interface I_CPDU_ParamConfigFlags {                     // 1 byte
                                                            // bit 7-6
     BLEAdvertisingActive:                 boolean,         // bit 5
     WiFiPayloadCyphered:                  boolean,         // bit 4
@@ -27,7 +26,7 @@ export interface I_Param_ConfigFlags {                     // 1 byte
     LongButtonPressToSwitchOff:           boolean,         // bit 1
     FramePendingMechanismActive:          boolean,         // bit 0
 }
-export class Param_ConfigFlags extends ValueTempl<I_Param_ConfigFlags> implements I_Param_ConfigFlags {
+export class CPDU_ParamConfigFlags extends PDUTemplate<I_CPDU_ParamConfigFlags> implements I_CPDU_ParamConfigFlags {
 
     // *** BLEAdvertisingActive ***
     set BLEAdvertisingActive(x:boolean) {
@@ -101,10 +100,10 @@ export class Param_ConfigFlags extends ValueTempl<I_Param_ConfigFlags> implement
 }
 
 // ***************************************************************
-// *** Status ****************************************************
+// *** CPDU_Status ****************************************************
 // ***************************************************************
 
-export interface I_Status {                          // 1 byte
+export interface I_CPDU_Status {                          // 1 byte
     operatingMode:           E_OperatingMode, // bit 7-5
     _operatingMode?:      string,
     sosState:                boolean,         // bit 4
@@ -113,7 +112,7 @@ export interface I_Status {                          // 1 byte
     periodicPositionMessage: boolean,         // bit 1
     positionOnDemandMessage: boolean,         // bit 0
 }
-export class Status extends ValueTempl<I_Status> implements I_Status {
+export class CPDU_Status extends PDUTemplate<I_CPDU_Status> implements I_CPDU_Status {
 
     // *** operatingMode ***
     set operatingMode(x:E_OperatingMode) {
@@ -189,37 +188,37 @@ export class Status extends ValueTempl<I_Status> implements I_Status {
 }
 
 // ***************************************************************
-// *** Header ****************************************************
+// *** CPDU_Header ****************************************************
 // ***************************************************************
 
-export interface I_Header {                          // 5 bytes
-    type:                    E_UlMsgType,     // 1 byte
+export interface I_CPDU_Header {                          // 5 bytes
+    type:                    E_UPDUType,     // 1 byte
     _type?:                  string,
-    status:                  Status,          // 1 byte
+    status:                  CPDU_Status,          // 1 byte
     battery:                 number,          // 1 byte lo=2.8, hi=4.2, nbits=8, nresv=2, step=5.5mV
     temperature:             number,          // 1 byte lo=-44, hi=85,  nbits=8, nresv=0, step=0.5C
     ackToken:                number,                       // 4 bits [7-4]
     optData:                 number|E_PositionInformation, // 4 bits [3-0]
     _optData?:               string,
 }
-export class Header extends BufferTempl<I_Header> implements I_Header {
+export class CPDU_Header extends PDUTemplate<I_CPDU_Header> implements I_CPDU_Header {
 
     // *** type ***
     // TODO: header should be read only!!!
-    set type(x:E_UlMsgType) {
-        assert.ok(x in E_UlMsgType, 'Header.type: invalid value');
+    set type(x:E_UPDUType) {
+        assert.ok(x in E_UPDUType, 'Header.type: invalid value');
         this._props.type = x;
-        this._props._type = E_UlMsgType[x];
+        this._props._type = E_UPDUType[x];
     }
-    get type():E_UlMsgType {
+    get type():E_UPDUType {
         return this._props.type;
     }
 
     // *** status ***
-    set status(x:Status) {
+    set status(x:CPDU_Status) {
         this._props.status = x;
     }
-    get status():Status {
+    get status():CPDU_Status {
         return this._props.status;
     }
 
@@ -254,7 +253,7 @@ export class Header extends BufferTempl<I_Header> implements I_Header {
     set optData(x:number|E_PositionInformation) {
         assert.ok((x & 0x0f) === x, 'Header.optData: invalid value');
         switch (this.type) {
-            case E_UlMsgType.POSITION:
+            case E_UPDUType.POSITION:
                 assert.ok(x in E_PositionInformation, 'Header.optData: invalid value');
                 this._props.optData = x;
                 this._props._optData = E_PositionInformation[x];
@@ -272,11 +271,11 @@ export class Header extends BufferTempl<I_Header> implements I_Header {
         assert.ok(x.length === 5, 'Header.setFromBuffer(): Invalid buffer legth!');
 
         // this.type = x[0];
-        assert.ok(x[0] in E_UlMsgType, 'Header.type: invalid value');
+        assert.ok(x[0] in E_UPDUType, 'Header.type: invalid value');
         this._props.type = x[0];
-        this._props._type = E_UlMsgType[x[0]];
+        this._props._type = E_UPDUType[x[0]];
 
-        this.status = new Status(x[1]);
+        this.status = new CPDU_Status(x[1]);
         this.battery     = mt_value_decode(x[2],   2.8,  4.2, 8, 2);
         this.temperature = mt_value_decode(x[3], -44.0, 85.0, 8, 0);
         this.ackToken = x[4] >>> 4;
@@ -295,26 +294,26 @@ export class Header extends BufferTempl<I_Header> implements I_Header {
 }
 
 // ***************************************************************
-// *** UlHeaderShort *********************************************
+// *** CPDU_UlHeaderShort *********************************************
 // ***************************************************************
 
 // TODO: To make it generic for UL and DL!
 
-export interface I_UlHeaderShort {                 // 2 bytes
-    type:                    E_UlMsgType,   // 1 byte
+export interface I_CPDU_UlHeaderShort {                 // 2 bytes
+    type:                    E_UPDUType,   // 1 byte
     _type?:               string,        
     ackToken:                number,        // 4 bits [7-4]
     optData:                 number,        // 4 bits [3-0]
 }
-export class UlHeaderShort extends BufferTempl<I_UlHeaderShort> implements I_UlHeaderShort {
+export class CPDU_UlHeaderShort extends PDUTemplate<I_CPDU_UlHeaderShort> implements I_CPDU_UlHeaderShort {
 
     // *** type ***
-    set type(x:E_UlMsgType) {
-        assert.ok(x in E_UlMsgType, 'UlHeaderShort.type: invalid value');
+    set type(x:E_UPDUType) {
+        assert.ok(x in E_UPDUType, 'UlHeaderShort.type: invalid value');
         this._props.type = x;
-        this._props._type = E_UlMsgType[x];
+        this._props._type = E_UPDUType[x];
     }
-    get type():E_UlMsgType {
+    get type():E_UPDUType {
         return this._props.type;
     }
 
@@ -352,26 +351,26 @@ export class UlHeaderShort extends BufferTempl<I_UlHeaderShort> implements I_UlH
 }
 
 // ***************************************************************
-// *** DlHeaderShort *********************************************
+// *** CPDU_DlHeaderShort *********************************************
 // ***************************************************************
 
 // TODO: To make it generic for UL and DL!
 
-export interface I_DlHeaderShort {                 // 2 bytes
-    type:                    E_DlMsgType,   // 1 byte
+export interface I_CPDU_DlHeaderShort {                 // 2 bytes
+    type:                    E_DPDUType,   // 1 byte
     _type?:               string,
     ackToken:                number,        // 4 bits [7-4]
     optData:                 number,        // 4 bits [3-0]
 }
-export class DlHeaderShort extends BufferTempl<I_DlHeaderShort> implements I_DlHeaderShort {
+export class CPDU_DlHeaderShort extends PDUTemplate<I_CPDU_DlHeaderShort> implements I_CPDU_DlHeaderShort {
 
     // *** type ***
-    set type(x:E_DlMsgType) {
-        assert.ok(x in E_DlMsgType, 'DlHeaderShort.type: invalid value');
+    set type(x:E_DPDUType) {
+        assert.ok(x in E_DPDUType, 'DlHeaderShort.type: invalid value');
         this._props.type = x;
-        this._props._type = E_DlMsgType[x];
+        this._props._type = E_DPDUType[x];
     }
-    get type():E_DlMsgType {
+    get type():E_DPDUType {
         return this._props.type;
     }
 
@@ -409,14 +408,14 @@ export class DlHeaderShort extends BufferTempl<I_DlHeaderShort> implements I_DlH
 }
 
 // ***************************************************************
-// *** WiFiBSSIDs *************************************************
+// *** CPDU_WiFiBSSIDs *************************************************
 // ***************************************************************
 
-export interface I_WiFiBSSIDs {               // 7 bytes
+export interface I_CPDU_WiFiBSSIDs {               // 7 bytes
     bssid:                      string,        // 6 bytes
     rssi:                       number,        // 1 byte
 }
-export class WiFiBSSIDs extends BufferTempl<I_WiFiBSSIDs> implements I_WiFiBSSIDs {
+export class CPDU_WiFiBSSIDs extends PDUTemplate<I_CPDU_WiFiBSSIDs> implements I_CPDU_WiFiBSSIDs {
 
     // *** bssid ***
     set bssid(x:string) {
@@ -453,15 +452,15 @@ export class WiFiBSSIDs extends BufferTempl<I_WiFiBSSIDs> implements I_WiFiBSSID
 }
 
 // ***************************************************************
-// *** Parameter *************************************************
+// *** CPDU_Parameter ********************************************
 // ***************************************************************
 
-export interface I_Parameter {                       // 5 bytes
+export interface I_CPDU_Parameter {                       // 5 bytes
     id:                      E_ParameterId, // 1 byte
     _id?:                 string,
-    value:                   number|Param_ConfigFlags,          // 4 bytes
+    value:                   number|CPDU_ParamConfigFlags,          // 4 bytes
 }
-export class Parameter extends BufferTempl<I_Parameter> implements I_Parameter {
+export class CPDU_Parameter extends PDUTemplate<I_CPDU_Parameter> implements I_CPDU_Parameter {
 
     // *** id ***
     set id(x:E_ParameterId) {
@@ -474,17 +473,17 @@ export class Parameter extends BufferTempl<I_Parameter> implements I_Parameter {
     }
 
     // *** value ***
-    set value(x:number|Param_ConfigFlags) {
+    set value(x:number|CPDU_ParamConfigFlags) {
         switch (this.id) {
             case E_ParameterId.CONFIG_FLAGS:
-                this._props.value = new Param_ConfigFlags(x);
+                this._props.value = new CPDU_ParamConfigFlags(x);
                 break;
             default:
                 this._props.value = x;
                 break;
         }
     }
-    get value():number|Param_ConfigFlags {
+    get value():number|CPDU_ParamConfigFlags {
         switch (this.id) {
             case E_ParameterId.CONFIG_FLAGS:
                 return this._props.value;
@@ -500,7 +499,7 @@ export class Parameter extends BufferTempl<I_Parameter> implements I_Parameter {
         this.id = x[0];
         switch (this.id) {
             case E_ParameterId.CONFIG_FLAGS:
-                this.value = new Param_ConfigFlags(x[4]);
+                this.value = new CPDU_ParamConfigFlags(x[4]);
                 break;
             default:
                 this.value = (x[1] << 24) + (x[2] << 16) + (x[3] << 8) + x[4];
@@ -514,7 +513,7 @@ export class Parameter extends BufferTempl<I_Parameter> implements I_Parameter {
         switch (this.id) {
             case E_ParameterId.CONFIG_FLAGS:
                 y[1] = 0; y[2] = 0; y[3] = 0; 
-                y[4] = (<Param_ConfigFlags>(this.value)).toValue();
+                y[4] = (<CPDU_ParamConfigFlags>(this.value)).toValue();
                 break;
             default:
                 let v:number =<number>this.value;

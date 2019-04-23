@@ -14,16 +14,16 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var assert = require("assert");
-/* Importing Constants */
+/* Constants */
 var constants_1 = require("./constants");
-/* Importing Utils */
+/* Utils */
 var utils_1 = require("./utils");
-var Param_ConfigFlags = /** @class */ (function (_super) {
-    __extends(Param_ConfigFlags, _super);
-    function Param_ConfigFlags() {
+var CPDU_ParamConfigFlags = /** @class */ (function (_super) {
+    __extends(CPDU_ParamConfigFlags, _super);
+    function CPDU_ParamConfigFlags() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Object.defineProperty(Param_ConfigFlags.prototype, "BLEAdvertisingActive", {
+    Object.defineProperty(CPDU_ParamConfigFlags.prototype, "BLEAdvertisingActive", {
         get: function () {
             return this._props.BLEAdvertisingActive;
         },
@@ -34,7 +34,7 @@ var Param_ConfigFlags = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Param_ConfigFlags.prototype, "WiFiPayloadCyphered", {
+    Object.defineProperty(CPDU_ParamConfigFlags.prototype, "WiFiPayloadCyphered", {
         get: function () {
             return this._props.WiFiPayloadCyphered;
         },
@@ -45,7 +45,7 @@ var Param_ConfigFlags = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Param_ConfigFlags.prototype, "ConfigReqsAcknoledged", {
+    Object.defineProperty(CPDU_ParamConfigFlags.prototype, "ConfigReqsAcknoledged", {
         get: function () {
             return this._props.ConfigReqsAcknoledged;
         },
@@ -56,7 +56,7 @@ var Param_ConfigFlags = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Param_ConfigFlags.prototype, "DoubleShortButtonPressForSOS", {
+    Object.defineProperty(CPDU_ParamConfigFlags.prototype, "DoubleShortButtonPressForSOS", {
         get: function () {
             return this._props.DoubleShortButtonPressForSOS;
         },
@@ -67,7 +67,7 @@ var Param_ConfigFlags = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Param_ConfigFlags.prototype, "LongButtonPressToSwitchOff", {
+    Object.defineProperty(CPDU_ParamConfigFlags.prototype, "LongButtonPressToSwitchOff", {
         get: function () {
             return this._props.LongButtonPressToSwitchOff;
         },
@@ -78,7 +78,7 @@ var Param_ConfigFlags = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Param_ConfigFlags.prototype, "FramePendingMechanismActive", {
+    Object.defineProperty(CPDU_ParamConfigFlags.prototype, "FramePendingMechanismActive", {
         get: function () {
             return this._props.FramePendingMechanismActive;
         },
@@ -89,7 +89,7 @@ var Param_ConfigFlags = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Param_ConfigFlags.prototype.setFromValue = function (x) {
+    CPDU_ParamConfigFlags.prototype.setFromValue = function (x) {
         assert.ok(utils_1.isUint8(x), 'Param_ConfigFlags.setFromValue(): Invalid value!');
         this.BLEAdvertisingActive = (x & 32) === 32;
         this.WiFiPayloadCyphered = (x & 16) === 16;
@@ -98,7 +98,7 @@ var Param_ConfigFlags = /** @class */ (function (_super) {
         this.LongButtonPressToSwitchOff = (x & 2) === 2;
         this.FramePendingMechanismActive = (x & 1) === 1;
     };
-    Param_ConfigFlags.prototype.toValue = function () {
+    CPDU_ParamConfigFlags.prototype.toValue = function () {
         var y = 0;
         y |= this.BLEAdvertisingActive ? 32 : 0;
         y |= this.WiFiPayloadCyphered ? 16 : 0;
@@ -108,15 +108,15 @@ var Param_ConfigFlags = /** @class */ (function (_super) {
         y |= this.FramePendingMechanismActive ? 1 : 0;
         return y;
     };
-    return Param_ConfigFlags;
-}(utils_1.ValueTempl));
-exports.Param_ConfigFlags = Param_ConfigFlags;
-var Status = /** @class */ (function (_super) {
-    __extends(Status, _super);
-    function Status() {
+    return CPDU_ParamConfigFlags;
+}(utils_1.PDUTemplate));
+exports.CPDU_ParamConfigFlags = CPDU_ParamConfigFlags;
+var CPDU_Status = /** @class */ (function (_super) {
+    __extends(CPDU_Status, _super);
+    function CPDU_Status() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Object.defineProperty(Status.prototype, "operatingMode", {
+    Object.defineProperty(CPDU_Status.prototype, "operatingMode", {
         get: function () {
             return this._props.operatingMode;
         },
@@ -129,7 +129,7 @@ var Status = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Status.prototype, "sosState", {
+    Object.defineProperty(CPDU_Status.prototype, "sosState", {
         get: function () {
             return this._props.sosState;
         },
@@ -140,7 +140,7 @@ var Status = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Status.prototype, "trackingState", {
+    Object.defineProperty(CPDU_Status.prototype, "trackingState", {
         get: function () {
             return this._props.trackingState;
         },
@@ -151,7 +151,7 @@ var Status = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Status.prototype, "movingState", {
+    Object.defineProperty(CPDU_Status.prototype, "movingState", {
         get: function () {
             return this._props.movingState;
         },
@@ -162,7 +162,7 @@ var Status = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Status.prototype, "periodicPositionMessage", {
+    Object.defineProperty(CPDU_Status.prototype, "periodicPositionMessage", {
         get: function () {
             return this._props.periodicPositionMessage;
         },
@@ -173,7 +173,7 @@ var Status = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Status.prototype, "positionOnDemandMessage", {
+    Object.defineProperty(CPDU_Status.prototype, "positionOnDemandMessage", {
         get: function () {
             return this._props.positionOnDemandMessage;
         },
@@ -184,7 +184,7 @@ var Status = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Status.prototype.setFromValue = function (x) {
+    CPDU_Status.prototype.setFromValue = function (x) {
         assert.ok(utils_1.isUint8(x), 'Status.setFromValue(): Invalid value!');
         this.operatingMode = (x >>> 5);
         this.sosState = (x & 16) === 16;
@@ -193,7 +193,7 @@ var Status = /** @class */ (function (_super) {
         this.periodicPositionMessage = (x & 2) === 2;
         this.positionOnDemandMessage = (x & 1) === 1;
     };
-    Status.prototype.toValue = function () {
+    CPDU_Status.prototype.toValue = function () {
         var y = 0;
         y = this.operatingMode << 5;
         y |= this.sosState ? 16 : 0;
@@ -203,29 +203,29 @@ var Status = /** @class */ (function (_super) {
         y |= this.positionOnDemandMessage ? 1 : 0;
         return y;
     };
-    return Status;
-}(utils_1.ValueTempl));
-exports.Status = Status;
-var Header = /** @class */ (function (_super) {
-    __extends(Header, _super);
-    function Header() {
+    return CPDU_Status;
+}(utils_1.PDUTemplate));
+exports.CPDU_Status = CPDU_Status;
+var CPDU_Header = /** @class */ (function (_super) {
+    __extends(CPDU_Header, _super);
+    function CPDU_Header() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Object.defineProperty(Header.prototype, "type", {
+    Object.defineProperty(CPDU_Header.prototype, "type", {
         get: function () {
             return this._props.type;
         },
         // *** type ***
         // TODO: header should be read only!!!
         set: function (x) {
-            assert.ok(x in constants_1.E_UlMsgType, 'Header.type: invalid value');
+            assert.ok(x in constants_1.E_UPDUType, 'Header.type: invalid value');
             this._props.type = x;
-            this._props._type = constants_1.E_UlMsgType[x];
+            this._props._type = constants_1.E_UPDUType[x];
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Header.prototype, "status", {
+    Object.defineProperty(CPDU_Header.prototype, "status", {
         get: function () {
             return this._props.status;
         },
@@ -236,7 +236,7 @@ var Header = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Header.prototype, "battery", {
+    Object.defineProperty(CPDU_Header.prototype, "battery", {
         get: function () {
             return this._props.battery;
         },
@@ -248,7 +248,7 @@ var Header = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Header.prototype, "temperature", {
+    Object.defineProperty(CPDU_Header.prototype, "temperature", {
         get: function () {
             return this._props.temperature;
         },
@@ -260,7 +260,7 @@ var Header = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Header.prototype, "ackToken", {
+    Object.defineProperty(CPDU_Header.prototype, "ackToken", {
         get: function () {
             return this._props.ackToken;
         },
@@ -272,7 +272,7 @@ var Header = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Header.prototype, "optData", {
+    Object.defineProperty(CPDU_Header.prototype, "optData", {
         get: function () {
             return this._props.optData;
         },
@@ -280,7 +280,7 @@ var Header = /** @class */ (function (_super) {
         set: function (x) {
             assert.ok((x & 0x0f) === x, 'Header.optData: invalid value');
             switch (this.type) {
-                case constants_1.E_UlMsgType.POSITION:
+                case constants_1.E_UPDUType.POSITION:
                     assert.ok(x in constants_1.E_PositionInformation, 'Header.optData: invalid value');
                     this._props.optData = x;
                     this._props._optData = constants_1.E_PositionInformation[x];
@@ -293,19 +293,19 @@ var Header = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Header.prototype.setFromBuffer = function (x) {
+    CPDU_Header.prototype.setFromBuffer = function (x) {
         assert.ok(x.length === 5, 'Header.setFromBuffer(): Invalid buffer legth!');
         // this.type = x[0];
-        assert.ok(x[0] in constants_1.E_UlMsgType, 'Header.type: invalid value');
+        assert.ok(x[0] in constants_1.E_UPDUType, 'Header.type: invalid value');
         this._props.type = x[0];
-        this._props._type = constants_1.E_UlMsgType[x[0]];
-        this.status = new Status(x[1]);
+        this._props._type = constants_1.E_UPDUType[x[0]];
+        this.status = new CPDU_Status(x[1]);
         this.battery = utils_1.mt_value_decode(x[2], 2.8, 4.2, 8, 2);
         this.temperature = utils_1.mt_value_decode(x[3], -44.0, 85.0, 8, 0);
         this.ackToken = x[4] >>> 4;
         this.optData = x[4] & 0x0f;
     };
-    Header.prototype.toBuffer = function () {
+    CPDU_Header.prototype.toBuffer = function () {
         var y = Buffer.allocUnsafe(5);
         y[0] = this.type;
         y[1] = this.status.toValue();
@@ -314,28 +314,28 @@ var Header = /** @class */ (function (_super) {
         y[4] = (this.ackToken << 4) | this.optData;
         return y;
     };
-    return Header;
-}(utils_1.BufferTempl));
-exports.Header = Header;
-var UlHeaderShort = /** @class */ (function (_super) {
-    __extends(UlHeaderShort, _super);
-    function UlHeaderShort() {
+    return CPDU_Header;
+}(utils_1.PDUTemplate));
+exports.CPDU_Header = CPDU_Header;
+var CPDU_UlHeaderShort = /** @class */ (function (_super) {
+    __extends(CPDU_UlHeaderShort, _super);
+    function CPDU_UlHeaderShort() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Object.defineProperty(UlHeaderShort.prototype, "type", {
+    Object.defineProperty(CPDU_UlHeaderShort.prototype, "type", {
         get: function () {
             return this._props.type;
         },
         // *** type ***
         set: function (x) {
-            assert.ok(x in constants_1.E_UlMsgType, 'UlHeaderShort.type: invalid value');
+            assert.ok(x in constants_1.E_UPDUType, 'UlHeaderShort.type: invalid value');
             this._props.type = x;
-            this._props._type = constants_1.E_UlMsgType[x];
+            this._props._type = constants_1.E_UPDUType[x];
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(UlHeaderShort.prototype, "ackToken", {
+    Object.defineProperty(CPDU_UlHeaderShort.prototype, "ackToken", {
         get: function () {
             return this._props.ackToken;
         },
@@ -347,7 +347,7 @@ var UlHeaderShort = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(UlHeaderShort.prototype, "optData", {
+    Object.defineProperty(CPDU_UlHeaderShort.prototype, "optData", {
         get: function () {
             return this._props.optData;
         },
@@ -359,40 +359,40 @@ var UlHeaderShort = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    UlHeaderShort.prototype.setFromBuffer = function (x) {
+    CPDU_UlHeaderShort.prototype.setFromBuffer = function (x) {
         assert.ok(x.length === 2, 'UlHeaderShort.setFromBuffer(): Invalid buffer legth!');
         this.type = x[0];
         this.ackToken = x[1] >>> 4;
         this.optData = x[1] & 0x0f;
     };
-    UlHeaderShort.prototype.toBuffer = function () {
+    CPDU_UlHeaderShort.prototype.toBuffer = function () {
         var y = Buffer.allocUnsafe(2);
         y[0] = this.type;
         y[1] = (this.ackToken << 4) | this.optData;
         return y;
     };
-    return UlHeaderShort;
-}(utils_1.BufferTempl));
-exports.UlHeaderShort = UlHeaderShort;
-var DlHeaderShort = /** @class */ (function (_super) {
-    __extends(DlHeaderShort, _super);
-    function DlHeaderShort() {
+    return CPDU_UlHeaderShort;
+}(utils_1.PDUTemplate));
+exports.CPDU_UlHeaderShort = CPDU_UlHeaderShort;
+var CPDU_DlHeaderShort = /** @class */ (function (_super) {
+    __extends(CPDU_DlHeaderShort, _super);
+    function CPDU_DlHeaderShort() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Object.defineProperty(DlHeaderShort.prototype, "type", {
+    Object.defineProperty(CPDU_DlHeaderShort.prototype, "type", {
         get: function () {
             return this._props.type;
         },
         // *** type ***
         set: function (x) {
-            assert.ok(x in constants_1.E_DlMsgType, 'DlHeaderShort.type: invalid value');
+            assert.ok(x in constants_1.E_DPDUType, 'DlHeaderShort.type: invalid value');
             this._props.type = x;
-            this._props._type = constants_1.E_DlMsgType[x];
+            this._props._type = constants_1.E_DPDUType[x];
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(DlHeaderShort.prototype, "ackToken", {
+    Object.defineProperty(CPDU_DlHeaderShort.prototype, "ackToken", {
         get: function () {
             return this._props.ackToken;
         },
@@ -404,7 +404,7 @@ var DlHeaderShort = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(DlHeaderShort.prototype, "optData", {
+    Object.defineProperty(CPDU_DlHeaderShort.prototype, "optData", {
         get: function () {
             return this._props.optData;
         },
@@ -416,27 +416,27 @@ var DlHeaderShort = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    DlHeaderShort.prototype.setFromBuffer = function (x) {
+    CPDU_DlHeaderShort.prototype.setFromBuffer = function (x) {
         assert.ok(x.length === 2, 'DlHeaderShort.setFromBuffer(): Invalid buffer legth!');
         this.type = x[0];
         this.ackToken = x[1] >>> 4;
         this.optData = x[1] & 0x0f;
     };
-    DlHeaderShort.prototype.toBuffer = function () {
+    CPDU_DlHeaderShort.prototype.toBuffer = function () {
         var y = Buffer.allocUnsafe(2);
         y[0] = this.type;
         y[1] = (this.ackToken << 4) | this.optData;
         return y;
     };
-    return DlHeaderShort;
-}(utils_1.BufferTempl));
-exports.DlHeaderShort = DlHeaderShort;
-var WiFiBSSIDs = /** @class */ (function (_super) {
-    __extends(WiFiBSSIDs, _super);
-    function WiFiBSSIDs() {
+    return CPDU_DlHeaderShort;
+}(utils_1.PDUTemplate));
+exports.CPDU_DlHeaderShort = CPDU_DlHeaderShort;
+var CPDU_WiFiBSSIDs = /** @class */ (function (_super) {
+    __extends(CPDU_WiFiBSSIDs, _super);
+    function CPDU_WiFiBSSIDs() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Object.defineProperty(WiFiBSSIDs.prototype, "bssid", {
+    Object.defineProperty(CPDU_WiFiBSSIDs.prototype, "bssid", {
         get: function () {
             return this._props.bssid;
         },
@@ -448,7 +448,7 @@ var WiFiBSSIDs = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(WiFiBSSIDs.prototype, "rssi", {
+    Object.defineProperty(CPDU_WiFiBSSIDs.prototype, "rssi", {
         get: function () {
             return this._props.rssi;
         },
@@ -460,12 +460,12 @@ var WiFiBSSIDs = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    WiFiBSSIDs.prototype.setFromBuffer = function (x) {
+    CPDU_WiFiBSSIDs.prototype.setFromBuffer = function (x) {
         assert.ok(x.length === 7, 'WiFiBSSIDs.setFromBuffer(): Invalid buffer legth!');
         this.bssid = x.slice(0, 6).toString('hex');
         this.rssi = x.readInt8(6);
     };
-    WiFiBSSIDs.prototype.toBuffer = function () {
+    CPDU_WiFiBSSIDs.prototype.toBuffer = function () {
         var y = Buffer.allocUnsafe(7);
         for (var i = 0; i < 6; i++) {
             var s = this.bssid;
@@ -474,15 +474,15 @@ var WiFiBSSIDs = /** @class */ (function (_super) {
         y.writeInt8(this.rssi, 6);
         return y;
     };
-    return WiFiBSSIDs;
-}(utils_1.BufferTempl));
-exports.WiFiBSSIDs = WiFiBSSIDs;
-var Parameter = /** @class */ (function (_super) {
-    __extends(Parameter, _super);
-    function Parameter() {
+    return CPDU_WiFiBSSIDs;
+}(utils_1.PDUTemplate));
+exports.CPDU_WiFiBSSIDs = CPDU_WiFiBSSIDs;
+var CPDU_Parameter = /** @class */ (function (_super) {
+    __extends(CPDU_Parameter, _super);
+    function CPDU_Parameter() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Object.defineProperty(Parameter.prototype, "id", {
+    Object.defineProperty(CPDU_Parameter.prototype, "id", {
         get: function () {
             return this._props.id;
         },
@@ -495,7 +495,7 @@ var Parameter = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Parameter.prototype, "value", {
+    Object.defineProperty(CPDU_Parameter.prototype, "value", {
         get: function () {
             switch (this.id) {
                 case constants_1.E_ParameterId.CONFIG_FLAGS:
@@ -510,7 +510,7 @@ var Parameter = /** @class */ (function (_super) {
         set: function (x) {
             switch (this.id) {
                 case constants_1.E_ParameterId.CONFIG_FLAGS:
-                    this._props.value = new Param_ConfigFlags(x);
+                    this._props.value = new CPDU_ParamConfigFlags(x);
                     break;
                 default:
                     this._props.value = x;
@@ -520,19 +520,19 @@ var Parameter = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Parameter.prototype.setFromBuffer = function (x) {
+    CPDU_Parameter.prototype.setFromBuffer = function (x) {
         assert.ok(x.length === 5, 'Parameter.setFromBuffer(): Invalid buffer legth!');
         this.id = x[0];
         switch (this.id) {
             case constants_1.E_ParameterId.CONFIG_FLAGS:
-                this.value = new Param_ConfigFlags(x[4]);
+                this.value = new CPDU_ParamConfigFlags(x[4]);
                 break;
             default:
                 this.value = (x[1] << 24) + (x[2] << 16) + (x[3] << 8) + x[4];
                 break;
         }
     };
-    Parameter.prototype.toBuffer = function () {
+    CPDU_Parameter.prototype.toBuffer = function () {
         var y = Buffer.allocUnsafe(5);
         y[0] = this.id;
         switch (this.id) {
@@ -552,7 +552,7 @@ var Parameter = /** @class */ (function (_super) {
         }
         return y;
     };
-    return Parameter;
-}(utils_1.BufferTempl));
-exports.Parameter = Parameter;
-//# sourceMappingURL=msg-components.js.map
+    return CPDU_Parameter;
+}(utils_1.PDUTemplate));
+exports.CPDU_Parameter = CPDU_Parameter;
+//# sourceMappingURL=CPDU.js.map

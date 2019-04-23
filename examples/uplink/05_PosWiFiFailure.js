@@ -2,13 +2,10 @@ const AD = require('../../dist/abeeway-driver');
 // Replace the above line with the following line if you use the module from the public npm repository
 // const AD = require('abeeway-driver');
 
-let b;
-let posWiFiFailure;
-
-posWiFiFailure = new AD.UlMsg_PosWiFiFailure ({
-    header: new AD.Header({
-        type:         AD.E_UlMsgType.POSITION,
-        status:       new AD.Status({
+let posWiFiFailure = new AD.UPDU_PosWiFiFailure ({
+    header: new AD.CPDU_Header({
+        type:         AD.E_UPDUType.POSITION,
+        status:       new AD.CPDU_Status({
             operatingMode:           AD.E_OperatingMode.MOTION_TRACKING,
             sosState:                false,
             trackingState:           false,
@@ -25,10 +22,8 @@ posWiFiFailure = new AD.UlMsg_PosWiFiFailure ({
     error: AD.E_WiFiFailure.SCAN_FAILURE,
 });
 console.log(posWiFiFailure.toJSON());
+console.log(posWiFiFailure.toHexString());
 
-b = posWiFiFailure.toBuffer();
-console.log(b.toString('hex'));
-
-posWiFiFailure = new AD.UlMsg_PosWiFiFailure(b);
-console.log(posWiFiFailure.toJSON());
-
+let buffer = posWiFiFailure.toBuffer();
+let posWiFiFailure1 = new AD.UPDU_PosWiFiFailure(buffer);
+console.log(posWiFiFailure1.toJSON());

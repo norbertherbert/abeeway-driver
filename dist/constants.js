@@ -3,16 +3,16 @@
 // *** Abeeway Driver Constants **********************************
 // ***************************************************************
 Object.defineProperty(exports, "__esModule", { value: true });
-var E_UlMsgType;
-(function (E_UlMsgType) {
-    E_UlMsgType[E_UlMsgType["FRAME_PENDING"] = 0] = "FRAME_PENDING";
-    E_UlMsgType[E_UlMsgType["POSITION"] = 3] = "POSITION";
-    E_UlMsgType[E_UlMsgType["ENERGY_STATUS"] = 4] = "ENERGY_STATUS";
-    E_UlMsgType[E_UlMsgType["HEART_BEAT"] = 5] = "HEART_BEAT";
-    E_UlMsgType[E_UlMsgType["ACTIVITY_OR_CONFIG"] = 7] = "ACTIVITY_OR_CONFIG";
-    E_UlMsgType[E_UlMsgType["SHUTDOWN"] = 9] = "SHUTDOWN";
-    E_UlMsgType[E_UlMsgType["DEBUG"] = 255] = "DEBUG";
-})(E_UlMsgType = exports.E_UlMsgType || (exports.E_UlMsgType = {}));
+var E_UPDUType;
+(function (E_UPDUType) {
+    E_UPDUType[E_UPDUType["FRAME_PENDING"] = 0] = "FRAME_PENDING";
+    E_UPDUType[E_UPDUType["POSITION"] = 3] = "POSITION";
+    E_UPDUType[E_UPDUType["ENERGY_STATUS"] = 4] = "ENERGY_STATUS";
+    E_UPDUType[E_UPDUType["HEART_BEAT"] = 5] = "HEART_BEAT";
+    E_UPDUType[E_UPDUType["ACTIVITY_OR_CONFIG"] = 7] = "ACTIVITY_OR_CONFIG";
+    E_UPDUType[E_UPDUType["SHUTDOWN"] = 9] = "SHUTDOWN";
+    E_UPDUType[E_UPDUType["DEBUG"] = 255] = "DEBUG";
+})(E_UPDUType = exports.E_UPDUType || (exports.E_UPDUType = {}));
 var E_Tag;
 (function (E_Tag) {
     E_Tag[E_Tag["ACTIVITY"] = 1] = "ACTIVITY";
@@ -56,16 +56,16 @@ var E_BLEFailure;
     E_BLEFailure[E_BLEFailure["NO_BEACON_DETECTED"] = 4] = "NO_BEACON_DETECTED";
     E_BLEFailure[E_BLEFailure["HARDWARE_INCOMPATIBILITY"] = 5] = "HARDWARE_INCOMPATIBILITY";
 })(E_BLEFailure = exports.E_BLEFailure || (exports.E_BLEFailure = {}));
-var E_DlMsgType;
-(function (E_DlMsgType) {
-    E_DlMsgType[E_DlMsgType["POSITION_ON_DEMAND"] = 1] = "POSITION_ON_DEMAND";
-    E_DlMsgType[E_DlMsgType["SET_MODE"] = 2] = "SET_MODE";
-    E_DlMsgType[E_DlMsgType["REQUEST_CONFIGURATION"] = 3] = "REQUEST_CONFIGURATION";
-    E_DlMsgType[E_DlMsgType["START_SOS_MODE"] = 4] = "START_SOS_MODE";
-    E_DlMsgType[E_DlMsgType["STOP_SOS_MODE"] = 5] = "STOP_SOS_MODE";
-    E_DlMsgType[E_DlMsgType["SET_PARAM"] = 11] = "SET_PARAM";
-    E_DlMsgType[E_DlMsgType["DEBUG_COMMAND"] = 255] = "DEBUG_COMMAND";
-})(E_DlMsgType = exports.E_DlMsgType || (exports.E_DlMsgType = {}));
+var E_DPDUType;
+(function (E_DPDUType) {
+    E_DPDUType[E_DPDUType["POSITION_ON_DEMAND"] = 1] = "POSITION_ON_DEMAND";
+    E_DPDUType[E_DPDUType["SET_MODE"] = 2] = "SET_MODE";
+    E_DPDUType[E_DPDUType["REQUEST_CONFIGURATION"] = 3] = "REQUEST_CONFIGURATION";
+    E_DPDUType[E_DPDUType["START_SOS_MODE"] = 4] = "START_SOS_MODE";
+    E_DPDUType[E_DPDUType["STOP_SOS_MODE"] = 5] = "STOP_SOS_MODE";
+    E_DPDUType[E_DPDUType["SET_PARAM"] = 11] = "SET_PARAM";
+    E_DPDUType[E_DPDUType["DEBUG_COMMAND"] = 255] = "DEBUG_COMMAND";
+})(E_DPDUType = exports.E_DPDUType || (exports.E_DPDUType = {}));
 var E_DebugCmd;
 (function (E_DebugCmd) {
     E_DebugCmd[E_DebugCmd["RESET_DEVICE"] = 1] = "RESET_DEVICE";
@@ -94,8 +94,8 @@ var E_ParameterId;
     E_ParameterId[E_ParameterId["BLE_BEACON_TIMEOUT"] = 16] = "BLE_BEACON_TIMEOUT";
     E_ParameterId[E_ParameterId["GPS_STANDBY_TIMEOUT"] = 17] = "GPS_STANDBY_TIMEOUT";
     //TODO: what is this?
-    E_ParameterId[E_ParameterId["CONFIRMED_UL_BITMAP"] = 18] = "CONFIRMED_UL_BITMAP";
-    E_ParameterId[E_ParameterId["CONFIRMED_UL_RETRY"] = 19] = "CONFIRMED_UL_RETRY";
+    E_ParameterId[E_ParameterId["CONFIRMED_UPDU_BITMAP"] = 18] = "CONFIRMED_UPDU_BITMAP";
+    E_ParameterId[E_ParameterId["CONFIRMED_UPDU_RETRY"] = 19] = "CONFIRMED_UPDU_RETRY";
 })(E_ParameterId = exports.E_ParameterId || (exports.E_ParameterId = {}));
 exports.C_ParameterId = {
     0x00: { name: 'UL_PERIOD', unit: 's', min: 60, max: 86400 },
@@ -114,8 +114,8 @@ exports.C_ParameterId = {
     0x0f: { name: 'BLE_BEACON_COUNT', unit: '', min: 1, max: 4 },
     0x10: { name: 'BLE_BEACON_TIMEOUT', unit: 's', min: 1, max: 5 },
     0x11: { name: 'GPS_STANDBY_TIMEOUT', unit: 's', min: 10, max: 7200 },
-    0x12: { name: 'CONFIRMED_UL_BITMAP', unit: '', min: 0x00, max: 0xffff },
-    0x13: { name: 'CONFIRMED_UL_RETRY', unit: '', min: 0, max: 8 },
+    0x12: { name: 'CONFIRMED_UPDU_BITMAP', unit: '', min: 0x00, max: 0xffff },
+    0x13: { name: 'CONFIRMED_UPDU_RETRY', unit: '', min: 0, max: 8 },
 };
 var E_Param_GeolocSensor;
 (function (E_Param_GeolocSensor) {

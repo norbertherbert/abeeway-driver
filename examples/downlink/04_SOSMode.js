@@ -2,12 +2,10 @@ const AD = require('../../dist/abeeway-driver');
 // Replace the above line with the following line if you use the module from the public npm repository
 // const AD = require('abeeway-driver');
 
-let b, msg;
-
 // Create a new "SOS Mode START/STOP" message object from its components
-msg = new AD.DlMsg_SOSMode ({
-    header: new AD.DlHeaderShort({
-        type:     AD.E_DlMsgType.START_SOS_MODE, // or STOP_SOS_MODE
+let msg = new AD.DPDU_SOSMode ({
+    header: new AD.CPDU_DlHeaderShort({
+        type:     AD.E_DPDUType.START_SOS_MODE, // or STOP_SOS_MODE
         ackToken: 0x5,
         optData:  0x0,
     }),
@@ -16,12 +14,14 @@ msg = new AD.DlMsg_SOSMode ({
 // Convert the message object to a JSON string
 console.log(msg.toJSON());
 
+// Convert the message object to a Hex string
+console.log(msg.toHexString());
+
 // Convert the message object to a Buffer
-b = msg.toBuffer();
-console.log(b.toString('hex'));
+let buffer = msg.toBuffer();
 
 // Create a new message object from a Buffer
-msg = new AD.DlMsg_SOSMode(b);
+let msg1 = new AD.DPDU_SOSMode(buffer);
 
 // Convert the message object to a JSON string again
-console.log(msg.toJSON());
+console.log(msg1.toJSON());

@@ -2,7 +2,7 @@
 // *** Abeeway Driver Constants **********************************
 // ***************************************************************
 
-export enum E_UlMsgType {
+export enum E_UPDUType {
     FRAME_PENDING                = 0x00,
     POSITION                     = 0x03,
     ENERGY_STATUS                = 0x04,
@@ -55,7 +55,7 @@ export enum E_BLEFailure {
     HARDWARE_INCOMPATIBILITY     = 0x05,
 }
 
-export enum E_DlMsgType {
+export enum E_DPDUType {
     POSITION_ON_DEMAND           = 0x01,
     SET_MODE                     = 0x02,
     REQUEST_CONFIGURATION        = 0x03,
@@ -95,9 +95,9 @@ export enum E_ParameterId {
     GPS_STANDBY_TIMEOUT          = 0x11, // s, 10-7200
 
     //TODO: what is this?
-    CONFIRMED_UL_BITMAP          = 0x12, // 0x00-0xffff
+    CONFIRMED_UPDU_BITMAP          = 0x12, // 0x00-0xffff
 
-    CONFIRMED_UL_RETRY           = 0x13, // 0-8
+    CONFIRMED_UPDU_RETRY           = 0x13, // 0-8
 }
 
 export const C_ParameterId = {
@@ -119,8 +119,8 @@ export const C_ParameterId = {
     0x0f: { name: 'BLE_BEACON_COUNT',     unit:'',  min: 1,    max: 4      },
     0x10: { name: 'BLE_BEACON_TIMEOUT',   unit:'s', min: 1,    max: 5      },
     0x11: { name: 'GPS_STANDBY_TIMEOUT',  unit:'s', min: 10,   max: 7200   },
-    0x12: { name: 'CONFIRMED_UL_BITMAP',  unit:'',  min: 0x00, max: 0xffff },
-    0x13: { name: 'CONFIRMED_UL_RETRY',   unit:'',  min: 0,    max: 8      },
+    0x12: { name: 'CONFIRMED_UPDU_BITMAP',  unit:'',  min: 0x00, max: 0xffff },
+    0x13: { name: 'CONFIRMED_UPDU_RETRY',   unit:'',  min: 0,    max: 8      },
 }
 
 export enum E_Param_GeolocSensor {

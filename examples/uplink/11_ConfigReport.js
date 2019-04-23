@@ -2,13 +2,10 @@ const AD = require('../../dist/abeeway-driver');
 // Replace the above line with the following line if you use the module from the public npm repository
 // const AD = require('abeeway-driver');
 
-let b;
-let configReport;
-
-configReport = new AD.UlMsg_ConfigReport ({
-    header: new AD.Header({
-        type:         AD.E_UlMsgType.ACTIVITY_OR_CONFIG,
-        status:       new AD.Status({
+let configReport = new AD.UPDU_ConfigReport ({
+    header: new AD.CPDU_Header({
+        type:         AD.E_UPDUType.ACTIVITY_OR_CONFIG,
+        status:       new AD.CPDU_Status({
             operatingMode:           AD.E_OperatingMode.ACTIVITY_TRACKING,
             sosState:                false,
             trackingState:           false,
@@ -23,22 +20,19 @@ configReport = new AD.UlMsg_ConfigReport ({
     }),
     tag:    AD.E_Tag.CONFIG,
     params: [
-        new AD.Parameter({
+        new AD.CPDU_Parameter({
             id: AD.E_ParameterId.TRANSMIT_STRAT,
             value: AD.E_Param_TransmitStrat.DUAL_FIXED,
         }),
-        new AD.Parameter({
+        new AD.CPDU_Parameter({
             id: AD.E_ParameterId.BLE_BEACON_COUNT,
             value: 1,
         }),
     ],
 });
 console.log(configReport.toJSON());
+console.log(configReport.toHexString());
 
-b = configReport.toBuffer();
-console.log(b.toString('hex'));
-
-configReport = new AD.UlMsg_ConfigReport(b);
-console.log(configReport.toJSON());
-
-
+let buffer = configReport.toBuffer();
+let configReport1 = new AD.UPDU_ConfigReport(buffer);
+console.log(configReport1.toJSON());

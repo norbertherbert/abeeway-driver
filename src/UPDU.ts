@@ -1,44 +1,44 @@
 import * as assert from 'assert';
 
-/* Importing Constants */
+/* Constants */
 import { 
-    E_UlMsgType, E_Tag, E_OperatingMode, E_PositionInformation, E_WiFiFailure,
-    E_BLEFailure, E_DlMsgType, E_DebugCmd, E_GPSTimeoutCause, E_ParameterId, 
+    E_UPDUType, E_Tag, E_OperatingMode, E_PositionInformation, E_WiFiFailure,
+    E_BLEFailure, E_DPDUType, E_DebugCmd, E_GPSTimeoutCause, E_ParameterId, 
     C_ParameterId, E_Param_GeolocSensor, E_Param_GeolocMethod, E_Param_TransmitStrat,
 } from './constants';
 
-/* Importing Utils */
+/* Utils */
 import { 
-    mt_value_decode, mt_value_encode, isUint8, ValueTempl, BufferTempl,
+    PDUTemplate, mt_value_decode, mt_value_encode, isUint8,
 } from './utils';
 
-/* Importing Message Components */
+/* Component Protocol Data Units (CPDU) */
 import { 
-    Param_ConfigFlags, Status, Header, UlHeaderShort, DlHeaderShort, WiFiBSSIDs, Parameter, 
-} from './msg-components';
+    CPDU_ParamConfigFlags, CPDU_Status, CPDU_Header, CPDU_UlHeaderShort, CPDU_DlHeaderShort, CPDU_WiFiBSSIDs, CPDU_Parameter, 
+} from './CPDU';
 
 
 // ***************************************************************
-// *** UlMsg_FramePending *******************************************
+// *** UPDU_FramePending *******************************************
 // ***************************************************************
 
 export interface I_MsgFramePending {
-    header:                  UlHeaderShort,     // 2 bytes
+    header:                  CPDU_UlHeaderShort,     // 2 bytes
 }
-export class UlMsg_FramePending extends BufferTempl<I_MsgFramePending> implements I_MsgFramePending {
+export class UPDU_FramePending extends PDUTemplate<I_MsgFramePending> implements I_MsgFramePending {
 
     // *** header ***
-    set header(x:UlHeaderShort) {
-        assert.ok(x.type === E_UlMsgType.FRAME_PENDING, 'UlMsg_FramePending.header: Invalid MessageType!');
+    set header(x:CPDU_UlHeaderShort) {
+        assert.ok(x.type === E_UPDUType.FRAME_PENDING, 'UPDU_FramePending.header: Invalid MessageType!');
         this._props.header = x;
     }
-    get header():UlHeaderShort {
+    get header():CPDU_UlHeaderShort {
         return this._props.header;
     }
 
     setFromBuffer(x:Buffer) {
-        assert.ok(x.length === 2, 'UlMsg_FramePending.setFromBuffer(): Invalid buffer legth!');
-        this.header = new UlHeaderShort(x);
+        assert.ok(x.length === 2, 'UPDU_FramePending.setFromBuffer(): Invalid buffer legth!');
+        this.header = new CPDU_UlHeaderShort(x);
     }
     toBuffer():Buffer {
         return this.header.toBuffer();
@@ -47,32 +47,32 @@ export class UlMsg_FramePending extends BufferTempl<I_MsgFramePending> implement
 }
 
 // ***************************************************************
-// *** UlMsg_PosGPSFix **********************************************
+// *** UPDU_PosGPSFix **********************************************
 // ***************************************************************
 
 export interface I_MsgPosGPSFix {             // 16 bytes
-    header:                  Header,          // 5 bytes
+    header:                  CPDU_Header,          // 5 bytes
     age:                     number,          // 1 byte
     latitude:                number,          // 3 bytes
     longitude:               number,          // 3 bytes
     ehpe:                    number,          // 1 byte
     encryptedPos:            Buffer,          // 3 bytes 
 }
-export class UlMsg_PosGPSFix extends BufferTempl<I_MsgPosGPSFix> implements I_MsgPosGPSFix {
+export class UPDU_PosGPSFix extends PDUTemplate<I_MsgPosGPSFix> implements I_MsgPosGPSFix {
 
     // *** header ***
-    set header(x:Header) {
-        assert.ok(x.type       === E_UlMsgType.POSITION, 'UlMsg_PosGPSFix.header: Invalid MessageType!');
-        assert.ok(x.optData === E_PositionInformation.GPS_FIX, 'UlMsg_PosGPSFix.header: Invalid PositionInformation!');
+    set header(x:CPDU_Header) {
+        assert.ok(x.type       === E_UPDUType.POSITION, 'UPDU_PosGPSFix.header: Invalid MessageType!');
+        assert.ok(x.optData === E_PositionInformation.GPS_FIX, 'UPDU_PosGPSFix.header: Invalid PositionInformation!');
         this._props.header = x;
     }
-    get header():Header {
+    get header():CPDU_Header {
         return this._props.header;
     }
 
     // *** age ***
     set age(x:number) {
-        assert.ok( (0<=x) && (x<=2040), 'UlMsg_PosGPSFix.age: Invalid value!')
+        assert.ok( (0<=x) && (x<=2040), 'UPDU_PosGPSFix.age: Invalid value!')
         this._props.age = x;
     }
     get age():number {
@@ -81,7 +81,7 @@ export class UlMsg_PosGPSFix extends BufferTempl<I_MsgPosGPSFix> implements I_Ms
 
     // *** latitude ***
     set latitude(x:number) {
-        assert.ok((-90<=x) && (x<=90), 'UlMsg_PosGPSFix.latitude: Invalid value!')
+        assert.ok((-90<=x) && (x<=90), 'UPDU_PosGPSFix.latitude: Invalid value!')
         this._props.latitude = x;
     }
     get latitude():number {
@@ -90,7 +90,7 @@ export class UlMsg_PosGPSFix extends BufferTempl<I_MsgPosGPSFix> implements I_Ms
 
     // *** longitude ***
     set longitude(x:number) {
-        assert.ok((-180<=x) && (x<=180), 'UlMsg_PosGPSFix.longitude: Invalid value!')
+        assert.ok((-180<=x) && (x<=180), 'UPDU_PosGPSFix.longitude: Invalid value!')
         this._props.longitude = x;
     }
     get longitude():number {
@@ -99,7 +99,7 @@ export class UlMsg_PosGPSFix extends BufferTempl<I_MsgPosGPSFix> implements I_Ms
 
     // *** ehpe ***
     set ehpe(x:number) {
-        assert.ok( (0<=x) && (x<=1000), 'UlMsg_PosGPSFix.ehpe: Invalid value!'); 
+        assert.ok( (0<=x) && (x<=1000), 'UPDU_PosGPSFix.ehpe: Invalid value!'); 
         this._props.ehpe = x;
     }
     get ehpe():number {
@@ -108,7 +108,7 @@ export class UlMsg_PosGPSFix extends BufferTempl<I_MsgPosGPSFix> implements I_Ms
 
     // *** encrypted ***
     set encryptedPos(x:Buffer) {
-        assert.ok( x.length === 3, 'UlMsg_PosGPSFix.encryptedPos: Invalid Buffer length!')
+        assert.ok( x.length === 3, 'UPDU_PosGPSFix.encryptedPos: Invalid Buffer length!')
         this._props.encryptedPos = x;
     }
     get encryptedPos():Buffer {
@@ -116,8 +116,8 @@ export class UlMsg_PosGPSFix extends BufferTempl<I_MsgPosGPSFix> implements I_Ms
     }
 
     setFromBuffer(x:Buffer) {
-        assert.ok(x.length === 16, 'UlMsg_PosGPSFix.setFromBuffer(): Invalid buffer legth!');
-        this.header = new Header(x.slice(0,5));
+        assert.ok(x.length === 16, 'UPDU_PosGPSFix.setFromBuffer(): Invalid buffer legth!');
+        this.header = new CPDU_Header(x.slice(0,5));
 
         this.age = mt_value_decode(x[5], 0, 2040, 8, 0);
 
@@ -158,30 +158,30 @@ export class UlMsg_PosGPSFix extends BufferTempl<I_MsgPosGPSFix> implements I_Ms
 }
 
 // ***************************************************************
-// *** UlMsg_PosGPSTimeout ******************************************
+// *** UPDU_PosGPSTimeout ******************************************
 // ***************************************************************
 
 export interface I_MsgPosGPSTimeout {                  // 10 bytes
-    header:                  Header,            // 5 bytes
+    header:                  CPDU_Header,            // 5 bytes
     cause:                   E_GPSTimeoutCause, // 1 byte
     _cause?:                 string,
     carrierOverNoise:        number[],          // 4 x 1 byte
 }
-export class UlMsg_PosGPSTimeout extends BufferTempl<I_MsgPosGPSTimeout> implements I_MsgPosGPSTimeout {
+export class UPDU_PosGPSTimeout extends PDUTemplate<I_MsgPosGPSTimeout> implements I_MsgPosGPSTimeout {
 
     // *** header ***
-    set header(x:Header) {
-        assert.ok(x.type       === E_UlMsgType.POSITION, 'UlMsg_PosGPSTimeout.header: Invalid MessageType!');
-        assert.ok(x.optData    === E_PositionInformation.GPS_TIMEOUT, 'UlMsg_PosGPSTimeout.header: Invalid PositionInformation!');
+    set header(x:CPDU_Header) {
+        assert.ok(x.type       === E_UPDUType.POSITION, 'UPDU_PosGPSTimeout.header: Invalid MessageType!');
+        assert.ok(x.optData    === E_PositionInformation.GPS_TIMEOUT, 'UPDU_PosGPSTimeout.header: Invalid PositionInformation!');
         this._props.header = x;
     }
-    get header():Header {
+    get header():CPDU_Header {
         return this._props.header;
     }
 
     // *** cause ***
     set cause(x:E_GPSTimeoutCause) {
-        assert.ok(x in E_GPSTimeoutCause, 'UlMsg_PosGPSTimeout.cause: invalid value');
+        assert.ok(x in E_GPSTimeoutCause, 'UPDU_PosGPSTimeout.cause: invalid value');
         this._props.cause = x;
         this._props._cause = E_GPSTimeoutCause[x];
     }
@@ -192,7 +192,7 @@ export class UlMsg_PosGPSTimeout extends BufferTempl<I_MsgPosGPSTimeout> impleme
     // *** carrierOverNoise ***
     set carrierOverNoise(x:number[]) {
         for (let i=0; i<4; i++) {
-            assert.ok( (0<=x[i]) && (x[i]<=2040), 'UlMsg_PosGPSTimeout.carrierOverNoise: invalid value');
+            assert.ok( (0<=x[i]) && (x[i]<=2040), 'UPDU_PosGPSTimeout.carrierOverNoise: invalid value');
         }
         this._props.carrierOverNoise = x;
     }
@@ -201,8 +201,8 @@ export class UlMsg_PosGPSTimeout extends BufferTempl<I_MsgPosGPSTimeout> impleme
     }
 
     setFromBuffer(x:Buffer) {
-        assert.ok(x.length === 10, 'UlMsg_PosGPSTimeout.setFromBuffer(): Invalid buffer legth!');
-        this.header = new Header(x.slice(0,5));
+        assert.ok(x.length === 10, 'UPDU_PosGPSTimeout.setFromBuffer(): Invalid buffer legth!');
+        this.header = new CPDU_Header(x.slice(0,5));
         this.cause = x[5];
         let carrierOverNoise: number[] = [];
         for (let i=0; i<4; i++) {
@@ -225,29 +225,29 @@ export class UlMsg_PosGPSTimeout extends BufferTempl<I_MsgPosGPSTimeout> impleme
 }
 
 // ***************************************************************
-// *** UlMsg_PosWiFiTimeout *****************************************
+// *** UPDU_PosWiFiTimeout *****************************************
 // ***************************************************************
 
 export interface I_MsgPosWiFiTimeout {               // 11 bytes
-    header:                  Header,          // 5 bytes
+    header:                  CPDU_Header,          // 5 bytes
     v_bat:                   number[],        // 6 x 1 byte
 }
-export class UlMsg_PosWiFiTimeout extends BufferTempl<I_MsgPosWiFiTimeout> implements I_MsgPosWiFiTimeout {
+export class UPDU_PosWiFiTimeout extends PDUTemplate<I_MsgPosWiFiTimeout> implements I_MsgPosWiFiTimeout {
 
     // *** header ***
-    set header(x:Header) {
-        assert.ok(x.type    === E_UlMsgType.POSITION, 'UlMsg_PosWiFiTimeout.header: Invalid MessageType!');
-        assert.ok(x.optData === E_PositionInformation.WIFI_TIMEOUT, 'UlMsg_PosWiFiTimeout.header: Invalid PositionInformation!');
+    set header(x:CPDU_Header) {
+        assert.ok(x.type    === E_UPDUType.POSITION, 'UPDU_PosWiFiTimeout.header: Invalid MessageType!');
+        assert.ok(x.optData === E_PositionInformation.WIFI_TIMEOUT, 'UPDU_PosWiFiTimeout.header: Invalid PositionInformation!');
         this._props.header = x;
     }
-    get header():Header {
+    get header():CPDU_Header {
         return this._props.header;
     }
 
     // *** v_bat ***
     set v_bat(x:number[]) {
         for (let i=0; i<6; i++) {
-            assert.ok( (2.8<=x[i]) && (x[i]<=4.2), 'UlMsg_PosWiFiTimeout.v_bat: invalid value');
+            assert.ok( (2.8<=x[i]) && (x[i]<=4.2), 'UPDU_PosWiFiTimeout.v_bat: invalid value');
         }
         this._props.v_bat = x;
     }
@@ -256,8 +256,8 @@ export class UlMsg_PosWiFiTimeout extends BufferTempl<I_MsgPosWiFiTimeout> imple
     }
 
     setFromBuffer(x:Buffer) {
-        assert.ok(x.length === 11, 'UlMsg_PosWiFiTimeout.setFromBuffer(): Invalid buffer legth!');
-        this.header = new Header(x.slice(0,5));
+        assert.ok(x.length === 11, 'UPDU_PosWiFiTimeout.setFromBuffer(): Invalid buffer legth!');
+        this.header = new CPDU_Header(x.slice(0,5));
 
         let v_bat: number[] = [];
         for (let i=0; i<6; i++) {
@@ -279,31 +279,31 @@ export class UlMsg_PosWiFiTimeout extends BufferTempl<I_MsgPosWiFiTimeout> imple
 }
 
 // ***************************************************************
-// *** UlMsg_PosWiFiFailure *****************************************
+// *** UPDU_PosWiFiFailure *****************************************
 // ***************************************************************
 
 export interface I_MsgPosWiFiFailure {               // 12 bytes
-    header:                  Header,          // 5 bytes
+    header:                  CPDU_Header,          // 5 bytes
     v_bat:                   number[],        // 6 x 1 byte
     error:                   E_WiFiFailure,   // 1 byte
     _error?:              string,
 }
-export class UlMsg_PosWiFiFailure extends BufferTempl<I_MsgPosWiFiFailure> implements I_MsgPosWiFiFailure {
+export class UPDU_PosWiFiFailure extends PDUTemplate<I_MsgPosWiFiFailure> implements I_MsgPosWiFiFailure {
 
     // *** header ***
-    set header(x:Header) {
-        assert.ok(x.type       === E_UlMsgType.POSITION, 'UlMsg_PosWiFiFailure.header: Invalid MessageType!');
-        assert.ok(x.optData === E_PositionInformation.WIFI_FAILURE, 'UlMsg_PosWiFiFailure.header: Invalid PositionInformation!');
+    set header(x:CPDU_Header) {
+        assert.ok(x.type       === E_UPDUType.POSITION, 'UPDU_PosWiFiFailure.header: Invalid MessageType!');
+        assert.ok(x.optData === E_PositionInformation.WIFI_FAILURE, 'UPDU_PosWiFiFailure.header: Invalid PositionInformation!');
         this._props.header = x;
     }
-    get header():Header {
+    get header():CPDU_Header {
         return this._props.header;
     }
 
     // *** v_bat ***
     set v_bat(x:number[]) {
         for (let i=0; i<6; i++) {
-            assert.ok( (2.8<=x[i]) && (x[i]<=4.2), 'UlMsg_PosWiFiFailure.v_bat: invalid value');
+            assert.ok( (2.8<=x[i]) && (x[i]<=4.2), 'UPDU_PosWiFiFailure.v_bat: invalid value');
         }
         this._props.v_bat = x;
     }
@@ -313,7 +313,7 @@ export class UlMsg_PosWiFiFailure extends BufferTempl<I_MsgPosWiFiFailure> imple
 
     // *** error ***
     set error(x:E_WiFiFailure) {
-        assert.ok( x in E_WiFiFailure, 'UlMsg_PosWiFiFailure.error: invalid value');
+        assert.ok( x in E_WiFiFailure, 'UPDU_PosWiFiFailure.error: invalid value');
         this._props.error = x;
         this._props._error = E_WiFiFailure[x];
     }
@@ -322,8 +322,8 @@ export class UlMsg_PosWiFiFailure extends BufferTempl<I_MsgPosWiFiFailure> imple
     }
 
     setFromBuffer(x:Buffer) {
-        assert.ok(x.length === 12, 'UlMsg_PosWiFiFailure.setFromBuffer(): Invalid buffer legth!');
-        this.header = new Header(x.slice(0,5));
+        assert.ok(x.length === 12, 'UPDU_PosWiFiFailure.setFromBuffer(): Invalid buffer legth!');
+        this.header = new CPDU_Header(x.slice(0,5));
 
         let v_bat: number[] = [];
         for (let i=0; i<6; i++) {
@@ -348,29 +348,29 @@ export class UlMsg_PosWiFiFailure extends BufferTempl<I_MsgPosWiFiFailure> imple
 }
 
 // ***************************************************************
-// *** UlMsg_PosWiFiBSSIDs ******************************************
+// *** UPDU_PosWiFiBSSIDs ******************************************
 // ***************************************************************
 
 export interface I_MsgPosWiFiBSSIDs {                // 34 bytes
-    header:                  Header,          // 5 bytes
+    header:                  CPDU_Header,          // 5 bytes
     age:                     number,          // 1 byte
-    wifiHotspots:            WiFiBSSIDs[],
+    wifiHotspots:            CPDU_WiFiBSSIDs[],
 }
-export class UlMsg_PosWiFiBSSIDs extends BufferTempl<I_MsgPosWiFiBSSIDs> implements I_MsgPosWiFiBSSIDs {
+export class UPDU_PosWiFiBSSIDs extends PDUTemplate<I_MsgPosWiFiBSSIDs> implements I_MsgPosWiFiBSSIDs {
 
     // *** header ***
-    set header(x:Header) {
-        assert.ok(x.type       === E_UlMsgType.POSITION, 'UlMsg_PosWiFiBSSIDs.header: Invalid MessageType!');
-        assert.ok(x.optData === E_PositionInformation.WIFI_BSSIDS, 'UlMsg_PosWiFiBSSIDs.header: Invalid PositionInformation!');
+    set header(x:CPDU_Header) {
+        assert.ok(x.type       === E_UPDUType.POSITION, 'UPDU_PosWiFiBSSIDs.header: Invalid MessageType!');
+        assert.ok(x.optData === E_PositionInformation.WIFI_BSSIDS, 'UPDU_PosWiFiBSSIDs.header: Invalid PositionInformation!');
         this._props.header = x;
     }
-    get header():Header {
+    get header():CPDU_Header {
         return this._props.header;
     }
 
     // *** age ***
     set age(x:number) {
-        assert.ok( (0<=x) && (x<=2040), 'UlMsg_PosWiFiBSSIDs.age: Invalid value!');
+        assert.ok( (0<=x) && (x<=2040), 'UPDU_PosWiFiBSSIDs.age: Invalid value!');
         this._props.age = x;
     }
     get age():number {
@@ -378,23 +378,23 @@ export class UlMsg_PosWiFiBSSIDs extends BufferTempl<I_MsgPosWiFiBSSIDs> impleme
     }
 
     // *** wifiHotspots ***
-    set wifiHotspots(x:WiFiBSSIDs[]) {
-        assert.ok( x.length === 4, 'UlMsg_PosWiFiBSSIDs.wifiHotspots: Invalid value!');
+    set wifiHotspots(x:CPDU_WiFiBSSIDs[]) {
+        assert.ok( x.length === 4, 'UPDU_PosWiFiBSSIDs.wifiHotspots: Invalid value!');
         this._props.wifiHotspots = x;
     }
-    get wifiHotspots():WiFiBSSIDs[] {
+    get wifiHotspots():CPDU_WiFiBSSIDs[] {
         return this._props.wifiHotspots;
     }
 
     setFromBuffer(x:Buffer) {
-        assert.ok(x.length === 34, 'UlMsg_PosWiFiBSSIDs.setFromBuffer(): Invalid buffer legth!');
-        this.header = new Header(x.slice(0,5));
+        assert.ok(x.length === 34, 'UPDU_PosWiFiBSSIDs.setFromBuffer(): Invalid buffer legth!');
+        this.header = new CPDU_Header(x.slice(0,5));
         this.age = mt_value_decode(x[5], 0, 2040, 8, 0);
 
-        let wifiHotspots: WiFiBSSIDs[] = [];
+        let wifiHotspots: CPDU_WiFiBSSIDs[] = [];
         for (let i=0; i<4; i++) {
             wifiHotspots.push( 
-                new WiFiBSSIDs( x.slice(6+(i*7), 13+(i*7)) )
+                new CPDU_WiFiBSSIDs( x.slice(6+(i*7), 13+(i*7)) )
             );
         }
         this.wifiHotspots = wifiHotspots;
@@ -414,29 +414,29 @@ export class UlMsg_PosWiFiBSSIDs extends BufferTempl<I_MsgPosWiFiBSSIDs> impleme
 }
 
 // ***************************************************************
-// *** UlMsg_PosBLEFailure ***************************************
+// *** UPDU_PosBLEFailure ***************************************
 // ***************************************************************
 
 export interface I_MsgPosBLEFailure {                // 6 bytes
-    header:                  Header,          // 5 bytes
+    header:                  CPDU_Header,          // 5 bytes
     error:                   E_BLEFailure,    // 1 byte
     _error?:                 string,
 }
-export class UlMsg_PosBLEFailure extends BufferTempl<I_MsgPosBLEFailure> implements I_MsgPosBLEFailure {
+export class UPDU_PosBLEFailure extends PDUTemplate<I_MsgPosBLEFailure> implements I_MsgPosBLEFailure {
 
     // *** header ***
-    set header(x:Header) {
-        assert.ok(x.type       === E_UlMsgType.POSITION, 'UlMsg_PosBLEFailure.header: Invalid MessageType!');
-        assert.ok(x.optData === E_PositionInformation.BLE_BACON_FAILURE, 'UlMsg_PosBLEFailure.header: Invalid PositionInformation!');
+    set header(x:CPDU_Header) {
+        assert.ok(x.type       === E_UPDUType.POSITION, 'UPDU_PosBLEFailure.header: Invalid MessageType!');
+        assert.ok(x.optData === E_PositionInformation.BLE_BACON_FAILURE, 'UPDU_PosBLEFailure.header: Invalid PositionInformation!');
         this._props.header = x;
     }
-    get header():Header {
+    get header():CPDU_Header {
         return this._props.header;
     }
 
     // *** error ***
     set error(x:E_BLEFailure) {
-        assert.ok(x in E_BLEFailure, 'UlMsg_PosBLEFailure.error: Invalid value!');
+        assert.ok(x in E_BLEFailure, 'UPDU_PosBLEFailure.error: Invalid value!');
         this._props.error = x;
         this._props._error = E_BLEFailure[x];
     }
@@ -445,8 +445,8 @@ export class UlMsg_PosBLEFailure extends BufferTempl<I_MsgPosBLEFailure> impleme
     }
 
     setFromBuffer(x:Buffer) {
-        assert.ok(x.length === 6, 'UlMsg_PosBLEFailure.setFromBuffer(): Invalid buffer legth!');
-        this.header = new Header(x.slice(0,5));
+        assert.ok(x.length === 6, 'UPDU_PosBLEFailure.setFromBuffer(): Invalid buffer legth!');
+        this.header = new CPDU_Header(x.slice(0,5));
         this.error = x[5];
     }
     toBuffer():Buffer {
@@ -459,23 +459,23 @@ export class UlMsg_PosBLEFailure extends BufferTempl<I_MsgPosBLEFailure> impleme
 }
 
 // ****************************************************************
-// *** UlMsg_EnergyStatus ********************************************
+// *** UPDU_EnergyStatus ********************************************
 // ****************************************************************
 
 export interface I_MsgEnergyStatus {           // 17 bytes
-    header:                  Header,    // 5 bytes
+    header:                  CPDU_Header,    // 5 bytes
     gpsOnTime:               number,    // 4 bytes
     gpsStabdbyTime:          number,    // 4 bytes
     wifiScans:               number,    // 4 bytes
 }
-export class UlMsg_EnergyStatus extends BufferTempl<I_MsgEnergyStatus> implements I_MsgEnergyStatus {
+export class UPDU_EnergyStatus extends PDUTemplate<I_MsgEnergyStatus> implements I_MsgEnergyStatus {
 
     // *** header ***
-    set header(x:Header) {
-        assert.ok(x.type       === E_UlMsgType.ENERGY_STATUS, 'UlMsg_EnergyStatus.header: Invalid MessageType!');
+    set header(x:CPDU_Header) {
+        assert.ok(x.type       === E_UPDUType.ENERGY_STATUS, 'UPDU_EnergyStatus.header: Invalid MessageType!');
         this._props.header = x;
     }
-    get header():Header {
+    get header():CPDU_Header {
         return this._props.header;
     }
 
@@ -504,8 +504,8 @@ export class UlMsg_EnergyStatus extends BufferTempl<I_MsgEnergyStatus> implement
     }
 
     setFromBuffer(x:Buffer) {
-        assert.ok(x.length === 17, 'UlMsg_EnergyStatus.setFromBuffer(): Invalid buffer legth!');
-        this.header = new Header(x.slice(0,5));
+        assert.ok(x.length === 17, 'UPDU_EnergyStatus.setFromBuffer(): Invalid buffer legth!');
+        this.header = new CPDU_Header(x.slice(0,5));
         this.gpsOnTime = x.readUInt32BE(5);
         this.gpsStabdbyTime = x.readUInt32BE(9);
         this.wifiScans = x.readUInt32BE(13);
@@ -522,25 +522,25 @@ export class UlMsg_EnergyStatus extends BufferTempl<I_MsgEnergyStatus> implement
 }
 
 // ***************************************************************
-// *** UlMsg_HeartBeat **********************************************
+// *** UPDU_HeartBeat **********************************************
 // ***************************************************************
 
 // TODO: What is the format of fwVersion?
 // TODO: What are the possible values of cause?
 
 export interface I_MsgHeartBeat {                    // 6|9 bytes
-    header:                  Header,          // 5 bytes
+    header:                  CPDU_Header,          // 5 bytes
     cause:                   number,          // 1 byte
     fwVersion?:              string,          // 3 bytes (optional)
 }
-export class UlMsg_HeartBeat extends BufferTempl<I_MsgHeartBeat> implements I_MsgHeartBeat {
+export class UPDU_HeartBeat extends PDUTemplate<I_MsgHeartBeat> implements I_MsgHeartBeat {
 
     // *** header ***
-    set header(x:Header) {
-        assert.ok(x.type       === E_UlMsgType.HEART_BEAT, 'UlMsg_HeartBeat.header: Invalid MessageType!');
+    set header(x:CPDU_Header) {
+        assert.ok(x.type       === E_UPDUType.HEART_BEAT, 'UPDU_HeartBeat.header: Invalid MessageType!');
         this._props.header = x;
     }
-    get header():Header {
+    get header():CPDU_Header {
         return this._props.header;
     }
 
@@ -559,13 +559,13 @@ export class UlMsg_HeartBeat extends BufferTempl<I_MsgHeartBeat> implements I_Ms
                 delete this._props.fwVersion
             }
         } else {
-            assert.ok(x.match(/^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/), 'UlMsg_HeartBeat.fwVersion: invalid value!');
+            assert.ok(x.match(/^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/), 'UPDU_HeartBeat.fwVersion: invalid value!');
             let fwStrArray = x.split('.');
             let fwValArray: number[] = [];
             let fwVal: number;
             for (let i=0; i<3; i++) {
                 fwVal = parseInt(fwStrArray[i]);
-                assert.ok(isUint8(fwVal), 'UlMsg_HeartBeat.fwVersion: invalid value!');
+                assert.ok(isUint8(fwVal), 'UPDU_HeartBeat.fwVersion: invalid value!');
                 fwValArray.push(fwVal);
             }
             this._props.fwVersion = fwValArray.join('.');
@@ -580,8 +580,8 @@ export class UlMsg_HeartBeat extends BufferTempl<I_MsgHeartBeat> implements I_Ms
 
     setFromBuffer(x:Buffer) {
         let l = x.length;
-        assert.ok([6, 9].includes(l), 'UlMsg_HeartBeat.setFromBuffer(): Invalid buffer legth!');
-        this.header = new Header(x.slice(0,5));
+        assert.ok([6, 9].includes(l), 'UPDU_HeartBeat.setFromBuffer(): Invalid buffer legth!');
+        this.header = new CPDU_Header(x.slice(0,5));
 
         this.cause = x[5];
 
@@ -609,30 +609,30 @@ export class UlMsg_HeartBeat extends BufferTempl<I_MsgHeartBeat> implements I_Ms
 }
 
 // ***************************************************************
-// *** UlMsg_ActivityStatus *****************************************
+// *** UPDU_ActivityStatus *****************************************
 // ***************************************************************
 
 // TODO: what are the possible values of tag? What does it mean?
 
 export interface I_MsgActivityStatus {               // 10 bytes
-    header:                  Header,          // 5 bytes
+    header:                  CPDU_Header,          // 5 bytes
     tag:                     E_Tag,          // 1 byte =1
     activityCount:           number,          // 4 bytes
 }
-export class UlMsg_ActivityStatus extends BufferTempl<I_MsgActivityStatus> implements I_MsgActivityStatus {
+export class UPDU_ActivityStatus extends PDUTemplate<I_MsgActivityStatus> implements I_MsgActivityStatus {
 
     // *** header ***
-    set header(x:Header) {
-        assert.ok(x.type       === E_UlMsgType.ACTIVITY_OR_CONFIG, 'UlMsg_ActivityStatus.header: Invalid MessageType!');
+    set header(x:CPDU_Header) {
+        assert.ok(x.type       === E_UPDUType.ACTIVITY_OR_CONFIG, 'UPDU_ActivityStatus.header: Invalid MessageType!');
         this._props.header = x;
     }
-    get header():Header {
+    get header():CPDU_Header {
         return this._props.header;
     }
 
     // *** tag ***
     set tag(x:E_Tag) {
-        assert.ok(x === E_Tag.ACTIVITY, 'UlMsg_ActivityStatus.tag(): Invalid value!');
+        assert.ok(x === E_Tag.ACTIVITY, 'UPDU_ActivityStatus.tag(): Invalid value!');
         this._props.tag = x;
         this._props._tag = E_Tag[x];
     }
@@ -642,7 +642,7 @@ export class UlMsg_ActivityStatus extends BufferTempl<I_MsgActivityStatus> imple
 
     // *** activityCount ***
     set activityCount(x:number) {
-        assert.ok(x >= 0, 'UlMsg_ActivityStatus.activityCount(): Invalid value!');
+        assert.ok(x >= 0, 'UPDU_ActivityStatus.activityCount(): Invalid value!');
         this._props.activityCount = x;
     }
     get activityCount():number {
@@ -650,8 +650,8 @@ export class UlMsg_ActivityStatus extends BufferTempl<I_MsgActivityStatus> imple
     }
 
     setFromBuffer(x:Buffer) {
-        assert.ok(x.length === 10, 'UlMsg_ActivityStatus.setFromBuffer(): Invalid buffer legth!');
-        this.header = new Header(x.slice(0,5));
+        assert.ok(x.length === 10, 'UPDU_ActivityStatus.setFromBuffer(): Invalid buffer legth!');
+        this.header = new CPDU_Header(x.slice(0,5));
         this.tag = x[5];
         this.activityCount = x.readUInt32BE(6);
     }
@@ -666,30 +666,30 @@ export class UlMsg_ActivityStatus extends BufferTempl<I_MsgActivityStatus> imple
 }
 
 // ***************************************************************
-// *** UlMsg_ConfigReport ******************************************
+// *** UPDU_ConfigReport ******************************************
 // ***************************************************************
 
 // TODO: what are the possible values of tag? What does it mean?
 
 export interface I_MsgConfigReport {          // 11..31 bytes
-    header:                  Header,          // 5 bytes
+    header:                  CPDU_Header,          // 5 bytes
     tag:                     E_Tag,           // 1 byte =2
-    params:                  Parameter[]      // n x 5 bytes, n=1..5
+    params:                  CPDU_Parameter[]      // n x 5 bytes, n=1..5
 }
-export class UlMsg_ConfigReport extends BufferTempl<I_MsgConfigReport> implements I_MsgConfigReport {
+export class UPDU_ConfigReport extends PDUTemplate<I_MsgConfigReport> implements I_MsgConfigReport {
    
     // *** header ***
-    set header(x:Header) {
-        assert.ok(x.type   === E_UlMsgType.ACTIVITY_OR_CONFIG, 'UlMsg_ConfigReport.header: Invalid MessageType!');
+    set header(x:CPDU_Header) {
+        assert.ok(x.type   === E_UPDUType.ACTIVITY_OR_CONFIG, 'UPDU_ConfigReport.header: Invalid MessageType!');
         this._props.header = x;
     }
-    get header():Header {
+    get header():CPDU_Header {
         return this._props.header;
     }
 
     // *** tag ***
     set tag(x:E_Tag) {
-        assert.ok(x === E_Tag.CONFIG, 'UlMsg_ConfigReport.tag(): Invalid value!');
+        assert.ok(x === E_Tag.CONFIG, 'UPDU_ConfigReport.tag(): Invalid value!');
         this._props.tag = x;
         this._props._tag = E_Tag[x];
     }
@@ -698,25 +698,25 @@ export class UlMsg_ConfigReport extends BufferTempl<I_MsgConfigReport> implement
     }
 
     // *** params ***
-    set params(x:Parameter[]) {
+    set params(x:CPDU_Parameter[]) {
         this._props.params = x;
     }
-    get params():Parameter[] {
+    get params():CPDU_Parameter[] {
         return this._props.params;
     }
 
     setFromBuffer(x:Buffer) {
         let paramsLength = (x.length - 6) / 5;
-        assert.ok( [1,2,3,4,5].includes(paramsLength), 'UlMsg_ConfigReport.setFromBuffer(): Invalid buffer legth!');
+        assert.ok( [1,2,3,4,5].includes(paramsLength), 'UPDU_ConfigReport.setFromBuffer(): Invalid buffer legth!');
 
-        this.header = new Header(x.slice(0,5));
+        this.header = new CPDU_Header(x.slice(0,5));
 
         this.tag = x[5];
 
-        let params: Parameter[] = [];
+        let params: CPDU_Parameter[] = [];
         for (let i=0; i<paramsLength; i++) {
             params.push( 
-                new Parameter( x.slice(6+(i*5), 11+(i*5)) )
+                new CPDU_Parameter( x.slice(6+(i*5), 11+(i*5)) )
             );
         }
 
@@ -737,30 +737,30 @@ export class UlMsg_ConfigReport extends BufferTempl<I_MsgConfigReport> implement
 }
 
 // ****************************************************************
-// *** UlMsg_Shutdown ************************************************
+// *** UPDU_Shutdown ************************************************
 // ****************************************************************
 
 // TODO: Verify if the implementation below is correct!
 
 export interface I_MsgShutdown {
-    header:                  UlHeaderShort,     // 2 bytes
+    header:                  CPDU_UlHeaderShort,     // 2 bytes
     // The documentation does not say anything about the additional fields of SHUTHDOWN messages
 }
-export class UlMsg_Shutdown extends BufferTempl<I_MsgShutdown> implements I_MsgShutdown {
+export class UPDU_Shutdown extends PDUTemplate<I_MsgShutdown> implements I_MsgShutdown {
 
     // *** header ***
-    set header(x:UlHeaderShort) {
-        assert.ok(x.type === E_UlMsgType.SHUTDOWN, 'UlMsg_Shutdown.header: Invalid MessageType!');
+    set header(x:CPDU_UlHeaderShort) {
+        assert.ok(x.type === E_UPDUType.SHUTDOWN, 'UPDU_Shutdown.header: Invalid MessageType!');
         this._props.header = x;
     }
-    get header():UlHeaderShort {
+    get header():CPDU_UlHeaderShort {
         return this._props.header;
     }
 
     setFromBuffer(x:Buffer) {
-        // assert.ok(x.length === 2, 'UlMsg_Shutdown.setFromBuffer(): Invalid buffer legth!');
+        // assert.ok(x.length === 2, 'UPDU_Shutdown.setFromBuffer(): Invalid buffer legth!');
         // The documentation does not say anything about the length of SHUTHDOWN messages
-        this.header = new UlHeaderShort(x.slice(0,2));
+        this.header = new CPDU_UlHeaderShort(x.slice(0,2));
     }
     toBuffer():Buffer {
         return this.header.toBuffer();
@@ -769,30 +769,30 @@ export class UlMsg_Shutdown extends BufferTempl<I_MsgShutdown> implements I_MsgS
 }
 
 // ****************************************************************
-// *** UlMsg_Debug ***************************************************
+// *** UPDU_Debug ***************************************************
 // ****************************************************************
 
 // TODO: Verify if the implementation below is correct!
 
 export interface I_MsgDebug {
-    header:                  UlHeaderShort,     // 2 bytes
+    header:                  CPDU_UlHeaderShort,     // 2 bytes
     // The documentation does not say anything about the additional fields of DEBUG messages
 }
-export class UlMsg_Debug extends BufferTempl<I_MsgDebug> implements I_MsgDebug {
+export class UPDU_Debug extends PDUTemplate<I_MsgDebug> implements I_MsgDebug {
 
     // *** header ***
-    set header(x:UlHeaderShort) {
-        assert.ok(x.type === E_UlMsgType.DEBUG, 'UlMsg_Debug.header: Invalid MessageType!');
+    set header(x:CPDU_UlHeaderShort) {
+        assert.ok(x.type === E_UPDUType.DEBUG, 'UPDU_Debug.header: Invalid MessageType!');
         this._props.header = x;
     }
-    get header():UlHeaderShort {
+    get header():CPDU_UlHeaderShort {
         return this._props.header;
     }
 
     setFromBuffer(x:Buffer) {
-        // assert.ok(x.length === 2, 'UlMsg_Debug.setFromBuffer(): Invalid buffer legth!');
+        // assert.ok(x.length === 2, 'UPDU_Debug.setFromBuffer(): Invalid buffer legth!');
         // The documentation does not say anything about the length of DEBUG messages
-        this.header = new UlHeaderShort(x.slice(0,2));
+        this.header = new CPDU_UlHeaderShort(x.slice(0,2));
     }
     toBuffer():Buffer {
         return this.header.toBuffer();
@@ -804,25 +804,25 @@ export let decodeUlMsg = (buf: Buffer):object => {
 
     let msg: any;
     switch(buf[0]) {
-        case E_UlMsgType.FRAME_PENDING:
-            msg = new UlMsg_FramePending(buf);
+        case E_UPDUType.FRAME_PENDING:
+            msg = new UPDU_FramePending(buf);
             break;
-        case E_UlMsgType.POSITION:
+        case E_UPDUType.POSITION:
             switch(buf[4] & 0xf) {
                 case E_PositionInformation.GPS_FIX:
-                    msg = new UlMsg_PosGPSFix(buf);
+                    msg = new UPDU_PosGPSFix(buf);
                     break;
                 case E_PositionInformation.GPS_TIMEOUT:
-                    msg = new UlMsg_PosGPSTimeout(buf);
+                    msg = new UPDU_PosGPSTimeout(buf);
                     break;
                 case E_PositionInformation.NO_MORE_USED:
                     msg = undefined;
                     break;
                 case E_PositionInformation.WIFI_TIMEOUT:
-                    msg = new UlMsg_PosWiFiTimeout(buf);
+                    msg = new UPDU_PosWiFiTimeout(buf);
                     break;
                 case E_PositionInformation.WIFI_FAILURE:
-                    msg = new UlMsg_PosWiFiFailure(buf);
+                    msg = new UPDU_PosWiFiFailure(buf);
                     break;
                 case E_PositionInformation.LPGPS_DATA1:
                     msg = undefined;
@@ -831,43 +831,43 @@ export let decodeUlMsg = (buf: Buffer):object => {
                     msg = undefined;
                     break;
                 case E_PositionInformation.BLE_BACON_SCAN:
-                    msg = undefined; //new UlMsg_(buf);
+                    msg = undefined; //new UPDU_(buf);
                     break;
                 case E_PositionInformation.BLE_BACON_FAILURE:
-                    msg = new UlMsg_PosBLEFailure(buf);
+                    msg = new UPDU_PosBLEFailure(buf);
                     break;
                 case E_PositionInformation.WIFI_BSSIDS:
-                    msg = new UlMsg_PosWiFiBSSIDs(buf);
+                    msg = new UPDU_PosWiFiBSSIDs(buf);
                     break;
                 default:
                     msg = undefined;
                     break;
             }
             break;
-        case E_UlMsgType.ENERGY_STATUS:
-            msg = new UlMsg_EnergyStatus(buf);
+        case E_UPDUType.ENERGY_STATUS:
+            msg = new UPDU_EnergyStatus(buf);
             break;
-        case E_UlMsgType.HEART_BEAT:
-            msg = new UlMsg_HeartBeat(buf);
+        case E_UPDUType.HEART_BEAT:
+            msg = new UPDU_HeartBeat(buf);
             break;
-        case E_UlMsgType.ACTIVITY_OR_CONFIG:
+        case E_UPDUType.ACTIVITY_OR_CONFIG:
             switch(buf[5]) {
                 case E_Tag.ACTIVITY:
-                    msg = new UlMsg_ActivityStatus(buf);
+                    msg = new UPDU_ActivityStatus(buf);
                     break;
                 case E_Tag.CONFIG:
-                    msg = new UlMsg_ConfigReport(buf);
+                    msg = new UPDU_ConfigReport(buf);
                     break;
                 default:
                     msg = undefined;
                     break;
             }
             break;
-        case E_UlMsgType.SHUTDOWN:
-            msg = new UlMsg_Shutdown(buf);
+        case E_UPDUType.SHUTDOWN:
+            msg = new UPDU_Shutdown(buf);
             break;
-        case E_UlMsgType.DEBUG:
-            msg = new UlMsg_Debug(buf);
+        case E_UPDUType.DEBUG:
+            msg = new UPDU_Debug(buf);
             break;
         default:
             msg = undefined;
@@ -877,7 +877,7 @@ export let decodeUlMsg = (buf: Buffer):object => {
     if (msg) {
         return msg.toComponents();
     } else {
-        return { error: "Unknown message type: "+E_UlMsgType[buf[0]] };
+        return { error: "Unknown message type: "+E_UPDUType[buf[0]] };
     }
 
 }

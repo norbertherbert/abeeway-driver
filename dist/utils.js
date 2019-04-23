@@ -15,78 +15,52 @@ exports.mt_value_encode = function (value, lo, hi, nbits, nresv) {
 exports.isUint8 = function (x) {
     return (x & 0xff) === x;
 };
-var ValueTempl = /** @class */ (function () {
-    function ValueTempl(x) {
+var PDUTemplate = /** @class */ (function () {
+    function PDUTemplate(x) {
         this._props = {};
-        if (typeof x === 'number') {
+        if (typeof x == 'number') {
             this.setFromValue(x);
         }
-        else {
-            this.setFromComponents(x);
+        else if (typeof x == 'string') {
+            this.setFromHexString(x);
         }
-    }
-    ValueTempl.prototype.setFromValue = function (x) {
-    };
-    ValueTempl.prototype.toValue = function () {
-        return 0;
-    };
-    ValueTempl.prototype.setFromComponents = function (x) {
-        for (var key in x) {
-            this[key] = x[key];
-        }
-    };
-    ValueTempl.prototype.toComponents = function () {
-        var y = {};
-        for (var key in this._props) {
-            if (Array.isArray(this._props[key])) {
-                var arr = [];
-                for (var _i = 0, _a = this._props[key]; _i < _a.length; _i++) {
-                    var element = _a[_i];
-                    if (typeof element === 'object') {
-                        arr.push(element.toComponents());
-                    }
-                    else {
-                        arr.push(element);
-                    }
-                }
-                y[key] = arr;
-            }
-            else if (typeof this._props[key] === 'object') {
-                y[key] = this._props[key].toComponents();
-            }
-            else {
-                y[key] = this._props[key];
-            }
-        }
-        return y;
-    };
-    ValueTempl.prototype.toJSON = function () {
-        return JSON.stringify(this.toComponents(), null, 4);
-    };
-    return ValueTempl;
-}());
-exports.ValueTempl = ValueTempl;
-var BufferTempl = /** @class */ (function () {
-    function BufferTempl(x) {
-        this._props = {};
-        if (x instanceof Buffer) {
+        else if (x instanceof Buffer) {
             this.setFromBuffer(x);
         }
         else {
             this.setFromComponents(x);
         }
     }
-    BufferTempl.prototype.setFromBuffer = function (x) {
+    // setFromValue() and toValue() methods are going to be overwritten by sub classes
+    // derived from this class template
+    PDUTemplate.prototype.setFromValue = function (x) {
+        throw new Error('setFromValue() method is not defined for this class.');
     };
-    BufferTempl.prototype.toBuffer = function () {
+    PDUTemplate.prototype.toValue = function () {
+        throw new Error('toValue() method is not defined for this class.');
+        return 0;
+    };
+    // setFromBuffer() and toBuffer() methods are going to be overwritten by sub classes
+    // derived from this class template
+    PDUTemplate.prototype.setFromBuffer = function (x) {
+        throw new Error('setFromBuffer() method is not defined for this class.');
+    };
+    PDUTemplate.prototype.toBuffer = function () {
+        throw new Error('toBuffer() method is not defined for this class.');
         return Buffer.allocUnsafe(0);
     };
-    BufferTempl.prototype.setFromComponents = function (x) {
+    PDUTemplate.prototype.setFromHexString = function (x) {
+        this.setFromBuffer(Buffer.from(x));
+    };
+    PDUTemplate.prototype.toHexString = function () {
+        return this.toBuffer().toString('hex');
+    };
+    PDUTemplate.prototype.setFromComponents = function (x) {
         for (var key in x) {
             this[key] = x[key];
         }
     };
-    BufferTempl.prototype.toComponents = function () {
+    PDUTemplate.prototype.toComponents = function () {
         var y = {};
         for (var key in this._props) {
             if (Array.isArray(this._props[key])) {
@@ -114,10 +88,13 @@ var BufferTempl = /** @class */ (function () {
         }
         return y;
     };
-    BufferTempl.prototype.toJSON = function () {
+    PDUTemplate.prototype.setFromJSON = function (x) {
+        this.setFromComponents(JSON.parse(x));
+    };
+    PDUTemplate.prototype.toJSON = function () {
         return JSON.stringify(this.toComponents(), null, 4);
     };
-    return BufferTempl;
+    return PDUTemplate;
 }());
-exports.BufferTempl = BufferTempl;
+exports.PDUTemplate = PDUTemplate;
 //# sourceMappingURL=utils.js.map

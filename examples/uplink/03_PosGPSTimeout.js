@@ -2,13 +2,10 @@ const AD = require('../../dist/abeeway-driver');
 // Replace the above line with the following line if you use the module from the public npm repository
 // const AD = require('abeeway-driver');
 
-let b;
-let posGPSTimeout;
-
-posGPSTimeout = new AD.UlMsg_PosGPSTimeout ({
-    header: new AD.Header({
-        type:         AD.E_UlMsgType.POSITION,
-        status:       new AD.Status({
+let posGPSTimeout = new AD.UPDU_PosGPSTimeout ({
+    header: new AD.CPDU_Header({
+        type:         AD.E_UPDUType.POSITION,
+        status:       new AD.CPDU_Status({
             operatingMode:           AD.E_OperatingMode.MOTION_TRACKING,
             sosState:                false,
             trackingState:           false,
@@ -25,10 +22,8 @@ posGPSTimeout = new AD.UlMsg_PosGPSTimeout ({
     carrierOverNoise:   [900, 1200, 600, 1999],
 });
 console.log(posGPSTimeout.toJSON());
+console.log(posGPSTimeout.toHexString());
 
-b = posGPSTimeout.toBuffer();
-console.log(b.toString('hex'));
-
-posGPSTimeout = new AD.UlMsg_PosGPSTimeout(b);
-console.log(posGPSTimeout.toJSON());
-
+let buffer = posGPSTimeout.toBuffer();
+let posGPSTimeout1 = new AD.UPDU_PosGPSTimeout(buffer);
+console.log(posGPSTimeout1.toJSON());

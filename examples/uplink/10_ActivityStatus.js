@@ -2,13 +2,10 @@ const AD = require('../../dist/abeeway-driver');
 // Replace the above line with the following line if you use the module from the public npm repository
 // const AD = require('abeeway-driver');
 
-let b;
-let activityStatus;
-
-activityStatus = new AD.UlMsg_ActivityStatus ({
-    header: new AD.Header({
-        type:         AD.E_UlMsgType.ACTIVITY_OR_CONFIG,
-        status:       new AD.Status({
+let activityStatus = new AD.UPDU_ActivityStatus ({
+    header: new AD.CPDU_Header({
+        type:         AD.E_UPDUType.ACTIVITY_OR_CONFIG,
+        status:       new AD.CPDU_Status({
             operatingMode:           AD.E_OperatingMode.ACTIVITY_TRACKING,
             sosState:                false,
             trackingState:           false,
@@ -25,10 +22,9 @@ activityStatus = new AD.UlMsg_ActivityStatus ({
     activityCount: 123,
 });
 console.log(activityStatus.toJSON());
+console.log(activityStatus.toHexString());
 
-b = activityStatus.toBuffer();
-console.log(b.toString('hex'));
-
-activityStatus = new AD.UlMsg_ActivityStatus(b);
-console.log(activityStatus.toJSON());
+let buffer = activityStatus.toBuffer();
+let activityStatus1 = new AD.UPDU_ActivityStatus(buffer);
+console.log(activityStatus1.toJSON());
 

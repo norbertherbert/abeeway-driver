@@ -9,6 +9,26 @@ The code was written based on the reference guides that are available in the
 [/docs](https://github.com/norbertherbert/abeeway-driver/tree/master/docs) 
 directory of this repository.
 
+### Abeeway Application Protocol Data Unit (PDU) Objects
+This driver is built from Protocol Data Unit (PDU) objects that you can create from 
+* number, 
+* buffer, 
+* hex string representation of the buffer, 
+* object, 
+* JSON representation of the object
+by using the PDU's constructor method.
+If you have an already created PDU object, you can convert it to
+* number (with the .toValue() method of the object), 
+* buffer (with the .toBuffer() method of the object), 
+* hex string representation of the buffer (with the .toHesString() method of the object), 
+* object (with the .toComponents() method of the object), 
+* JSON representation of the object (with the .toJSON() method of the object)
+There are 3 types of PDUs
+* UPDU, represents an uplink message
+* DPDU, represents a downlink message
+* CPDU, Component PDU that represents a component of an UPDU or DPDU 
+In order to allow programmers to easily recognize the type of PDUs the class names of PDUs always have one of the following prefixes: UPDU_, DPDU_ or CPDU_ 
+
 ### Install abeeway-driver
     npm install abeeway-driver --save
 
@@ -25,20 +45,20 @@ console.log( JSON.stringify(decoded, null, 4) );
 ```javascript
 const AD = require('abeeway-driver');
 
-// Create a new "Set Parameter Value" message object from its components
-let msg = new AD.DlMsg_SetParam({
-    header: new AD.DlHeaderShort({
-        type: AD.E_DlMsgType.SET_PARAM,
+// Create a new "Set Parameter Value" PDU object from its components
+let msg = new AD.DPDU_SetParam({
+    header: new AD.CPDU_DlHeaderShort({
+        type: AD.E_DPDU.SET_PARAM,
         ackToken: 0x5,
         optData: 0x0,
     }),
     params: [
         // Up to 5 parameters can be listed here
-        new AD.Parameter({
+        new AD.CPDU_Parameter({
             id: AD.E_ParameterId.UL_PERIOD,
             value: 60,
         }),
-        new AD.Parameter({
+        new AD.CPDU_Parameter({
             id: AD.E_ParameterId.LORA_PERIOD,
             value: 300,
         }),

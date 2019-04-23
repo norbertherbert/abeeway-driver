@@ -2,13 +2,10 @@ const AD = require('../../dist/abeeway-driver');
 // Replace the above line with the following line if you use the module from the public npm repository
 // const AD = require('abeeway-driver');
 
-let b;
-let posBLEFailure;
-
-posBLEFailure = new AD.UlMsg_PosBLEFailure ({
-    header: new AD.Header({
-        type:         AD.E_UlMsgType.POSITION,
-        status:       new AD.Status({
+let posBLEFailure = new AD.UPDU_PosBLEFailure ({
+    header: new AD.CPDU_Header({
+        type:         AD.E_UPDUType.POSITION,
+        status:       new AD.CPDU_Status({
             operatingMode:           AD.E_OperatingMode.MOTION_TRACKING,
             sosState:                false,
             trackingState:           false,
@@ -24,10 +21,8 @@ posBLEFailure = new AD.UlMsg_PosBLEFailure ({
     error: AD.E_BLEFailure.SCAN_ALREADY_ONGOING,
 });
 console.log(posBLEFailure.toJSON());
+console.log(posBLEFailure.toHexString());
 
-b = posBLEFailure.toBuffer();
-console.log(b.toString('hex'));
-
-posBLEFailure = new AD.UlMsg_PosBLEFailure(b);
-console.log(posBLEFailure.toJSON());
-
+let buffer = posBLEFailure.toBuffer();
+let posBLEFailure1 = new AD.UPDU_PosBLEFailure(buffer);
+console.log(posBLEFailure1.toJSON());

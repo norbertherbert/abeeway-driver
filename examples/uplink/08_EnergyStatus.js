@@ -2,13 +2,10 @@ const AD = require('../../dist/abeeway-driver');
 // Replace the above line with the following line if you use the module from the public npm repository
 // const AD = require('abeeway-driver');
 
-let b;
-let energyStatus;
-
-energyStatus = new AD.UlMsg_EnergyStatus ({
-    header: new AD.Header({
-        type:         AD.E_UlMsgType.ENERGY_STATUS,
-        status:       new AD.Status({
+let energyStatus = new AD.UPDU_EnergyStatus ({
+    header: new AD.CPDU_Header({
+        type:         AD.E_UPDUType.ENERGY_STATUS,
+        status:       new AD.CPDU_Status({
             operatingMode:           AD.E_OperatingMode.MOTION_TRACKING,
             sosState:                false,
             trackingState:           false,
@@ -26,10 +23,8 @@ energyStatus = new AD.UlMsg_EnergyStatus ({
     wifiScans:               800,
 });
 console.log(energyStatus.toJSON());
+console.log(energyStatus.toHexString());
 
-b = energyStatus.toBuffer();
-console.log(b.toString('hex'));
-
-energyStatus = new AD.UlMsg_EnergyStatus(b);
-console.log(energyStatus.toJSON());
-
+let buffer = energyStatus.toBuffer();
+let energyStatus1 = new AD.UPDU_EnergyStatus(buffer);
+console.log(energyStatus1.toJSON());

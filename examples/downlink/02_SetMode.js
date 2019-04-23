@@ -2,12 +2,10 @@ const AD = require('../../dist/abeeway-driver');
 // Replace the above line with the following line if you use the module from the public npm repository
 // const AD = require('abeeway-driver');
 
-let b, msg;
-
 // Create a new "Set Operating Mode" message object from its components
-msg = new AD.DlMsg_SetMode ({
-    header: new AD.DlHeaderShort({
-        type:     AD.E_DlMsgType.SET_MODE,
+let msg = new AD.DPDU_SetMode ({
+    header: new AD.CPDU_DlHeaderShort({
+        type:     AD.E_DPDUType.SET_MODE,
         ackToken: 0x5,
         optData:  0x0,
     }),
@@ -17,12 +15,14 @@ msg = new AD.DlMsg_SetMode ({
 // Convert the message object to a JSON string
 console.log(msg.toJSON());
 
+// Convert the message object to a Hex string
+console.log(msg.toHexString());
+
 // Convert the message object to a Buffer
-b = msg.toBuffer();
-console.log(b.toString('hex'));
+let buffer = msg.toBuffer();
 
 // Create a new message object from a Buffer
-msg = new AD.DlMsg_SetMode(b);
+let msg1 = new AD.DPDU_SetMode(buffer);
 
 // Convert the message object to a JSON string again
-console.log(msg.toJSON());
+console.log(msg1.toJSON());

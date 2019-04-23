@@ -2,13 +2,10 @@ const AD = require('../../dist/abeeway-driver');
 // Replace the above line with the following line if you use the module from the public npm repository
 // const AD = require('abeeway-driver');
 
-let b;
-let gpsPosFix;
-
-gpsPosFix = new AD.UlMsg_PosGPSFix ({
-    header: new AD.Header({
-        type:         AD.E_UlMsgType.POSITION,
-        status:       new AD.Status({
+let gpsPosFix = new AD.UPDU_PosGPSFix ({
+    header: new AD.CPDU_Header({
+        type:         AD.E_UPDUType.POSITION,
+        status:       new AD.CPDU_Status({
             operatingMode:           AD.E_OperatingMode.MOTION_TRACKING,
             sosState:                false,
             trackingState:           false,
@@ -28,10 +25,8 @@ gpsPosFix = new AD.UlMsg_PosGPSFix ({
     encryptedPos:     Buffer.from([0,0,0]), 
 });
 console.log(gpsPosFix.toJSON());
+console.log(gpsPosFix.toHexString());
 
-b = gpsPosFix.toBuffer();
-console.log(b.toString('hex'));
-
-gpsPosFix = new AD.UlMsg_PosGPSFix(b);
-console.log(gpsPosFix.toJSON());
-
+let buffer = gpsPosFix.toBuffer();
+let gpsPosFix1 = new AD.UPDU_PosGPSFix(buffer);
+console.log(gpsPosFix1.toJSON());

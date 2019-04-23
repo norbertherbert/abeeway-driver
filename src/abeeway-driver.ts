@@ -1,47 +1,45 @@
 import * as assert from 'assert';
 
-/* Import/Export Constants */
+/* Constants */
 import { 
-    E_UlMsgType, E_Tag, E_OperatingMode, E_PositionInformation, E_WiFiFailure,
-    E_BLEFailure, E_DlMsgType, E_DebugCmd, E_GPSTimeoutCause, E_ParameterId, 
+    E_UPDUType, E_Tag, E_OperatingMode, E_PositionInformation, E_WiFiFailure,
+    E_BLEFailure, E_DPDUType, E_DebugCmd, E_GPSTimeoutCause, E_ParameterId, 
     C_ParameterId, E_Param_GeolocSensor, E_Param_GeolocMethod, E_Param_TransmitStrat,
 } from './constants';
 export {
-    E_UlMsgType, E_Tag, E_OperatingMode, E_PositionInformation, E_WiFiFailure,
-    E_BLEFailure, E_DlMsgType, E_DebugCmd, E_GPSTimeoutCause, E_ParameterId, 
+    E_UPDUType, E_Tag, E_OperatingMode, E_PositionInformation, E_WiFiFailure,
+    E_BLEFailure, E_DPDUType, E_DebugCmd, E_GPSTimeoutCause, E_ParameterId, 
     C_ParameterId, E_Param_GeolocSensor, E_Param_GeolocMethod, E_Param_TransmitStrat,
 }
 
-/* Import/Export Message Component Classes */
+/* Component Protocol Data Units (CPDU) */
 import { 
-    Param_ConfigFlags, Status, Header, UlHeaderShort, DlHeaderShort, WiFiBSSIDs, Parameter, 
-} from './msg-components';
+    CPDU_ParamConfigFlags, CPDU_Status, CPDU_Header, CPDU_UlHeaderShort, CPDU_DlHeaderShort, CPDU_WiFiBSSIDs, CPDU_Parameter, 
+} from './CPDU';
 export {
-    Param_ConfigFlags, Status, Header, UlHeaderShort, DlHeaderShort, WiFiBSSIDs, Parameter, 
+    CPDU_ParamConfigFlags, CPDU_Status, CPDU_Header, CPDU_UlHeaderShort, CPDU_DlHeaderShort, CPDU_WiFiBSSIDs, CPDU_Parameter, 
 }
 
-/* Import/Export Uplink Message Classes */
+/* Uplink Protocol Data Units (UPDU)*/
 import { 
-    UlMsg_FramePending, UlMsg_PosGPSFix, UlMsg_PosGPSTimeout, UlMsg_PosWiFiTimeout, 
-    UlMsg_PosWiFiFailure, UlMsg_PosWiFiBSSIDs, UlMsg_PosBLEFailure, UlMsg_EnergyStatus,
-    UlMsg_HeartBeat, UlMsg_ActivityStatus, UlMsg_ConfigReport, UlMsg_Shutdown, UlMsg_Debug,
+    UPDU_FramePending, UPDU_PosGPSFix, UPDU_PosGPSTimeout, UPDU_PosWiFiTimeout, 
+    UPDU_PosWiFiFailure, UPDU_PosWiFiBSSIDs, UPDU_PosBLEFailure, UPDU_EnergyStatus,
+    UPDU_HeartBeat, UPDU_ActivityStatus, UPDU_ConfigReport, UPDU_Shutdown, UPDU_Debug,
     decodeUlMsg,
-} from './msg-uplink';
+} from './UPDU';
 export {
-    UlMsg_FramePending, UlMsg_PosGPSFix, UlMsg_PosGPSTimeout, UlMsg_PosWiFiTimeout, 
-    UlMsg_PosWiFiFailure, UlMsg_PosWiFiBSSIDs, UlMsg_PosBLEFailure, UlMsg_EnergyStatus,
-    UlMsg_HeartBeat, UlMsg_ActivityStatus, UlMsg_ConfigReport, UlMsg_Shutdown, UlMsg_Debug,
+    UPDU_FramePending, UPDU_PosGPSFix, UPDU_PosGPSTimeout, UPDU_PosWiFiTimeout, 
+    UPDU_PosWiFiFailure, UPDU_PosWiFiBSSIDs, UPDU_PosBLEFailure, UPDU_EnergyStatus,
+    UPDU_HeartBeat, UPDU_ActivityStatus, UPDU_ConfigReport, UPDU_Shutdown, UPDU_Debug,
     decodeUlMsg,
 }
 
-/* Import/Export Downlink Message Classes */
+/* Downlink Protocol Data Units (DPDU) */
 import { 
-    DlMsg_PosOnDem, DlMsg_SetMode, DlMsg_ReqConf, DlMsg_SOSMode, DlMsg_SetParam, DlMsg_DebugCmd,
+    DPDU_PosOnDem, DPDU_SetMode, DPDU_ReqConf, DPDU_SOSMode, DPDU_SetParam, DPDU_DebugCmd,
     decodeDlMsg,
-} from './msg-downlink';
+} from './DPDU';
 export {
-    DlMsg_PosOnDem, DlMsg_SetMode, DlMsg_ReqConf, DlMsg_SOSMode, DlMsg_SetParam, DlMsg_DebugCmd,
+    DPDU_PosOnDem, DPDU_SetMode, DPDU_ReqConf, DPDU_SOSMode, DPDU_SetParam, DPDU_DebugCmd,
     decodeDlMsg,
 }
-
-
