@@ -22,10 +22,10 @@ import {
 // *** DPDU_PosOnDem *********************************************
 // ***************************************************************
 
-export interface I_DlMsgPosOnDem {
+export interface I_DPDU_PosOnDem {
     header:                  CPDU_DlHeaderShort,     // 2 bytes
 }
-export class DPDU_PosOnDem extends PDUTemplate<I_DlMsgPosOnDem> implements I_DlMsgPosOnDem {
+export class DPDU_PosOnDem extends PDUTemplate<I_DPDU_PosOnDem> implements I_DPDU_PosOnDem {
 
     // *** header ***
     set header(x:CPDU_DlHeaderShort) {
@@ -50,12 +50,12 @@ export class DPDU_PosOnDem extends PDUTemplate<I_DlMsgPosOnDem> implements I_DlM
 // *** DPDU_SetMode **********************************************
 // ***************************************************************
 
-export interface I_DlMsgSetMode {                    // 3 bytes
+export interface I_DPDU_SetMode {                    // 3 bytes
     header:                  CPDU_DlHeaderShort,     // 2 bytes
     mode:                    E_OperatingMode, // 1 byte
     _mode?:               string,
 }
-export class DPDU_SetMode extends PDUTemplate<I_DlMsgSetMode> implements I_DlMsgSetMode {
+export class DPDU_SetMode extends PDUTemplate<I_DPDU_SetMode> implements I_DPDU_SetMode {
 
     // *** header ***
     set header(x:CPDU_DlHeaderShort) {
@@ -94,12 +94,12 @@ export class DPDU_SetMode extends PDUTemplate<I_DlMsgSetMode> implements I_DlMsg
 // *** DPDU_ReqConf **********************************************
 // ***************************************************************
 
-export interface I_DlMsgReqConf {                       // 2..22
+export interface I_DPDU_ReqConf {                       // 2..22
     header:                  CPDU_DlHeaderShort,        // 2 bytes
     paramIDs:                E_ParameterId[],  // 0..20 bytes
     _paramIDs?:           string[],
 }
-export class DPDU_ReqConf extends PDUTemplate<I_DlMsgReqConf> implements I_DlMsgReqConf {
+export class DPDU_ReqConf extends PDUTemplate<I_DPDU_ReqConf> implements I_DPDU_ReqConf {
 
     // *** header ***
     set header(x:CPDU_DlHeaderShort) {
@@ -155,10 +155,10 @@ export class DPDU_ReqConf extends PDUTemplate<I_DlMsgReqConf> implements I_DlMsg
 // *** DPDU_SOSMode **********************************************
 // ***************************************************************
 
-export interface I_DlMsgSOSMode {
+export interface I_DPDU_SOSMode {
     header:                  CPDU_DlHeaderShort,     // 2 bytes
 }
-export class DPDU_SOSMode extends PDUTemplate<I_DlMsgSOSMode> implements I_DlMsgSOSMode {
+export class DPDU_SOSMode extends PDUTemplate<I_DPDU_SOSMode> implements I_DPDU_SOSMode {
 
     // *** header ***
     set header(x:CPDU_DlHeaderShort) {
@@ -183,11 +183,11 @@ export class DPDU_SOSMode extends PDUTemplate<I_DlMsgSOSMode> implements I_DlMsg
 // *** DPDU_SetParam *********************************************
 // ***************************************************************
 
-export interface I_DlMsgSetParam {                   // 7..27
+export interface I_DPDU_SetParam {                   // 7..27
     header:                  CPDU_DlHeaderShort,     // 2 bytes
     params:                  CPDU_Parameter[]      // n x 5 bytes, n= 1..5
 }
-export class DPDU_SetParam extends PDUTemplate<I_DlMsgSetParam> implements I_DlMsgSetParam {
+export class DPDU_SetParam extends PDUTemplate<I_DPDU_SetParam> implements I_DPDU_SetParam {
    
     // *** header ***
     set header(x:CPDU_DlHeaderShort) {
@@ -239,12 +239,12 @@ export class DPDU_SetParam extends PDUTemplate<I_DlMsgSetParam> implements I_DlM
 // *** DPDU_DebugCmd *********************************************
 // ***************************************************************
 
-export interface I_DlMsgDebugCmd {                   // 3 bytes
+export interface I_DPDU_DebugCmd {                   // 3 bytes
     header:                  CPDU_DlHeaderShort,     // 2 bytes
     debugCmd:                E_DebugCmd,      // 1 byte
     _debugCmd?:            string,
 }
-export class DPDU_DebugCmd extends PDUTemplate<I_DlMsgDebugCmd> implements I_DlMsgDebugCmd {
+export class DPDU_DebugCmd extends PDUTemplate<I_DPDU_DebugCmd> implements I_DPDU_DebugCmd {
 
     // *** header ***
     set header(x:CPDU_DlHeaderShort) {
@@ -312,5 +312,53 @@ export let decodeDlMsg = (buf: Buffer):object => {
     } else {
         return { error: "Unknown message type: "+E_UPDUType[buf[0]] };
     }
+
+}
+
+
+
+
+
+
+
+type DPDU_Generic = DPDU_PosOnDem | DPDU_SetMode | DPDU_ReqConf | DPDU_SOSMode | DPDU_SetParam | DPDU_DebugCmd;
+
+export let createDPDU = (x: Buffer|string):DPDU_Generic => {
+
+    let buf: Buffer;
+
+    if ( typeof(x) == 'string' ) {
+        buf = Buffer.from(x, 'hex');
+    } else {
+        buf = x;
+    }
+
+    let dpdu: any;
+    switch(buf[0]) {
+        case E_DPDUType.POSITION_ON_DEMAND:
+            dpdu = new DPDU_PosOnDem(buf);
+            break;
+        case E_DPDUType.SET_MODE:
+            dpdu = new DPDU_SetMode(buf);
+            break;
+        case E_DPDUType.REQUEST_CONFIGURATION:
+            dpdu = new DPDU_ReqConf(buf);
+            break;
+        case E_DPDUType.START_SOS_MODE:
+        case E_DPDUType.STOP_SOS_MODE:
+            dpdu = new DPDU_SOSMode(buf);
+            break;
+        case E_DPDUType.SET_PARAM:
+            dpdu = new DPDU_SetParam(buf);
+            break;
+        case E_DPDUType.DEBUG_COMMAND:
+            dpdu = new DPDU_DebugCmd(buf);
+            break;
+        default:
+            dpdu = undefined;
+            break;
+    }
+ 
+    return dpdu;
 
 }

@@ -303,4 +303,39 @@ exports.decodeDlMsg = function (buf) {
         return { error: "Unknown message type: " + constants_1.E_UPDUType[buf[0]] };
     }
 };
+exports.createDPDU = function (x) {
+    var buf;
+    if (typeof (x) == 'string') {
+        buf = Buffer.from(x, 'hex');
+    }
+    else {
+        buf = x;
+    }
+    var dpdu;
+    switch (buf[0]) {
+        case constants_1.E_DPDUType.POSITION_ON_DEMAND:
+            dpdu = new DPDU_PosOnDem(buf);
+            break;
+        case constants_1.E_DPDUType.SET_MODE:
+            dpdu = new DPDU_SetMode(buf);
+            break;
+        case constants_1.E_DPDUType.REQUEST_CONFIGURATION:
+            dpdu = new DPDU_ReqConf(buf);
+            break;
+        case constants_1.E_DPDUType.START_SOS_MODE:
+        case constants_1.E_DPDUType.STOP_SOS_MODE:
+            dpdu = new DPDU_SOSMode(buf);
+            break;
+        case constants_1.E_DPDUType.SET_PARAM:
+            dpdu = new DPDU_SetParam(buf);
+            break;
+        case constants_1.E_DPDUType.DEBUG_COMMAND:
+            dpdu = new DPDU_DebugCmd(buf);
+            break;
+        default:
+            dpdu = undefined;
+            break;
+    }
+    return dpdu;
+};
 //# sourceMappingURL=DPDU.js.map

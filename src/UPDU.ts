@@ -22,10 +22,10 @@ import {
 // *** UPDU_FramePending *******************************************
 // ***************************************************************
 
-export interface I_MsgFramePending {
+export interface I_UPDU_FramePending {
     header:                  CPDU_UlHeaderShort,     // 2 bytes
 }
-export class UPDU_FramePending extends PDUTemplate<I_MsgFramePending> implements I_MsgFramePending {
+export class UPDU_FramePending extends PDUTemplate<I_UPDU_FramePending> implements I_UPDU_FramePending {
 
     // *** header ***
     set header(x:CPDU_UlHeaderShort) {
@@ -50,7 +50,7 @@ export class UPDU_FramePending extends PDUTemplate<I_MsgFramePending> implements
 // *** UPDU_PosGPSFix **********************************************
 // ***************************************************************
 
-export interface I_MsgPosGPSFix {             // 16 bytes
+export interface I_UPDU_PosGPSFix {             // 16 bytes
     header:                  CPDU_Header,          // 5 bytes
     age:                     number,          // 1 byte
     latitude:                number,          // 3 bytes
@@ -58,7 +58,7 @@ export interface I_MsgPosGPSFix {             // 16 bytes
     ehpe:                    number,          // 1 byte
     encryptedPos:            Buffer,          // 3 bytes 
 }
-export class UPDU_PosGPSFix extends PDUTemplate<I_MsgPosGPSFix> implements I_MsgPosGPSFix {
+export class UPDU_PosGPSFix extends PDUTemplate<I_UPDU_PosGPSFix> implements I_UPDU_PosGPSFix {
 
     // *** header ***
     set header(x:CPDU_Header) {
@@ -161,13 +161,13 @@ export class UPDU_PosGPSFix extends PDUTemplate<I_MsgPosGPSFix> implements I_Msg
 // *** UPDU_PosGPSTimeout ******************************************
 // ***************************************************************
 
-export interface I_MsgPosGPSTimeout {                  // 10 bytes
+export interface I_UPDU_PosGPSTimeout {                  // 10 bytes
     header:                  CPDU_Header,            // 5 bytes
     cause:                   E_GPSTimeoutCause, // 1 byte
     _cause?:                 string,
     carrierOverNoise:        number[],          // 4 x 1 byte
 }
-export class UPDU_PosGPSTimeout extends PDUTemplate<I_MsgPosGPSTimeout> implements I_MsgPosGPSTimeout {
+export class UPDU_PosGPSTimeout extends PDUTemplate<I_UPDU_PosGPSTimeout> implements I_UPDU_PosGPSTimeout {
 
     // *** header ***
     set header(x:CPDU_Header) {
@@ -228,11 +228,11 @@ export class UPDU_PosGPSTimeout extends PDUTemplate<I_MsgPosGPSTimeout> implemen
 // *** UPDU_PosWiFiTimeout *****************************************
 // ***************************************************************
 
-export interface I_MsgPosWiFiTimeout {               // 11 bytes
+export interface I_UPDU_PosWiFiTimeout {               // 11 bytes
     header:                  CPDU_Header,          // 5 bytes
     v_bat:                   number[],        // 6 x 1 byte
 }
-export class UPDU_PosWiFiTimeout extends PDUTemplate<I_MsgPosWiFiTimeout> implements I_MsgPosWiFiTimeout {
+export class UPDU_PosWiFiTimeout extends PDUTemplate<I_UPDU_PosWiFiTimeout> implements I_UPDU_PosWiFiTimeout {
 
     // *** header ***
     set header(x:CPDU_Header) {
@@ -282,13 +282,13 @@ export class UPDU_PosWiFiTimeout extends PDUTemplate<I_MsgPosWiFiTimeout> implem
 // *** UPDU_PosWiFiFailure *****************************************
 // ***************************************************************
 
-export interface I_MsgPosWiFiFailure {               // 12 bytes
+export interface I_UPDU_PosWiFiFailure {               // 12 bytes
     header:                  CPDU_Header,          // 5 bytes
     v_bat:                   number[],        // 6 x 1 byte
     error:                   E_WiFiFailure,   // 1 byte
     _error?:              string,
 }
-export class UPDU_PosWiFiFailure extends PDUTemplate<I_MsgPosWiFiFailure> implements I_MsgPosWiFiFailure {
+export class UPDU_PosWiFiFailure extends PDUTemplate<I_UPDU_PosWiFiFailure> implements I_UPDU_PosWiFiFailure {
 
     // *** header ***
     set header(x:CPDU_Header) {
@@ -351,12 +351,12 @@ export class UPDU_PosWiFiFailure extends PDUTemplate<I_MsgPosWiFiFailure> implem
 // *** UPDU_PosWiFiBSSIDs ******************************************
 // ***************************************************************
 
-export interface I_MsgPosWiFiBSSIDs {                // 34 bytes
+export interface I_UPDU_PosWiFiBSSIDs {                // 34 bytes
     header:                  CPDU_Header,          // 5 bytes
     age:                     number,          // 1 byte
     wifiHotspots:            CPDU_WiFiBSSIDs[],
 }
-export class UPDU_PosWiFiBSSIDs extends PDUTemplate<I_MsgPosWiFiBSSIDs> implements I_MsgPosWiFiBSSIDs {
+export class UPDU_PosWiFiBSSIDs extends PDUTemplate<I_UPDU_PosWiFiBSSIDs> implements I_UPDU_PosWiFiBSSIDs {
 
     // *** header ***
     set header(x:CPDU_Header) {
@@ -417,12 +417,12 @@ export class UPDU_PosWiFiBSSIDs extends PDUTemplate<I_MsgPosWiFiBSSIDs> implemen
 // *** UPDU_PosBLEFailure ***************************************
 // ***************************************************************
 
-export interface I_MsgPosBLEFailure {                // 6 bytes
+export interface I_UPDU_PosBLEFailure {                // 6 bytes
     header:                  CPDU_Header,          // 5 bytes
     error:                   E_BLEFailure,    // 1 byte
     _error?:                 string,
 }
-export class UPDU_PosBLEFailure extends PDUTemplate<I_MsgPosBLEFailure> implements I_MsgPosBLEFailure {
+export class UPDU_PosBLEFailure extends PDUTemplate<I_UPDU_PosBLEFailure> implements I_UPDU_PosBLEFailure {
 
     // *** header ***
     set header(x:CPDU_Header) {
@@ -462,13 +462,13 @@ export class UPDU_PosBLEFailure extends PDUTemplate<I_MsgPosBLEFailure> implemen
 // *** UPDU_EnergyStatus ********************************************
 // ****************************************************************
 
-export interface I_MsgEnergyStatus {           // 17 bytes
+export interface I_UPDU_EnergyStatus {           // 17 bytes
     header:                  CPDU_Header,    // 5 bytes
     gpsOnTime:               number,    // 4 bytes
     gpsStabdbyTime:          number,    // 4 bytes
     wifiScans:               number,    // 4 bytes
 }
-export class UPDU_EnergyStatus extends PDUTemplate<I_MsgEnergyStatus> implements I_MsgEnergyStatus {
+export class UPDU_EnergyStatus extends PDUTemplate<I_UPDU_EnergyStatus> implements I_UPDU_EnergyStatus {
 
     // *** header ***
     set header(x:CPDU_Header) {
@@ -528,12 +528,12 @@ export class UPDU_EnergyStatus extends PDUTemplate<I_MsgEnergyStatus> implements
 // TODO: What is the format of fwVersion?
 // TODO: What are the possible values of cause?
 
-export interface I_MsgHeartBeat {                    // 6|9 bytes
+export interface I_UPDU_HeartBeat {                    // 6|9 bytes
     header:                  CPDU_Header,          // 5 bytes
     cause:                   number,          // 1 byte
     fwVersion?:              string,          // 3 bytes (optional)
 }
-export class UPDU_HeartBeat extends PDUTemplate<I_MsgHeartBeat> implements I_MsgHeartBeat {
+export class UPDU_HeartBeat extends PDUTemplate<I_UPDU_HeartBeat> implements I_UPDU_HeartBeat {
 
     // *** header ***
     set header(x:CPDU_Header) {
@@ -614,12 +614,12 @@ export class UPDU_HeartBeat extends PDUTemplate<I_MsgHeartBeat> implements I_Msg
 
 // TODO: what are the possible values of tag? What does it mean?
 
-export interface I_MsgActivityStatus {               // 10 bytes
+export interface I_UPDU_ActivityStatus {               // 10 bytes
     header:                  CPDU_Header,          // 5 bytes
     tag:                     E_Tag,          // 1 byte =1
     activityCount:           number,          // 4 bytes
 }
-export class UPDU_ActivityStatus extends PDUTemplate<I_MsgActivityStatus> implements I_MsgActivityStatus {
+export class UPDU_ActivityStatus extends PDUTemplate<I_UPDU_ActivityStatus> implements I_UPDU_ActivityStatus {
 
     // *** header ***
     set header(x:CPDU_Header) {
@@ -671,12 +671,12 @@ export class UPDU_ActivityStatus extends PDUTemplate<I_MsgActivityStatus> implem
 
 // TODO: what are the possible values of tag? What does it mean?
 
-export interface I_MsgConfigReport {          // 11..31 bytes
+export interface I_UPDU_ConfigReport {          // 11..31 bytes
     header:                  CPDU_Header,          // 5 bytes
     tag:                     E_Tag,           // 1 byte =2
     params:                  CPDU_Parameter[]      // n x 5 bytes, n=1..5
 }
-export class UPDU_ConfigReport extends PDUTemplate<I_MsgConfigReport> implements I_MsgConfigReport {
+export class UPDU_ConfigReport extends PDUTemplate<I_UPDU_ConfigReport> implements I_UPDU_ConfigReport {
    
     // *** header ***
     set header(x:CPDU_Header) {
@@ -742,11 +742,11 @@ export class UPDU_ConfigReport extends PDUTemplate<I_MsgConfigReport> implements
 
 // TODO: Verify if the implementation below is correct!
 
-export interface I_MsgShutdown {
+export interface I_UPDU_Shutdown {
     header:                  CPDU_UlHeaderShort,     // 2 bytes
     // The documentation does not say anything about the additional fields of SHUTHDOWN messages
 }
-export class UPDU_Shutdown extends PDUTemplate<I_MsgShutdown> implements I_MsgShutdown {
+export class UPDU_Shutdown extends PDUTemplate<I_UPDU_Shutdown> implements I_UPDU_Shutdown {
 
     // *** header ***
     set header(x:CPDU_UlHeaderShort) {
@@ -774,11 +774,11 @@ export class UPDU_Shutdown extends PDUTemplate<I_MsgShutdown> implements I_MsgSh
 
 // TODO: Verify if the implementation below is correct!
 
-export interface I_MsgDebug {
+export interface I_UPDU_Debug {
     header:                  CPDU_UlHeaderShort,     // 2 bytes
     // The documentation does not say anything about the additional fields of DEBUG messages
 }
-export class UPDU_Debug extends PDUTemplate<I_MsgDebug> implements I_MsgDebug {
+export class UPDU_Debug extends PDUTemplate<I_UPDU_Debug> implements I_UPDU_Debug {
 
     // *** header ***
     set header(x:CPDU_UlHeaderShort) {
@@ -800,84 +800,95 @@ export class UPDU_Debug extends PDUTemplate<I_MsgDebug> implements I_MsgDebug {
 
 }
 
-export let decodeUlMsg = (buf: Buffer):object => {
 
-    let msg: any;
+
+
+type UPDU_Generic = UPDU_FramePending | UPDU_PosGPSFix | UPDU_PosGPSTimeout | UPDU_PosWiFiTimeout | 
+     UPDU_PosWiFiFailure | UPDU_PosWiFiBSSIDs | UPDU_PosBLEFailure | UPDU_EnergyStatus |
+     UPDU_HeartBeat | UPDU_ActivityStatus | UPDU_ConfigReport | UPDU_Shutdown | UPDU_Debug;
+
+export let createUPDU = (x: Buffer|string):UPDU_Generic => {
+
+    let buf: Buffer;
+
+    if ( typeof(x) == 'string' ) {
+        buf = Buffer.from(x, 'hex');
+    } else {
+        buf = x;
+    }
+
+    let updu: any;
     switch(buf[0]) {
         case E_UPDUType.FRAME_PENDING:
-            msg = new UPDU_FramePending(buf);
+            updu = new UPDU_FramePending(buf);
             break;
         case E_UPDUType.POSITION:
             switch(buf[4] & 0xf) {
                 case E_PositionInformation.GPS_FIX:
-                    msg = new UPDU_PosGPSFix(buf);
+                    updu = new UPDU_PosGPSFix(buf);
                     break;
                 case E_PositionInformation.GPS_TIMEOUT:
-                    msg = new UPDU_PosGPSTimeout(buf);
+                    updu = new UPDU_PosGPSTimeout(buf);
                     break;
                 case E_PositionInformation.NO_MORE_USED:
-                    msg = undefined;
+                    updu = undefined;
                     break;
                 case E_PositionInformation.WIFI_TIMEOUT:
-                    msg = new UPDU_PosWiFiTimeout(buf);
+                    updu = new UPDU_PosWiFiTimeout(buf);
                     break;
                 case E_PositionInformation.WIFI_FAILURE:
-                    msg = new UPDU_PosWiFiFailure(buf);
+                    updu = new UPDU_PosWiFiFailure(buf);
                     break;
                 case E_PositionInformation.LPGPS_DATA1:
-                    msg = undefined;
+                    updu = undefined;
                     break;
                 case E_PositionInformation.LPGPS_DATA2:
-                    msg = undefined;
+                    updu = undefined;
                     break;
                 case E_PositionInformation.BLE_BACON_SCAN:
-                    msg = undefined; //new UPDU_(buf);
+                    updu = undefined; //new UPDU_(buf);
                     break;
                 case E_PositionInformation.BLE_BACON_FAILURE:
-                    msg = new UPDU_PosBLEFailure(buf);
+                    updu = new UPDU_PosBLEFailure(buf);
                     break;
                 case E_PositionInformation.WIFI_BSSIDS:
-                    msg = new UPDU_PosWiFiBSSIDs(buf);
+                    updu = new UPDU_PosWiFiBSSIDs(buf);
                     break;
                 default:
-                    msg = undefined;
+                    updu = undefined;
                     break;
             }
             break;
         case E_UPDUType.ENERGY_STATUS:
-            msg = new UPDU_EnergyStatus(buf);
+            updu = new UPDU_EnergyStatus(buf);
             break;
         case E_UPDUType.HEART_BEAT:
-            msg = new UPDU_HeartBeat(buf);
+            updu = new UPDU_HeartBeat(buf);
             break;
         case E_UPDUType.ACTIVITY_OR_CONFIG:
             switch(buf[5]) {
                 case E_Tag.ACTIVITY:
-                    msg = new UPDU_ActivityStatus(buf);
+                    updu = new UPDU_ActivityStatus(buf);
                     break;
                 case E_Tag.CONFIG:
-                    msg = new UPDU_ConfigReport(buf);
+                    updu = new UPDU_ConfigReport(buf);
                     break;
                 default:
-                    msg = undefined;
+                    updu = undefined;
                     break;
             }
             break;
         case E_UPDUType.SHUTDOWN:
-            msg = new UPDU_Shutdown(buf);
+            updu = new UPDU_Shutdown(buf);
             break;
         case E_UPDUType.DEBUG:
-            msg = new UPDU_Debug(buf);
+            updu = new UPDU_Debug(buf);
             break;
         default:
-            msg = undefined;
+            updu = undefined;
             break;
     }
 
-    if (msg) {
-        return msg.toComponents();
-    } else {
-        return { error: "Unknown message type: "+E_UPDUType[buf[0]] };
-    }
+    return updu;
 
 }

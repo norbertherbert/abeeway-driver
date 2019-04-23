@@ -45,38 +45,41 @@ Please note that all enum constants are referred with prefix E_.
 
 ### Use abeeway-driver to decode an uplink message
 ```javascript
-const AD = require('abeeway-driver');
+const createUPDU = require('abeeway-driver');
 
 const uplinkPayloadHex = '0781f98350020e000000030f00000001';
-let buffer = Buffer.from(uplinkPayloadHex, 'hex');
-let decoded = AD.decodeUlMsg(buffer);
-console.log( JSON.stringify(decoded, null, 4) );
+let pdu = createUPDU(uplinkPayloadHex);
+console.log( 'The type of this PDU is: ' + pdu.header.type );
+console.log( pdu.toJSON() );
 ```
 ### Use abeeway-driver to encode a device command to send in a downlink message
 ```javascript
-const AD = require('abeeway-driver');
+const {
+    DPDU_SetParam, 
+    CPDU_DlHeaderShort, E_DPDUType,
+    CPDU_Parameter, E_ParameterId
+} = require('abeeway-driver');
 
 // Create a new "Set Parameter Value" PDU object from its components
-let msg = new AD.DPDU_SetParam({
-    header: new AD.CPDU_DlHeaderShort({
-        type: AD.E_DPDUType.SET_PARAM,
+let pdu = new DPDU_SetParam({
+    header: new CPDU_DlHeaderShort({
+        type: E_DPDUType.SET_PARAM,
         ackToken: 0x5,
         optData: 0x0,
     }),
     params: [
         // Up to 5 parameters can be listed here
-        new AD.CPDU_Parameter({
-            id: AD.E_ParameterId.UL_PERIOD,
+        new CPDU_Parameter({
+            id: E_ParameterId.UL_PERIOD,
             value: 60,
         }),
-        new AD.CPDU_Parameter({
-            id: AD.E_ParameterId.LORA_PERIOD,
+        new CPDU_Parameter({
+            id: E_ParameterId.LORA_PERIOD,
             value: 300,
         }),
     ]
 });
-let buffer = msg.toBuffer();
-console.log(buffer.toString('hex'));
+console.log(pdu.toHexString());
 ```
 
 ### More examples

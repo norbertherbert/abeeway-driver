@@ -40,7 +40,7 @@ exports.UPDU_ActivityStatus = UPDU_1.UPDU_ActivityStatus;
 exports.UPDU_ConfigReport = UPDU_1.UPDU_ConfigReport;
 exports.UPDU_Shutdown = UPDU_1.UPDU_Shutdown;
 exports.UPDU_Debug = UPDU_1.UPDU_Debug;
-exports.decodeUlMsg = UPDU_1.decodeUlMsg;
+exports.createUPDU = UPDU_1.createUPDU;
 /* Downlink Protocol Data Units (DPDU) */
 var DPDU_1 = require("./DPDU");
 exports.DPDU_PosOnDem = DPDU_1.DPDU_PosOnDem;
@@ -49,5 +49,5 @@ exports.DPDU_ReqConf = DPDU_1.DPDU_ReqConf;
 exports.DPDU_SOSMode = DPDU_1.DPDU_SOSMode;
 exports.DPDU_SetParam = DPDU_1.DPDU_SetParam;
 exports.DPDU_DebugCmd = DPDU_1.DPDU_DebugCmd;
-exports.decodeDlMsg = DPDU_1.decodeDlMsg;
+exports.createDPDU = DPDU_1.createDPDU;
 //# sourceMappingURL=abeeway-driver.js.map

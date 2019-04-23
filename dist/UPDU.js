@@ -796,83 +796,85 @@ var UPDU_Debug = /** @class */ (function (_super) {
     return UPDU_Debug;
 }(utils_1.PDUTemplate));
 exports.UPDU_Debug = UPDU_Debug;
-exports.decodeUlMsg = function (buf) {
-    var msg;
+exports.createUPDU = function (x) {
+    var buf;
+    if (typeof (x) == 'string') {
+        buf = Buffer.from(x, 'hex');
+    }
+    else {
+        buf = x;
+    }
+    var updu;
     switch (buf[0]) {
         case constants_1.E_UPDUType.FRAME_PENDING:
-            msg = new UPDU_FramePending(buf);
+            updu = new UPDU_FramePending(buf);
             break;
         case constants_1.E_UPDUType.POSITION:
             switch (buf[4] & 0xf) {
                 case constants_1.E_PositionInformation.GPS_FIX:
-                    msg = new UPDU_PosGPSFix(buf);
+                    updu = new UPDU_PosGPSFix(buf);
                     break;
                 case constants_1.E_PositionInformation.GPS_TIMEOUT:
-                    msg = new UPDU_PosGPSTimeout(buf);
+                    updu = new UPDU_PosGPSTimeout(buf);
                     break;
                 case constants_1.E_PositionInformation.NO_MORE_USED:
-                    msg = undefined;
+                    updu = undefined;
                     break;
                 case constants_1.E_PositionInformation.WIFI_TIMEOUT:
-                    msg = new UPDU_PosWiFiTimeout(buf);
+                    updu = new UPDU_PosWiFiTimeout(buf);
                     break;
                 case constants_1.E_PositionInformation.WIFI_FAILURE:
-                    msg = new UPDU_PosWiFiFailure(buf);
+                    updu = new UPDU_PosWiFiFailure(buf);
                     break;
                 case constants_1.E_PositionInformation.LPGPS_DATA1:
-                    msg = undefined;
+                    updu = undefined;
                     break;
                 case constants_1.E_PositionInformation.LPGPS_DATA2:
-                    msg = undefined;
+                    updu = undefined;
                     break;
                 case constants_1.E_PositionInformation.BLE_BACON_SCAN:
-                    msg = undefined; //new UPDU_(buf);
+                    updu = undefined; //new UPDU_(buf);
                     break;
                 case constants_1.E_PositionInformation.BLE_BACON_FAILURE:
-                    msg = new UPDU_PosBLEFailure(buf);
+                    updu = new UPDU_PosBLEFailure(buf);
                     break;
                 case constants_1.E_PositionInformation.WIFI_BSSIDS:
-                    msg = new UPDU_PosWiFiBSSIDs(buf);
+                    updu = new UPDU_PosWiFiBSSIDs(buf);
                     break;
                 default:
-                    msg = undefined;
+                    updu = undefined;
                     break;
             }
             break;
         case constants_1.E_UPDUType.ENERGY_STATUS:
-            msg = new UPDU_EnergyStatus(buf);
+            updu = new UPDU_EnergyStatus(buf);
             break;
         case constants_1.E_UPDUType.HEART_BEAT:
-            msg = new UPDU_HeartBeat(buf);
+            updu = new UPDU_HeartBeat(buf);
             break;
         case constants_1.E_UPDUType.ACTIVITY_OR_CONFIG:
             switch (buf[5]) {
                 case constants_1.E_Tag.ACTIVITY:
-                    msg = new UPDU_ActivityStatus(buf);
+                    updu = new UPDU_ActivityStatus(buf);
                     break;
                 case constants_1.E_Tag.CONFIG:
-                    msg = new UPDU_ConfigReport(buf);
+                    updu = new UPDU_ConfigReport(buf);
                     break;
                 default:
-                    msg = undefined;
+                    updu = undefined;
                     break;
             }
             break;
         case constants_1.E_UPDUType.SHUTDOWN:
-            msg = new UPDU_Shutdown(buf);
+            updu = new UPDU_Shutdown(buf);
             break;
         case constants_1.E_UPDUType.DEBUG:
-            msg = new UPDU_Debug(buf);
+            updu = new UPDU_Debug(buf);
             break;
         default:
-            msg = undefined;
+            updu = undefined;
             break;
     }
-    if (msg) {
-        return msg.toComponents();
-    }
-    else {
-        return { error: "Unknown message type: " + constants_1.E_UPDUType[buf[0]] };
-    }
+    return updu;
 };
 //# sourceMappingURL=UPDU.js.map

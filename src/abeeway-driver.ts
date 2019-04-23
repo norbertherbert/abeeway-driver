@@ -25,21 +25,21 @@ import {
     UPDU_FramePending, UPDU_PosGPSFix, UPDU_PosGPSTimeout, UPDU_PosWiFiTimeout, 
     UPDU_PosWiFiFailure, UPDU_PosWiFiBSSIDs, UPDU_PosBLEFailure, UPDU_EnergyStatus,
     UPDU_HeartBeat, UPDU_ActivityStatus, UPDU_ConfigReport, UPDU_Shutdown, UPDU_Debug,
-    decodeUlMsg,
+    createUPDU,
 } from './UPDU';
 export {
     UPDU_FramePending, UPDU_PosGPSFix, UPDU_PosGPSTimeout, UPDU_PosWiFiTimeout, 
     UPDU_PosWiFiFailure, UPDU_PosWiFiBSSIDs, UPDU_PosBLEFailure, UPDU_EnergyStatus,
     UPDU_HeartBeat, UPDU_ActivityStatus, UPDU_ConfigReport, UPDU_Shutdown, UPDU_Debug,
-    decodeUlMsg,
+    createUPDU,
 }
 
 /* Downlink Protocol Data Units (DPDU) */
 import { 
     DPDU_PosOnDem, DPDU_SetMode, DPDU_ReqConf, DPDU_SOSMode, DPDU_SetParam, DPDU_DebugCmd,
-    decodeDlMsg,
+    createDPDU,
 } from './DPDU';
 export {
     DPDU_PosOnDem, DPDU_SetMode, DPDU_ReqConf, DPDU_SOSMode, DPDU_SetParam, DPDU_DebugCmd,
-    decodeDlMsg,
+    createDPDU,
 }
