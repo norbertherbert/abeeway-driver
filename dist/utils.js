@@ -1,8 +1,9 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var buffer_1 = require("buffer");
 // ***************************************************************
 // *** Utility functions *****************************************
 // ***************************************************************
-Object.defineProperty(exports, "__esModule", { value: true });
 var step_size = function (lo, hi, nbits, nresv) {
     return 1.0 / ((((1 << nbits) - 1) - nresv) / (hi - lo));
 };
@@ -24,7 +25,7 @@ var PDUTemplate = /** @class */ (function () {
         else if (typeof x == 'string') {
             this.setFromHexString(x);
         }
-        else if (x instanceof Buffer) {
+        else if (x instanceof buffer_1.Buffer) {
             this.setFromBuffer(x);
         }
         else {
@@ -47,10 +48,10 @@ var PDUTemplate = /** @class */ (function () {
     };
     PDUTemplate.prototype.toBuffer = function () {
         throw new Error('toBuffer() method is not defined for this class.');
-        return Buffer.allocUnsafe(0);
+        return buffer_1.Buffer.allocUnsafe(0);
     };
     PDUTemplate.prototype.setFromHexString = function (x) {
-        this.setFromBuffer(Buffer.from(x));
+        this.setFromBuffer(buffer_1.Buffer.from(x));
     };
     PDUTemplate.prototype.toHexString = function () {
         return this.toBuffer().toString('hex');
@@ -76,7 +77,7 @@ var PDUTemplate = /** @class */ (function () {
                 }
                 y[key] = arr;
             }
-            else if (this._props[key] instanceof Buffer) {
+            else if (this._props[key] instanceof buffer_1.Buffer) {
                 y[key] = this._props[key].toString('hex');
             }
             else if (typeof this._props[key] === 'object') {
