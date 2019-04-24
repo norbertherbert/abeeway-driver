@@ -14,6 +14,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var assert = require("assert");
+var buffer_1 = require("buffer");
 /* Constants */
 var constants_1 = require("./constants");
 /* Utils */
@@ -83,7 +84,7 @@ var DPDU_SetMode = /** @class */ (function (_super) {
         this.mode = x[2];
     };
     DPDU_SetMode.prototype.toBuffer = function () {
-        var y = Buffer.allocUnsafe(3);
+        var y = buffer_1.Buffer.allocUnsafe(3);
         this.header.toBuffer().copy(y);
         y[2] = this.mode;
         return y;
@@ -139,7 +140,7 @@ var DPDU_ReqConf = /** @class */ (function (_super) {
     };
     DPDU_ReqConf.prototype.toBuffer = function () {
         var paramIDsLength = this.paramIDs.length;
-        var y = Buffer.allocUnsafe(2 + paramIDsLength);
+        var y = buffer_1.Buffer.allocUnsafe(2 + paramIDsLength);
         this.header.toBuffer().copy(y);
         for (var i = 0; i < paramIDsLength; i++) {
             y[2 + i] = this.paramIDs[i];
@@ -216,7 +217,7 @@ var DPDU_SetParam = /** @class */ (function (_super) {
     };
     DPDU_SetParam.prototype.toBuffer = function () {
         var paramsLength = this.params.length;
-        var y = Buffer.allocUnsafe(2 + (paramsLength * 5));
+        var y = buffer_1.Buffer.allocUnsafe(2 + (paramsLength * 5));
         this.header.toBuffer().copy(y);
         for (var i = 0; i < paramsLength; i++) {
             this.params[i].toBuffer().copy(y, 2 + (i * 5));
@@ -262,7 +263,7 @@ var DPDU_DebugCmd = /** @class */ (function (_super) {
         this.debugCmd = x[2];
     };
     DPDU_DebugCmd.prototype.toBuffer = function () {
-        var y = Buffer.allocUnsafe(3);
+        var y = buffer_1.Buffer.allocUnsafe(3);
         this.header.toBuffer().copy(y);
         y[2] = this.debugCmd;
         return y;
@@ -306,7 +307,7 @@ exports.decodeDlMsg = function (buf) {
 exports.createDPDU = function (x) {
     var buf;
     if (typeof (x) == 'string') {
-        buf = Buffer.from(x, 'hex');
+        buf = buffer_1.Buffer.from(x, 'hex');
     }
     else {
         buf = x;

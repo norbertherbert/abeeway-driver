@@ -14,6 +14,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var assert = require("assert");
+var buffer_1 = require("buffer");
 /* Constants */
 var constants_1 = require("./constants");
 /* Utils */
@@ -139,10 +140,10 @@ var UPDU_PosGPSFix = /** @class */ (function (_super) {
             l -= 0x100000000;
         this.longitude = l / 10000000;
         this.ehpe = utils_1.mt_value_decode(x[12], 0, 1000, 8, 0);
-        this.encryptedPos = Buffer.from(x.slice(13, 16));
+        this.encryptedPos = buffer_1.Buffer.from(x.slice(13, 16));
     };
     UPDU_PosGPSFix.prototype.toBuffer = function () {
-        var y = Buffer.allocUnsafe(16);
+        var y = buffer_1.Buffer.allocUnsafe(16);
         this.header.toBuffer().copy(y);
         y[5] = utils_1.mt_value_encode(this.age, 0, 2040, 8, 0);
         var l;
@@ -224,7 +225,7 @@ var UPDU_PosGPSTimeout = /** @class */ (function (_super) {
         this.carrierOverNoise = carrierOverNoise;
     };
     UPDU_PosGPSTimeout.prototype.toBuffer = function () {
-        var y = Buffer.allocUnsafe(10);
+        var y = buffer_1.Buffer.allocUnsafe(10);
         this.header.toBuffer().copy(y);
         y[5] = this.cause;
         for (var i = 0; i < 4; i++) {
@@ -277,7 +278,7 @@ var UPDU_PosWiFiTimeout = /** @class */ (function (_super) {
         this.v_bat = v_bat;
     };
     UPDU_PosWiFiTimeout.prototype.toBuffer = function () {
-        var y = Buffer.allocUnsafe(11);
+        var y = buffer_1.Buffer.allocUnsafe(11);
         this.header.toBuffer().copy(y);
         for (var i = 0; i < 6; i++) {
             y[5 + i] = utils_1.mt_value_encode(this.v_bat[i], 2.8, 4.2, 8, 2);
@@ -343,7 +344,7 @@ var UPDU_PosWiFiFailure = /** @class */ (function (_super) {
         this.error = x[11];
     };
     UPDU_PosWiFiFailure.prototype.toBuffer = function () {
-        var y = Buffer.allocUnsafe(12);
+        var y = buffer_1.Buffer.allocUnsafe(12);
         this.header.toBuffer().copy(y);
         for (var i = 0; i < 6; i++) {
             y[5 + i] = utils_1.mt_value_encode(this.v_bat[i], 2.8, 4.2, 8, 2);
@@ -407,7 +408,7 @@ var UPDU_PosWiFiBSSIDs = /** @class */ (function (_super) {
         this.wifiHotspots = wifiHotspots;
     };
     UPDU_PosWiFiBSSIDs.prototype.toBuffer = function () {
-        var y = Buffer.allocUnsafe(34);
+        var y = buffer_1.Buffer.allocUnsafe(34);
         this.header.toBuffer().copy(y);
         y[5] = utils_1.mt_value_decode(this.age, 0, 2040, 8, 0);
         for (var i = 0; i < 4; i++) {
@@ -455,7 +456,7 @@ var UPDU_PosBLEFailure = /** @class */ (function (_super) {
         this.error = x[5];
     };
     UPDU_PosBLEFailure.prototype.toBuffer = function () {
-        var y = Buffer.allocUnsafe(6);
+        var y = buffer_1.Buffer.allocUnsafe(6);
         this.header.toBuffer().copy(y);
         y[5] = this.error;
         return y;
@@ -521,7 +522,7 @@ var UPDU_EnergyStatus = /** @class */ (function (_super) {
         this.wifiScans = x.readUInt32BE(13);
     };
     UPDU_EnergyStatus.prototype.toBuffer = function () {
-        var y = Buffer.allocUnsafe(17);
+        var y = buffer_1.Buffer.allocUnsafe(17);
         this.header.toBuffer().copy(y);
         y.writeUInt32BE(this.gpsOnTime, 5);
         y.writeUInt32BE(this.gpsStabdbyTime, 9);
@@ -603,7 +604,7 @@ var UPDU_HeartBeat = /** @class */ (function (_super) {
     };
     UPDU_HeartBeat.prototype.toBuffer = function () {
         var l = (this.fwVersion == '') ? 6 : 9;
-        var y = Buffer.allocUnsafe(l);
+        var y = buffer_1.Buffer.allocUnsafe(l);
         this.header.toBuffer().copy(y);
         y[5] = this.cause;
         if (l = 9) {
@@ -666,7 +667,7 @@ var UPDU_ActivityStatus = /** @class */ (function (_super) {
         this.activityCount = x.readUInt32BE(6);
     };
     UPDU_ActivityStatus.prototype.toBuffer = function () {
-        var y = Buffer.allocUnsafe(10);
+        var y = buffer_1.Buffer.allocUnsafe(10);
         this.header.toBuffer().copy(y);
         y[5] = this.tag;
         y.writeUInt32BE(this.activityCount, 6);
@@ -729,7 +730,7 @@ var UPDU_ConfigReport = /** @class */ (function (_super) {
     };
     UPDU_ConfigReport.prototype.toBuffer = function () {
         var paramsLength = this.params.length;
-        var y = Buffer.allocUnsafe(6 + (paramsLength * 5));
+        var y = buffer_1.Buffer.allocUnsafe(6 + (paramsLength * 5));
         this.header.toBuffer().copy(y);
         y[5] = this.tag;
         for (var i = 0; i < paramsLength; i++) {
@@ -799,7 +800,7 @@ exports.UPDU_Debug = UPDU_Debug;
 exports.createUPDU = function (x) {
     var buf;
     if (typeof (x) == 'string') {
-        buf = Buffer.from(x, 'hex');
+        buf = buffer_1.Buffer.from(x, 'hex');
     }
     else {
         buf = x;

@@ -14,6 +14,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var assert = require("assert");
+var buffer_1 = require("buffer");
 /* Constants */
 var constants_1 = require("./constants");
 /* Utils */
@@ -306,7 +307,7 @@ var CPDU_Header = /** @class */ (function (_super) {
         this.optData = x[4] & 0x0f;
     };
     CPDU_Header.prototype.toBuffer = function () {
-        var y = Buffer.allocUnsafe(5);
+        var y = buffer_1.Buffer.allocUnsafe(5);
         y[0] = this.type;
         y[1] = this.status.toValue();
         y[2] = utils_1.mt_value_encode(this.battery, 2.8, 4.2, 8, 2);
@@ -366,7 +367,7 @@ var CPDU_UlHeaderShort = /** @class */ (function (_super) {
         this.optData = x[1] & 0x0f;
     };
     CPDU_UlHeaderShort.prototype.toBuffer = function () {
-        var y = Buffer.allocUnsafe(2);
+        var y = buffer_1.Buffer.allocUnsafe(2);
         y[0] = this.type;
         y[1] = (this.ackToken << 4) | this.optData;
         return y;
@@ -423,7 +424,7 @@ var CPDU_DlHeaderShort = /** @class */ (function (_super) {
         this.optData = x[1] & 0x0f;
     };
     CPDU_DlHeaderShort.prototype.toBuffer = function () {
-        var y = Buffer.allocUnsafe(2);
+        var y = buffer_1.Buffer.allocUnsafe(2);
         y[0] = this.type;
         y[1] = (this.ackToken << 4) | this.optData;
         return y;
@@ -466,7 +467,7 @@ var CPDU_WiFiBSSIDs = /** @class */ (function (_super) {
         this.rssi = x.readInt8(6);
     };
     CPDU_WiFiBSSIDs.prototype.toBuffer = function () {
-        var y = Buffer.allocUnsafe(7);
+        var y = buffer_1.Buffer.allocUnsafe(7);
         for (var i = 0; i < 6; i++) {
             var s = this.bssid;
             y[i] = parseInt(s.substring(2 * i, 2 * (i + 1)), 16);
@@ -533,7 +534,7 @@ var CPDU_Parameter = /** @class */ (function (_super) {
         }
     };
     CPDU_Parameter.prototype.toBuffer = function () {
-        var y = Buffer.allocUnsafe(5);
+        var y = buffer_1.Buffer.allocUnsafe(5);
         y[0] = this.id;
         switch (this.id) {
             case constants_1.E_ParameterId.CONFIG_FLAGS:
