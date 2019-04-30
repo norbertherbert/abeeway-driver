@@ -4,20 +4,20 @@ import * as assert from 'assert';
 import { 
     E_UPDUType, E_Tag, E_OperatingMode, E_PositionInformation, E_WiFiFailure,
     E_BLEFailure, E_DPDUType, E_DebugCmd, E_GPSTimeoutCause, E_ParameterId, 
-    C_ParameterId, E_Param_GeolocSensor, E_Param_GeolocMethod, E_Param_TransmitStrat,
+    C_ParamDescriptions, E_Param_GeolocSensor, E_Param_GeolocMethod, E_Param_TransmitStrat,
 } from './constants';
 export {
     E_UPDUType, E_Tag, E_OperatingMode, E_PositionInformation, E_WiFiFailure,
     E_BLEFailure, E_DPDUType, E_DebugCmd, E_GPSTimeoutCause, E_ParameterId, 
-    C_ParameterId, E_Param_GeolocSensor, E_Param_GeolocMethod, E_Param_TransmitStrat,
+    C_ParamDescriptions, E_Param_GeolocSensor, E_Param_GeolocMethod, E_Param_TransmitStrat,
 }
 
 /* Component Protocol Data Units (CPDU) */
 import { 
-    CPDU_ParamConfigFlags, CPDU_Status, CPDU_Header, CPDU_UlHeaderShort, CPDU_DlHeaderShort, CPDU_WiFiBSSIDs, CPDU_Parameter, 
+    CPDU_ParamConfirmedUlBitmap, CPDU_ParamConfigFlags, CPDU_Status, CPDU_Header, CPDU_UlHeaderShort, CPDU_DlHeaderShort, CPDU_WiFiBSSIDs, CPDU_Parameter, 
 } from './CPDU';
 export {
-    CPDU_ParamConfigFlags, CPDU_Status, CPDU_Header, CPDU_UlHeaderShort, CPDU_DlHeaderShort, CPDU_WiFiBSSIDs, CPDU_Parameter, 
+    CPDU_ParamConfirmedUlBitmap, CPDU_ParamConfigFlags, CPDU_Status, CPDU_Header, CPDU_UlHeaderShort, CPDU_DlHeaderShort, CPDU_WiFiBSSIDs, CPDU_Parameter, 
 }
 
 /* Uplink Protocol Data Units (UPDU)*/

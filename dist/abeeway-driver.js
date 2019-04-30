@@ -12,12 +12,13 @@ exports.E_DPDUType = constants_1.E_DPDUType;
 exports.E_DebugCmd = constants_1.E_DebugCmd;
 exports.E_GPSTimeoutCause = constants_1.E_GPSTimeoutCause;
 exports.E_ParameterId = constants_1.E_ParameterId;
-exports.C_ParameterId = constants_1.C_ParameterId;
+exports.C_ParamDescriptions = constants_1.C_ParamDescriptions;
 exports.E_Param_GeolocSensor = constants_1.E_Param_GeolocSensor;
 exports.E_Param_GeolocMethod = constants_1.E_Param_GeolocMethod;
 exports.E_Param_TransmitStrat = constants_1.E_Param_TransmitStrat;
 /* Component Protocol Data Units (CPDU) */
 var CPDU_1 = require("./CPDU");
+exports.CPDU_ParamConfirmedUlBitmap = CPDU_1.CPDU_ParamConfirmedUlBitmap;
 exports.CPDU_ParamConfigFlags = CPDU_1.CPDU_ParamConfigFlags;
 exports.CPDU_Status = CPDU_1.CPDU_Status;
 exports.CPDU_Header = CPDU_1.CPDU_Header;

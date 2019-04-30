@@ -1,7 +1,8 @@
 const {
     DPDU_SetParam, 
     CPDU_DlHeaderShort, E_DPDUType, 
-    CPDU_Parameter, E_ParameterId, 
+    CPDU_Parameter, E_ParameterId,
+    CPDU_ParamConfirmedUlBitmap,
 } = require('../../dist/abeeway-driver');
 // if you use the module from the public npm repository use require('abeeway-driver') instead.
 
@@ -23,11 +24,18 @@ msg = new DPDU_SetParam({
             value: 10,
         }),
         new CPDU_Parameter({
-            id: E_ParameterId.CONFIRMED_UPDU_BITMAP,
-            value: 0,
+            id: E_ParameterId.CONFIRMED_UL_BITMAP,
+            value: new CPDU_ParamConfirmedUlBitmap({
+                FramePending:     false,
+                Position:         true,
+                EnergyStatus:     false,
+                HeartBeat:        true,
+                ActivityOrConfig: false,
+                Shutdown:         true,
+            })
         }),
         new CPDU_Parameter({
-            id: E_ParameterId.CONFIRMED_UPDU_RETRY,
+            id: E_ParameterId.CONFIRMED_UL_RETRY,
             value: 0,
         }),
     ]
@@ -41,6 +49,7 @@ console.log(msg.toHexString());
 
 // Convert the message object to a Buffer
 buffer = msg.toBuffer();
+//buffer = Buffer.from('0b50110000000a120000ffff1300000000', 'hex');
 
 // Create a new message object from a Buffer
 msg1 = new DPDU_SetParam(buffer);

@@ -95,32 +95,68 @@ export enum E_ParameterId {
     GPS_STANDBY_TIMEOUT          = 0x11, // s, 10-7200
 
     //TODO: what is this?
-    CONFIRMED_UPDU_BITMAP          = 0x12, // 0x00-0xffff
+    CONFIRMED_UL_BITMAP        = 0x12, // 0x00-0xff
 
-    CONFIRMED_UPDU_RETRY           = 0x13, // 0-8
+    CONFIRMED_UL_RETRY         = 0x13, // 0-8
 }
 
-export const C_ParameterId = {
-    0x00: { name: 'UL_PERIOD',            unit:'s', min: 60,   max: 86400  },
-    0x01: { name: 'LORA_PERIOD',          unit:'s', min: 300,  max: 86400  },
-    0x02: { name: 'PW_STAT_PERIOD',       unit:'s', min: 300,  max: 604800 },
-    0x03: { name: 'PERIODIC_POS_PERIOD',  unit:'s', min: 900,  max: 604800 },
+export const C_ParamDescriptions = {
+    UL_PERIOD:             { code: 0x00, name: 'UL_PERIOD',             unit:'s', min: 60,   max: 86400,
+        description: 'Period of position or activity messages in motion, start/end, activity or permanent operating mode. [60..86400 s]',
+    },
+    LORA_PERIOD:           { code: 0x01, name: 'LORA_PERIOD',           unit:'s', min: 300,  max: 86400,
+        description: 'Period of LoRa heartbeat messages. [300..86400 s]',
+    },
+    PW_STAT_PERIOD:        { code: 0x02, name: 'PW_STAT_PERIOD',        unit:'s', min: 300,  max: 604800,
+        description: 'Period of energy status report. When 0, no status report is sent. (Not used for micro trackers) [0, 300..60480 s]',
+    },
+    PERIODIC_POS_PERIOD:   { code: 0x03, name: 'PERIODIC_POS_PERIOD',   unit:'s', min: 900,  max: 604800,
+        description: 'Period of the periodic position report. A 0 value disables this reporting. [0, 900..60480 s]',
+    },
 
-    0x05: { name: 'GEOLOC_SENSOR',        unit:'',  min: 0x00, max: 0x10   }, // E_Param_GeolocSensor
-    0x06: { name: 'GEOLOC_METHOD',        unit:'',  min: 0x00, max: 0x05   }, // E_Param_GeolocMethod
+    GEOLOC_SENSOR:         { code: 0x05, name: 'GEOLOC_SENSOR',         unit:'',  min: 0x00, max: 0x10,
+        description: 'Geoloc sensor profile used in motion, start/end or permanent tracking operating mode.',
+    }, // E_Param_GeolocSensor
+    GEOLOC_METHOD:         { code: 0x06, name: 'GEOLOC_METHOD',         unit:'',  min: 0x00, max: 0x05,
+        description: 'Oneshot geolocation policy used for alert, periodic or on demand positions.',
+    }, // E_Param_GeolocMethod
 
-    0x08: { name: 'MOTION_NB_POS',        unit:'',  min: 1,    max: 60     },
-    0x09: { name: 'GPS_TIMEOUT',          unit:'s', min: 3,    max: 300    },
-    0x0a: { name: 'AGPS_TIMEOUT',         unit:'s', min: 30,   max: 250    },
-    0x0b: { name: 'GPS_EHPE',             unit:'s', min: 0,    max: 100    },
-    0x0c: { name: 'GPS_CONVERGENCE',      unit:'s', min: 0,    max: 300    },
-    0x0d: { name: 'CONFIG_FLAGS',         unit:'',  min: 0x00, max: 0xff   }, // Param_ConfigFlags
-    0x0e: { name: 'TRANSMIT_STRAT',       unit:'',  min: 0x00, max: 0x04   }, // E_Param_TransmitStrat (0-4)
-    0x0f: { name: 'BLE_BEACON_COUNT',     unit:'',  min: 1,    max: 4      },
-    0x10: { name: 'BLE_BEACON_TIMEOUT',   unit:'s', min: 1,    max: 5      },
-    0x11: { name: 'GPS_STANDBY_TIMEOUT',  unit:'s', min: 10,   max: 7200   },
-    0x12: { name: 'CONFIRMED_UPDU_BITMAP',  unit:'',  min: 0x00, max: 0xffff },
-    0x13: { name: 'CONFIRMED_UPDU_RETRY',   unit:'',  min: 0,    max: 8      },
+    MOTION_NB_POS:         { code: 0x08, name: 'MOTION_NB_POS',         unit:'',  min: 1,    max: 60,
+        description: 'Number of positions to report during motion events (in motion start/end mode only) [1..60]',
+    },
+    GPS_TIMEOUT:           { code: 0x09, name: 'GPS_TIMEOUT',           unit:'s', min: 3,    max: 300,
+        description: 'Timeout for GPS scans before sending a GPS timeout message. [30..300 s]',
+    },
+    AGPS_TIMEOUT:          { code: 0x0a, name: 'AGPS_TIMEOUT',          unit:'s', min: 30,   max: 250,
+        description: 'Timeout for LPGPS scans before sending a GPS timeout message. [30..250 s]',
+    },
+    GPS_EHPE:              { code: 0x0b, name: 'GPS_EHPE',              unit:'s', min: 0,    max: 100,
+        description: 'Acceptable GPS Horizontal Positioning Error [0..100 m]',
+    },
+    GPS_CONVERGENCE:       { code: 0x0c, name: 'GPS_CONVERGENCE',       unit:'s', min: 0,    max: 300,
+        description: 'Time available for the GPS module to refine the calculated position. [0..300 s]',
+    },
+    CONFIG_FLAGS:          { code: 0x0d, name: 'CONFIG_FLAGS',          unit:'',  min: 0x00, max: 0xff,
+        description: 'Configuration flags.',
+    }, // Param_ConfigFlags
+    TRANSMIT_STRAT:        { code: 0x0e, name: 'TRANSMIT_STRAT',        unit:'',  min: 0x00, max: 0x04,
+        description: 'LoRa transmit strategy in motion. (If not in motion always ADR is used.)',
+    }, // E_Param_TransmitStrat (0-4)
+    BLE_BEACON_COUNT:      { code: 0x0f, name: 'BLE_BEACON_COUNT',      unit:'',  min: 1,    max: 4,
+        description: 'Maximum number of BLE beacons to report. [1..4]',
+    },
+    BLE_BEACON_TIMEOUT:    { code: 0x10, name: 'BLE_BEACON_TIMEOUT',    unit:'s', min: 1,    max: 5,
+        description: 'Timeout used by the BLE beacon for geolocation. [1..5 s]',
+    },
+    GPS_STANDBY_TIMEOUT:   { code: 0x11, name: 'GPS_STANDBY_TIMEOUT',   unit:'s', min: 10,   max: 7200,
+        description: 'Duration of GPS standby mode before going OFF. [10..7200 s]',
+    },
+    CONFIRMED_UL_BITMAP: { code: 0x12, name: 'CONFIRMED_UL_BITMAP', unit:'',  min: 0x00, max: 0xff,
+        description: 'Bitmap enabling the LoRa confirmation of specific type of uplink message. [0x00..0xff]',
+    }, // E_Param_UlBitmap
+    CONFIRMED_UL_RETRY:  { code: 0x13, name: 'CONFIRMED_UL_RETRY',  unit:'',  min: 0,    max: 8,
+        description: 'The number of retries for each confirmed uplink when the confirmation is not received. [0..8]',
+    },
 }
 
 export enum E_Param_GeolocSensor {

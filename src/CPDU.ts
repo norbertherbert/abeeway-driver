@@ -5,12 +5,12 @@ import { Buffer } from 'buffer';
 import { 
     E_UPDUType, E_Tag, E_OperatingMode, E_PositionInformation, E_WiFiFailure,
     E_BLEFailure, E_DPDUType, E_DebugCmd, E_GPSTimeoutCause, E_ParameterId, 
-    C_ParameterId, E_Param_GeolocSensor, E_Param_GeolocMethod, E_Param_TransmitStrat,
+    C_ParamDescriptions, E_Param_GeolocSensor, E_Param_GeolocMethod, E_Param_TransmitStrat,
 } from './constants';
 
 /* Utils */
 import { 
-    PDUTemplate, mt_value_decode, mt_value_encode, isUint8, 
+    PDUTemplate, mt_value_decode, mt_value_encode, isUint8, isUint16,
 } from './utils';
 
 
@@ -18,7 +18,7 @@ import {
 // *** CPDU_ParamConfigFlags *****************************************
 // ***************************************************************
 
-export interface I_CPDU_ParamConfigFlags {                     // 1 byte
+export interface I_CPDU_ParamConfigFlags {                 // 1 byte
                                                            // bit 7-6
     BLEAdvertisingActive:                 boolean,         // bit 5
     WiFiPayloadCyphered:                  boolean,         // bit 4
@@ -78,7 +78,7 @@ export class CPDU_ParamConfigFlags extends PDUTemplate<I_CPDU_ParamConfigFlags> 
     }
 
     setFromValue(x:number):void {
-        assert.ok(isUint8(x), 'Param_ConfigFlags.setFromValue(): Invalid value!' );
+        assert.ok(isUint8(x), 'CPDU_ParamConfigFlags.setFromValue(): Invalid value!' );
         this.BLEAdvertisingActive           = (x & 0b100000) === 0b100000;
         this.WiFiPayloadCyphered            = (x &  0b10000) ===  0b10000;
         this.ConfigReqsAcknoledged          = (x &   0b1000) ===   0b1000;
@@ -95,6 +95,91 @@ export class CPDU_ParamConfigFlags extends PDUTemplate<I_CPDU_ParamConfigFlags> 
         y |= this.DoubleShortButtonPressForSOS ?    0b100 : 0;
         y |= this.LongButtonPressToSwitchOff   ?     0b10 : 0;
         y |= this.FramePendingMechanismActive  ?      0b1 : 0;
+        return y;
+    }
+
+}
+
+// ***************************************************************
+// *** CPDU_ParamConfirmedUlBitmap *******************************
+// ***************************************************************
+
+export interface I_CPDU_ParamConfirmedUlBitmap { // 2 bytes
+    FramePending:       boolean,                // bit 0, E_UPDUType.FRAME_PENDING
+    Position:           boolean,                // bit 3, E_UPDUType.POSITION
+    EnergyStatus:       boolean,                // bit 4, E_UPDUType.ENERGY_STATUS
+    HeartBeat:          boolean,                // bit 5, E_UPDUType.HEART_BEAT
+    ActivityOrConfig:   boolean,                // bit 7, E_UPDUType.ACTIVITY_OR_CONFIG
+    Shutdown:           boolean,                // bit 9, E_UPDUType.SHUTDOWN
+}
+export class CPDU_ParamConfirmedUlBitmap extends PDUTemplate<I_CPDU_ParamConfirmedUlBitmap> implements I_CPDU_ParamConfirmedUlBitmap {
+
+    // *** FramePending ***
+    set FramePending(x:boolean) {
+        this._props.FramePending = x;
+    }
+    get FramePending():boolean {
+        return this._props.FramePending;
+    }
+
+    // *** Position ***
+    set Position(x:boolean) {
+        this._props.Position = x;
+    }
+    get Position():boolean {
+        return this._props.Position;
+    }
+
+    // *** EnergyStatus ***
+    set EnergyStatus(x:boolean) {
+        this._props.EnergyStatus = x;
+    }
+    get EnergyStatus():boolean {
+        return this._props.EnergyStatus;
+    }
+
+    // *** HeartBeat ***
+    set HeartBeat(x:boolean) {
+        this._props.HeartBeat = x;
+    }
+    get HeartBeat():boolean {
+        return this._props.HeartBeat;
+    }
+
+    // *** ActivityOrConfig ***
+    set ActivityOrConfig(x:boolean) {
+        this._props.ActivityOrConfig = x;
+    }
+    get ActivityOrConfig():boolean {
+        return this._props.ActivityOrConfig;
+    }
+
+    // *** Shutdown ***
+    set Shutdown(x:boolean) {
+        this._props.Shutdown = x;
+    }
+    get Shutdown():boolean {
+        return this._props.Shutdown;
+    }
+
+    setFromValue(x:number):void {
+        assert.ok(isUint16(x), 'CPDU_ParamConfirmedUlBitmap.setFromValue(): Invalid value!' );
+        this.FramePending        = ((x >> E_UPDUType.FRAME_PENDING ) & 1) === 1;
+        this.Position            = ((x >> E_UPDUType.POSITION      ) & 1) === 1;
+        this.EnergyStatus        = ((x >> E_UPDUType.ENERGY_STATUS ) & 1) === 1;
+        this.HeartBeat           = ((x >> E_UPDUType.HEART_BEAT    ) & 1) === 1;
+        this.ActivityOrConfig    = ((x >> E_UPDUType.ACTIVITY_OR_CONFIG) & 1) === 1;
+        this.Shutdown            = ((x >> E_UPDUType.SHUTDOWN      ) & 1) === 1;
+    }
+
+    toValue():number {
+        let y: number = 0;
+        y |= this.FramePending      ? ( 1 << E_UPDUType.FRAME_PENDING )      : 0; 
+        y |= this.Position          ? ( 1 << E_UPDUType.POSITION )           : 0; 
+        y |= this.EnergyStatus      ? ( 1 << E_UPDUType.ENERGY_STATUS )      : 0; 
+        y |= this.HeartBeat         ? ( 1 << E_UPDUType.HEART_BEAT )         : 0;
+        y |= this.ActivityOrConfig  ? ( 1 << E_UPDUType.ACTIVITY_OR_CONFIG ) : 0;
+        y |= this.Shutdown          ? ( 1 << E_UPDUType.SHUTDOWN )           : 0;
         return y;
     }
 
@@ -456,10 +541,10 @@ export class CPDU_WiFiBSSIDs extends PDUTemplate<I_CPDU_WiFiBSSIDs> implements I
 // *** CPDU_Parameter ********************************************
 // ***************************************************************
 
-export interface I_CPDU_Parameter {                       // 5 bytes
-    id:                      E_ParameterId, // 1 byte
-    _id?:                 string,
-    value:                   number|CPDU_ParamConfigFlags,          // 4 bytes
+export interface I_CPDU_Parameter {           // 5 bytes
+    id:                      E_ParameterId,   // 1 byte
+    _id?:                    string,
+    value:                   number | CPDU_ParamConfirmedUlBitmap | CPDU_ParamConfigFlags, // 4 bytes
 }
 export class CPDU_Parameter extends PDUTemplate<I_CPDU_Parameter> implements I_CPDU_Parameter {
 
@@ -474,31 +559,20 @@ export class CPDU_Parameter extends PDUTemplate<I_CPDU_Parameter> implements I_C
     }
 
     // *** value ***
-    set value(x:number|CPDU_ParamConfigFlags) {
-        switch (this.id) {
-            case E_ParameterId.CONFIG_FLAGS:
-                this._props.value = new CPDU_ParamConfigFlags(x);
-                break;
-            default:
-                this._props.value = x;
-                break;
-        }
+    set value(x:number|CPDU_ParamConfirmedUlBitmap|CPDU_ParamConfigFlags) {
+        this._props.value = x;
     }
-    get value():number|CPDU_ParamConfigFlags {
-        switch (this.id) {
-            case E_ParameterId.CONFIG_FLAGS:
-                return this._props.value;
-                break;
-            default:
-                return this._props.value;
-                break;
-        }
+    get value():number|CPDU_ParamConfirmedUlBitmap|CPDU_ParamConfigFlags {
+        return this._props.value;
     }
 
     setFromBuffer(x:Buffer) {
         assert.ok(x.length === 5, 'Parameter.setFromBuffer(): Invalid buffer legth!');
         this.id = x[0];
         switch (this.id) {
+            case E_ParameterId.CONFIRMED_UL_BITMAP:
+                this.value = new CPDU_ParamConfirmedUlBitmap((x[3] << 8) + x[4]);
+                break;
             case E_ParameterId.CONFIG_FLAGS:
                 this.value = new CPDU_ParamConfigFlags(x[4]);
                 break;
@@ -508,23 +582,31 @@ export class CPDU_Parameter extends PDUTemplate<I_CPDU_Parameter> implements I_C
         }
     }
     toBuffer():Buffer {
+
         let y = Buffer.allocUnsafe(5);
         y[0] = this.id;
 
+        let v:number;
         switch (this.id) {
+            case E_ParameterId.CONFIRMED_UL_BITMAP:
+                v = (<CPDU_ParamConfirmedUlBitmap>(this.value)).toValue();
+                break;
             case E_ParameterId.CONFIG_FLAGS:
-                y[1] = 0; y[2] = 0; y[3] = 0; 
-                y[4] = (<CPDU_ParamConfigFlags>(this.value)).toValue();
+                v = (<CPDU_ParamConfigFlags>(this.value)).toValue();
                 break;
             default:
-                let v:number =<number>this.value;
-                y[1] = (v >> 24) & 0xff;
-                y[2] = (v >> 16) & 0xff;
-                y[3] = (v >>  8) & 0xff;
-                y[4] = (v      ) & 0xff;
+                v = <number>this.value;
                 break;
         }
+
+        y[1] = (v >> 24) & 0xff;
+        y[2] = (v >> 16) & 0xff;
+        y[3] = (v >>  8) & 0xff;
+        y[4] = (v      ) & 0xff;
+
         return y;
+
     }
+
 }
 

@@ -20,6 +20,9 @@ export let isUint8 = (x:number): boolean => {
     return (x & 0xff) === x;
 }
 
+export let isUint16 = (x:number): boolean => {
+    return (x & 0xffff) === x;
+}
 
 
 // ***************************************************************

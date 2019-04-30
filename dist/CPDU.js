@@ -91,7 +91,7 @@ var CPDU_ParamConfigFlags = /** @class */ (function (_super) {
         configurable: true
     });
     CPDU_ParamConfigFlags.prototype.setFromValue = function (x) {
-        assert.ok(utils_1.isUint8(x), 'Param_ConfigFlags.setFromValue(): Invalid value!');
+        assert.ok(utils_1.isUint8(x), 'CPDU_ParamConfigFlags.setFromValue(): Invalid value!');
         this.BLEAdvertisingActive = (x & 32) === 32;
         this.WiFiPayloadCyphered = (x & 16) === 16;
         this.ConfigReqsAcknoledged = (x & 8) === 8;
@@ -112,6 +112,99 @@ var CPDU_ParamConfigFlags = /** @class */ (function (_super) {
     return CPDU_ParamConfigFlags;
 }(utils_1.PDUTemplate));
 exports.CPDU_ParamConfigFlags = CPDU_ParamConfigFlags;
+var CPDU_ParamConfirmedUlBitmap = /** @class */ (function (_super) {
+    __extends(CPDU_ParamConfirmedUlBitmap, _super);
+    function CPDU_ParamConfirmedUlBitmap() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Object.defineProperty(CPDU_ParamConfirmedUlBitmap.prototype, "FramePending", {
+        get: function () {
+            return this._props.FramePending;
+        },
+        // *** FramePending ***
+        set: function (x) {
+            this._props.FramePending = x;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CPDU_ParamConfirmedUlBitmap.prototype, "Position", {
+        get: function () {
+            return this._props.Position;
+        },
+        // *** Position ***
+        set: function (x) {
+            this._props.Position = x;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CPDU_ParamConfirmedUlBitmap.prototype, "EnergyStatus", {
+        get: function () {
+            return this._props.EnergyStatus;
+        },
+        // *** EnergyStatus ***
+        set: function (x) {
+            this._props.EnergyStatus = x;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CPDU_ParamConfirmedUlBitmap.prototype, "HeartBeat", {
+        get: function () {
+            return this._props.HeartBeat;
+        },
+        // *** HeartBeat ***
+        set: function (x) {
+            this._props.HeartBeat = x;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CPDU_ParamConfirmedUlBitmap.prototype, "ActivityOrConfig", {
+        get: function () {
+            return this._props.ActivityOrConfig;
+        },
+        // *** ActivityOrConfig ***
+        set: function (x) {
+            this._props.ActivityOrConfig = x;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CPDU_ParamConfirmedUlBitmap.prototype, "Shutdown", {
+        get: function () {
+            return this._props.Shutdown;
+        },
+        // *** Shutdown ***
+        set: function (x) {
+            this._props.Shutdown = x;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    CPDU_ParamConfirmedUlBitmap.prototype.setFromValue = function (x) {
+        assert.ok(utils_1.isUint16(x), 'CPDU_ParamConfirmedUlBitmap.setFromValue(): Invalid value!');
+        this.FramePending = ((x >> constants_1.E_UPDUType.FRAME_PENDING) & 1) === 1;
+        this.Position = ((x >> constants_1.E_UPDUType.POSITION) & 1) === 1;
+        this.EnergyStatus = ((x >> constants_1.E_UPDUType.ENERGY_STATUS) & 1) === 1;
+        this.HeartBeat = ((x >> constants_1.E_UPDUType.HEART_BEAT) & 1) === 1;
+        this.ActivityOrConfig = ((x >> constants_1.E_UPDUType.ACTIVITY_OR_CONFIG) & 1) === 1;
+        this.Shutdown = ((x >> constants_1.E_UPDUType.SHUTDOWN) & 1) === 1;
+    };
+    CPDU_ParamConfirmedUlBitmap.prototype.toValue = function () {
+        var y = 0;
+        y |= this.FramePending ? (1 << constants_1.E_UPDUType.FRAME_PENDING) : 0;
+        y |= this.Position ? (1 << constants_1.E_UPDUType.POSITION) : 0;
+        y |= this.EnergyStatus ? (1 << constants_1.E_UPDUType.ENERGY_STATUS) : 0;
+        y |= this.HeartBeat ? (1 << constants_1.E_UPDUType.HEART_BEAT) : 0;
+        y |= this.ActivityOrConfig ? (1 << constants_1.E_UPDUType.ACTIVITY_OR_CONFIG) : 0;
+        y |= this.Shutdown ? (1 << constants_1.E_UPDUType.SHUTDOWN) : 0;
+        return y;
+    };
+    return CPDU_ParamConfirmedUlBitmap;
+}(utils_1.PDUTemplate));
+exports.CPDU_ParamConfirmedUlBitmap = CPDU_ParamConfirmedUlBitmap;
 var CPDU_Status = /** @class */ (function (_super) {
     __extends(CPDU_Status, _super);
     function CPDU_Status() {
@@ -498,25 +591,11 @@ var CPDU_Parameter = /** @class */ (function (_super) {
     });
     Object.defineProperty(CPDU_Parameter.prototype, "value", {
         get: function () {
-            switch (this.id) {
-                case constants_1.E_ParameterId.CONFIG_FLAGS:
-                    return this._props.value;
-                    break;
-                default:
-                    return this._props.value;
-                    break;
-            }
+            return this._props.value;
         },
         // *** value ***
         set: function (x) {
-            switch (this.id) {
-                case constants_1.E_ParameterId.CONFIG_FLAGS:
-                    this._props.value = new CPDU_ParamConfigFlags(x);
-                    break;
-                default:
-                    this._props.value = x;
-                    break;
-            }
+            this._props.value = x;
         },
         enumerable: true,
         configurable: true
@@ -525,6 +604,9 @@ var CPDU_Parameter = /** @class */ (function (_super) {
         assert.ok(x.length === 5, 'Parameter.setFromBuffer(): Invalid buffer legth!');
         this.id = x[0];
         switch (this.id) {
+            case constants_1.E_ParameterId.CONFIRMED_UL_BITMAP:
+                this.value = new CPDU_ParamConfirmedUlBitmap((x[3] << 8) + x[4]);
+                break;
             case constants_1.E_ParameterId.CONFIG_FLAGS:
                 this.value = new CPDU_ParamConfigFlags(x[4]);
                 break;
@@ -536,21 +618,22 @@ var CPDU_Parameter = /** @class */ (function (_super) {
     CPDU_Parameter.prototype.toBuffer = function () {
         var y = buffer_1.Buffer.allocUnsafe(5);
         y[0] = this.id;
+        var v;
         switch (this.id) {
+            case constants_1.E_ParameterId.CONFIRMED_UL_BITMAP:
+                v = (this.value).toValue();
+                break;
             case constants_1.E_ParameterId.CONFIG_FLAGS:
-                y[1] = 0;
-                y[2] = 0;
-                y[3] = 0;
-                y[4] = (this.value).toValue();
+                v = (this.value).toValue();
                 break;
             default:
-                var v = this.value;
-                y[1] = (v >> 24) & 0xff;
-                y[2] = (v >> 16) & 0xff;
-                y[3] = (v >> 8) & 0xff;
-                y[4] = (v) & 0xff;
+                v = this.value;
                 break;
         }
+        y[1] = (v >> 24) & 0xff;
+        y[2] = (v >> 16) & 0xff;
+        y[3] = (v >> 8) & 0xff;
+        y[4] = (v) & 0xff;
         return y;
     };
     return CPDU_Parameter;

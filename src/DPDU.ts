@@ -5,7 +5,7 @@ import { Buffer } from 'buffer';
 import { 
     E_UPDUType, E_Tag, E_OperatingMode, E_PositionInformation, E_WiFiFailure,
     E_BLEFailure, E_DPDUType, E_DebugCmd, E_GPSTimeoutCause, E_ParameterId, 
-    C_ParameterId, E_Param_GeolocSensor, E_Param_GeolocMethod, E_Param_TransmitStrat,
+    C_ParamDescriptions, E_Param_GeolocSensor, E_Param_GeolocMethod, E_Param_TransmitStrat,
 } from './constants';
 
 /* Utils */

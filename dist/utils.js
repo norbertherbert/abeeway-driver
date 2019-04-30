@@ -16,6 +16,9 @@ exports.mt_value_encode = function (value, lo, hi, nbits, nresv) {
 exports.isUint8 = function (x) {
     return (x & 0xff) === x;
 };
+exports.isUint16 = function (x) {
+    return (x & 0xffff) === x;
+};
 var PDUTemplate = /** @class */ (function () {
     function PDUTemplate(x) {
         this._props = {};
