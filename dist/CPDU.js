@@ -596,6 +596,19 @@ var CPDU_Parameter = /** @class */ (function (_super) {
         // *** value ***
         set: function (x) {
             this._props.value = x;
+            if (typeof x === 'number') {
+                switch (this.id) {
+                    case constants_1.E_ParameterId.GEOLOC_SENSOR:
+                        this._props._value = constants_1.E_Param_GeolocSensor[x];
+                        break;
+                    case constants_1.E_ParameterId.GEOLOC_METHOD:
+                        this._props._value = constants_1.E_Param_GeolocMethod[x];
+                        break;
+                    case constants_1.E_ParameterId.TRANSMIT_STRAT:
+                        this._props._value = constants_1.E_Param_TransmitStrat[x];
+                        break;
+                }
+            }
         },
         enumerable: true,
         configurable: true

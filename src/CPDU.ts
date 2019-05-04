@@ -561,6 +561,19 @@ export class CPDU_Parameter extends PDUTemplate<I_CPDU_Parameter> implements I_C
     // *** value ***
     set value(x:number|CPDU_ParamConfirmedUlBitmap|CPDU_ParamConfigFlags) {
         this._props.value = x;
+        if (typeof x === 'number') {
+            switch (this.id) {
+                case E_ParameterId.GEOLOC_SENSOR:
+                    this._props._value = E_Param_GeolocSensor[x];
+                    break;
+                case E_ParameterId.GEOLOC_METHOD:
+                    this._props._value = E_Param_GeolocMethod[x];
+                    break;
+                case E_ParameterId.TRANSMIT_STRAT:
+                    this._props._value = E_Param_TransmitStrat[x];
+                    break;
+            }
+        }
     }
     get value():number|CPDU_ParamConfirmedUlBitmap|CPDU_ParamConfigFlags {
         return this._props.value;

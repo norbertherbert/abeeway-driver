@@ -3,7 +3,8 @@ const {
     CPDU_Header, E_UPDUType,
     CPDU_Status, E_OperatingMode,
     CPDU_Parameter, E_ParameterId,
-    E_Tag, E_Param_TransmitStrat
+    E_Tag,
+    E_Param_GeolocSensor, E_Param_GeolocMethod, E_Param_TransmitStrat,
 } = require('../../dist/abeeway-driver');
 // if you use the module from the public npm repository use require('abeeway-driver') instead.
 
@@ -25,6 +26,14 @@ let configReport = new UPDU_ConfigReport ({
     }),
     tag:    E_Tag.CONFIG,
     params: [
+        new CPDU_Parameter({
+            id: E_ParameterId.GEOLOC_SENSOR,
+            value: E_Param_GeolocSensor.WiFiGPS,
+        }),
+        new CPDU_Parameter({
+            id: E_ParameterId.GEOLOC_METHOD,
+            value: E_Param_GeolocMethod.GPS,
+        }),
         new CPDU_Parameter({
             id: E_ParameterId.TRANSMIT_STRAT,
             value: E_Param_TransmitStrat.DUAL_FIXED,
