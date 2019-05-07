@@ -6,6 +6,7 @@ const {createUPDU, E_UPDUType} = require('../dist/abeeway-driver');
 
 // This is an example uplink message
 const uplinkPayloadHex = '0781f98350020e000000030f00000001';
+// const uplinkPayloadHex = '0328937b0539707257c0216c60fe267b69e56677726be9'
 
 // The argumet must be either a hex string or a Buffer object.
 let pdu = createUPDU(uplinkPayloadHex);

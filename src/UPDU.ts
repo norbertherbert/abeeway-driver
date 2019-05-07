@@ -803,6 +803,37 @@ export class UPDU_Debug extends PDUTemplate<I_UPDU_Debug> implements I_UPDU_Debu
 
 
 
+// ****************************************************************
+// *** I_UPDU_LPGPS *********************************************
+// ****************************************************************
+
+export interface I_UPDU_LPGPS {
+    header:                  CPDU_Header,          // 5 bytes
+    // all additional values are proprietary
+}
+export class UPDU_LPGPS extends PDUTemplate<I_UPDU_LPGPS> implements I_UPDU_LPGPS {
+
+    // *** header ***
+    set header(x:CPDU_Header) {
+        assert.ok(x.type       === E_UPDUType.POSITION, 'UPDU_LPGPS.header: Invalid MessageType!');
+        this._props.header = x;
+    }
+    get header():CPDU_Header {
+        return this._props.header;
+    }
+
+    setFromBuffer(x:Buffer) {
+        // assert.ok(x.length === 2, 'UPDU_Debug.setFromBuffer(): Invalid buffer legth!');
+        // The documentation does not say anything about the length of DEBUG messages
+        this.header = new CPDU_Header(x.slice(0,5));
+    }
+    toBuffer():Buffer {
+        return this.header.toBuffer();
+    }
+
+}
+
+
 
 type UPDU_Generic = UPDU_FramePending | UPDU_PosGPSFix | UPDU_PosGPSTimeout | UPDU_PosWiFiTimeout | 
      UPDU_PosWiFiFailure | UPDU_PosWiFiBSSIDs | UPDU_PosBLEFailure | UPDU_EnergyStatus |
@@ -832,7 +863,7 @@ export let createUPDU = (x: Buffer|string):UPDU_Generic => {
                     updu = new UPDU_PosGPSTimeout(buf);
                     break;
                 case E_PositionInformation.NO_MORE_USED:
-                    updu = undefined;
+                    updu = new UPDU_LPGPS(buf); // added here just for safety...
                     break;
                 case E_PositionInformation.WIFI_TIMEOUT:
                     updu = new UPDU_PosWiFiTimeout(buf);
@@ -841,13 +872,13 @@ export let createUPDU = (x: Buffer|string):UPDU_Generic => {
                     updu = new UPDU_PosWiFiFailure(buf);
                     break;
                 case E_PositionInformation.LPGPS_DATA1:
-                    updu = undefined;
+                    updu = new UPDU_LPGPS(buf);
                     break;
                 case E_PositionInformation.LPGPS_DATA2:
-                    updu = undefined;
+                    updu = new UPDU_LPGPS(buf);;
                     break;
                 case E_PositionInformation.BLE_BACON_SCAN:
-                    updu = undefined; //new UPDU_(buf);
+                    updu = new UPDU_LPGPS(buf); // TODO: verify the format, // added here just for safety...
                     break;
                 case E_PositionInformation.BLE_BACON_FAILURE:
                     updu = new UPDU_PosBLEFailure(buf);

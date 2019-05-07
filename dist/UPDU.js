@@ -797,6 +797,34 @@ var UPDU_Debug = /** @class */ (function (_super) {
     return UPDU_Debug;
 }(utils_1.PDUTemplate));
 exports.UPDU_Debug = UPDU_Debug;
+var UPDU_LPGPS = /** @class */ (function (_super) {
+    __extends(UPDU_LPGPS, _super);
+    function UPDU_LPGPS() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Object.defineProperty(UPDU_LPGPS.prototype, "header", {
+        get: function () {
+            return this._props.header;
+        },
+        // *** header ***
+        set: function (x) {
+            assert.ok(x.type === constants_1.E_UPDUType.POSITION, 'UPDU_LPGPS.header: Invalid MessageType!');
+            this._props.header = x;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    UPDU_LPGPS.prototype.setFromBuffer = function (x) {
+        // assert.ok(x.length === 2, 'UPDU_Debug.setFromBuffer(): Invalid buffer legth!');
+        // The documentation does not say anything about the length of DEBUG messages
+        this.header = new CPDU_1.CPDU_Header(x.slice(0, 5));
+    };
+    UPDU_LPGPS.prototype.toBuffer = function () {
+        return this.header.toBuffer();
+    };
+    return UPDU_LPGPS;
+}(utils_1.PDUTemplate));
+exports.UPDU_LPGPS = UPDU_LPGPS;
 exports.createUPDU = function (x) {
     var buf;
     if (typeof (x) == 'string') {
@@ -819,7 +847,7 @@ exports.createUPDU = function (x) {
                     updu = new UPDU_PosGPSTimeout(buf);
                     break;
                 case constants_1.E_PositionInformation.NO_MORE_USED:
-                    updu = undefined;
+                    updu = new UPDU_LPGPS(buf); // added here just for safety...
                     break;
                 case constants_1.E_PositionInformation.WIFI_TIMEOUT:
                     updu = new UPDU_PosWiFiTimeout(buf);
@@ -828,13 +856,14 @@ exports.createUPDU = function (x) {
                     updu = new UPDU_PosWiFiFailure(buf);
                     break;
                 case constants_1.E_PositionInformation.LPGPS_DATA1:
-                    updu = undefined;
+                    updu = new UPDU_LPGPS(buf);
                     break;
                 case constants_1.E_PositionInformation.LPGPS_DATA2:
-                    updu = undefined;
+                    updu = new UPDU_LPGPS(buf);
+                    ;
                     break;
                 case constants_1.E_PositionInformation.BLE_BACON_SCAN:
-                    updu = undefined; //new UPDU_(buf);
+                    updu = new UPDU_LPGPS(buf); // TODO: verify the format, // added here just for safety...
                     break;
                 case constants_1.E_PositionInformation.BLE_BACON_FAILURE:
                     updu = new UPDU_PosBLEFailure(buf);
