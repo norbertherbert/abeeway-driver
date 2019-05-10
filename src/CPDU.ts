@@ -446,7 +446,6 @@ export interface I_CPDU_DlHeaderShort {                 // 2 bytes
     type:                    E_DPDUType,   // 1 byte
     _type?:               string,
     ackToken:                number,        // 4 bits [7-4]
-    optData:                 number,        // 4 bits [3-0]
 }
 export class CPDU_DlHeaderShort extends PDUTemplate<I_CPDU_DlHeaderShort> implements I_CPDU_DlHeaderShort {
 
@@ -469,25 +468,15 @@ export class CPDU_DlHeaderShort extends PDUTemplate<I_CPDU_DlHeaderShort> implem
         return this._props.ackToken;
     }
 
-    // *** optData ***
-    set optData(x:number) {
-        assert.ok((x & 0x0f) === x, 'DlHeaderShort.optData: invalid value');
-        this._props.optData = x;
-    }
-    get optData():number {
-        return this._props.optData;
-    }
-
     setFromBuffer(x:Buffer) {
         assert.ok(x.length === 2, 'DlHeaderShort.setFromBuffer(): Invalid buffer legth!');
         this.type     = x[0];
-        this.ackToken = x[1] >>> 4;
-        this.optData  = x[1] & 0x0f;
+        this.ackToken = x[1];
     }
     toBuffer():Buffer {
         let y = Buffer.allocUnsafe(2);
         y[0] = this.type;
-        y[1] = (this.ackToken << 4) | this.optData;
+        y[1] = this.ackToken;
         return y;    
     }
 

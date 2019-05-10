@@ -498,28 +498,15 @@ var CPDU_DlHeaderShort = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(CPDU_DlHeaderShort.prototype, "optData", {
-        get: function () {
-            return this._props.optData;
-        },
-        // *** optData ***
-        set: function (x) {
-            assert.ok((x & 0x0f) === x, 'DlHeaderShort.optData: invalid value');
-            this._props.optData = x;
-        },
-        enumerable: true,
-        configurable: true
-    });
     CPDU_DlHeaderShort.prototype.setFromBuffer = function (x) {
         assert.ok(x.length === 2, 'DlHeaderShort.setFromBuffer(): Invalid buffer legth!');
         this.type = x[0];
-        this.ackToken = x[1] >>> 4;
-        this.optData = x[1] & 0x0f;
+        this.ackToken = x[1];
     };
     CPDU_DlHeaderShort.prototype.toBuffer = function () {
         var y = buffer_1.Buffer.allocUnsafe(2);
         y[0] = this.type;
-        y[1] = (this.ackToken << 4) | this.optData;
+        y[1] = this.ackToken;
         return y;
     };
     return CPDU_DlHeaderShort;

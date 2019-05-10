@@ -10,7 +10,6 @@ let msg = new DPDU_SetMode ({
     header: new CPDU_DlHeaderShort({
         type:     E_DPDUType.SET_MODE,
         ackToken: 0x5,
-        optData:  0x0,
     }),
     mode:         E_OperatingMode.MOTION_TRACKING, 
 });
