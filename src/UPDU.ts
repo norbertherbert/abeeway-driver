@@ -51,13 +51,13 @@ export class UPDU_FramePending extends PDUTemplate<I_UPDU_FramePending> implemen
 // *** UPDU_PosGPSFix **********************************************
 // ***************************************************************
 
-export interface I_UPDU_PosGPSFix {             // 16 bytes
-    header:                  CPDU_Header,          // 5 bytes
+export interface I_UPDU_PosGPSFix {           // 16 bytes
+    header:                  CPDU_Header,     // 5 bytes
     age:                     number,          // 1 byte
     latitude:                number,          // 3 bytes
     longitude:               number,          // 3 bytes
     ehpe:                    number,          // 1 byte
-    encryptedPos:            Buffer,          // 3 bytes 
+    encryptedPos:            Buffer,          // 0 | 3 bytes
 }
 export class UPDU_PosGPSFix extends PDUTemplate<I_UPDU_PosGPSFix> implements I_UPDU_PosGPSFix {
 
@@ -109,7 +109,7 @@ export class UPDU_PosGPSFix extends PDUTemplate<I_UPDU_PosGPSFix> implements I_U
 
     // *** encrypted ***
     set encryptedPos(x:Buffer) {
-        assert.ok( x.length === 3, 'UPDU_PosGPSFix.encryptedPos: Invalid Buffer length!')
+        assert.ok( (x.length === 0) || (x.length === 3), 'UPDU_PosGPSFix.encryptedPos: Invalid Buffer length!')
         this._props.encryptedPos = x;
     }
     get encryptedPos():Buffer {
@@ -117,7 +117,7 @@ export class UPDU_PosGPSFix extends PDUTemplate<I_UPDU_PosGPSFix> implements I_U
     }
 
     setFromBuffer(x:Buffer) {
-        assert.ok(x.length === 16, 'UPDU_PosGPSFix.setFromBuffer(): Invalid buffer legth!');
+        assert.ok((x.length === 13) || (x.length === 16), 'UPDU_PosGPSFix.setFromBuffer(): Invalid buffer legth!');
         this.header = new CPDU_Header(x.slice(0,5));
 
         this.age = mt_value_decode(x[5], 0, 2040, 8, 0);
@@ -134,7 +134,14 @@ export class UPDU_PosGPSFix extends PDUTemplate<I_UPDU_PosGPSFix> implements I_U
         this.encryptedPos = Buffer.from(x.slice(13,16)); 
     }
     toBuffer():Buffer {
-        let y = Buffer.allocUnsafe(16);
+         
+        let y: Buffer;
+        if (this.encryptedPos.length == 0) {
+            y = Buffer.allocUnsafe(13);
+        } else {
+            y = Buffer.allocUnsafe(16);
+        }
+
         this.header.toBuffer().copy(y);
         y[5] = mt_value_encode(this.age, 0, 2040, 8, 0);
 
@@ -151,7 +158,10 @@ export class UPDU_PosGPSFix extends PDUTemplate<I_UPDU_PosGPSFix> implements I_U
         y[11] = (l>> 8) & 0xff;
 
         y[12] = mt_value_encode(this.ehpe, 0, 1000, 8, 0);
-        this.encryptedPos.copy(y, 13);
+
+        if (this.encryptedPos.length > 0) {
+            this.encryptedPos.copy(y, 13);
+        }
 
         return y;
     }
@@ -162,8 +172,8 @@ export class UPDU_PosGPSFix extends PDUTemplate<I_UPDU_PosGPSFix> implements I_U
 // *** UPDU_PosGPSTimeout ******************************************
 // ***************************************************************
 
-export interface I_UPDU_PosGPSTimeout {                  // 10 bytes
-    header:                  CPDU_Header,            // 5 bytes
+export interface I_UPDU_PosGPSTimeout {         // 10 bytes
+    header:                  CPDU_Header,       // 5 bytes
     cause:                   E_GPSTimeoutCause, // 1 byte
     _cause?:                 string,
     carrierOverNoise:        number[],          // 4 x 1 byte
@@ -229,8 +239,8 @@ export class UPDU_PosGPSTimeout extends PDUTemplate<I_UPDU_PosGPSTimeout> implem
 // *** UPDU_PosWiFiTimeout *****************************************
 // ***************************************************************
 
-export interface I_UPDU_PosWiFiTimeout {               // 11 bytes
-    header:                  CPDU_Header,          // 5 bytes
+export interface I_UPDU_PosWiFiTimeout {      // 11 bytes
+    header:                  CPDU_Header,     // 5 bytes
     v_bat:                   number[],        // 6 x 1 byte
 }
 export class UPDU_PosWiFiTimeout extends PDUTemplate<I_UPDU_PosWiFiTimeout> implements I_UPDU_PosWiFiTimeout {
@@ -283,11 +293,11 @@ export class UPDU_PosWiFiTimeout extends PDUTemplate<I_UPDU_PosWiFiTimeout> impl
 // *** UPDU_PosWiFiFailure *****************************************
 // ***************************************************************
 
-export interface I_UPDU_PosWiFiFailure {               // 12 bytes
-    header:                  CPDU_Header,          // 5 bytes
+export interface I_UPDU_PosWiFiFailure {      // 12 bytes
+    header:                  CPDU_Header,     // 5 bytes
     v_bat:                   number[],        // 6 x 1 byte
     error:                   E_WiFiFailure,   // 1 byte
-    _error?:              string,
+    _error?:                 string,
 }
 export class UPDU_PosWiFiFailure extends PDUTemplate<I_UPDU_PosWiFiFailure> implements I_UPDU_PosWiFiFailure {
 
@@ -352,10 +362,10 @@ export class UPDU_PosWiFiFailure extends PDUTemplate<I_UPDU_PosWiFiFailure> impl
 // *** UPDU_PosWiFiBSSIDs ******************************************
 // ***************************************************************
 
-export interface I_UPDU_PosWiFiBSSIDs {                // 34 bytes
-    header:                  CPDU_Header,          // 5 bytes
-    age:                     number,          // 1 byte
-    wifiHotspots:            CPDU_WiFiBSSIDs[],
+export interface I_UPDU_PosWiFiBSSIDs {         // 34 bytes
+    header:                  CPDU_Header,       // 5 bytes
+    age:                     number,            // 1 byte
+    wifiHotspots:            CPDU_WiFiBSSIDs[], //
 }
 export class UPDU_PosWiFiBSSIDs extends PDUTemplate<I_UPDU_PosWiFiBSSIDs> implements I_UPDU_PosWiFiBSSIDs {
 
@@ -418,8 +428,8 @@ export class UPDU_PosWiFiBSSIDs extends PDUTemplate<I_UPDU_PosWiFiBSSIDs> implem
 // *** UPDU_PosBLEFailure ***************************************
 // ***************************************************************
 
-export interface I_UPDU_PosBLEFailure {                // 6 bytes
-    header:                  CPDU_Header,          // 5 bytes
+export interface I_UPDU_PosBLEFailure {       // 6 bytes
+    header:                  CPDU_Header,     // 5 bytes
     error:                   E_BLEFailure,    // 1 byte
     _error?:                 string,
 }
@@ -463,11 +473,11 @@ export class UPDU_PosBLEFailure extends PDUTemplate<I_UPDU_PosBLEFailure> implem
 // *** UPDU_EnergyStatus ********************************************
 // ****************************************************************
 
-export interface I_UPDU_EnergyStatus {           // 17 bytes
-    header:                  CPDU_Header,    // 5 bytes
-    gpsOnTime:               number,    // 4 bytes
-    gpsStabdbyTime:          number,    // 4 bytes
-    wifiScans:               number,    // 4 bytes
+export interface I_UPDU_EnergyStatus {     // 17 bytes
+    header:                  CPDU_Header,  // 5 bytes
+    gpsOnTime:               number,       // 4 bytes
+    gpsStabdbyTime:          number,       // 4 bytes
+    wifiScans:               number,       // 4 bytes
 }
 export class UPDU_EnergyStatus extends PDUTemplate<I_UPDU_EnergyStatus> implements I_UPDU_EnergyStatus {
 
@@ -529,10 +539,10 @@ export class UPDU_EnergyStatus extends PDUTemplate<I_UPDU_EnergyStatus> implemen
 // TODO: What is the format of fwVersion?
 // TODO: What are the possible values of cause?
 
-export interface I_UPDU_HeartBeat {                    // 6|9 bytes
-    header:                  CPDU_Header,          // 5 bytes
-    cause:                   number,          // 1 byte
-    fwVersion?:              string,          // 3 bytes (optional)
+export interface I_UPDU_HeartBeat {        // 6|9 bytes
+    header:                  CPDU_Header,  // 5 bytes
+    cause:                   number,       // 1 byte
+    fwVersion?:              string,       // 3 bytes (optional)
 }
 export class UPDU_HeartBeat extends PDUTemplate<I_UPDU_HeartBeat> implements I_UPDU_HeartBeat {
 
@@ -615,10 +625,10 @@ export class UPDU_HeartBeat extends PDUTemplate<I_UPDU_HeartBeat> implements I_U
 
 // TODO: what are the possible values of tag? What does it mean?
 
-export interface I_UPDU_ActivityStatus {               // 10 bytes
-    header:                  CPDU_Header,          // 5 bytes
-    tag:                     E_Tag,          // 1 byte =1
-    activityCount:           number,          // 4 bytes
+export interface I_UPDU_ActivityStatus {    // 10 bytes
+    header:                  CPDU_Header,   // 5 bytes
+    tag:                     E_Tag,         // 1 byte =1
+    activityCount:           number,        // 4 bytes
 }
 export class UPDU_ActivityStatus extends PDUTemplate<I_UPDU_ActivityStatus> implements I_UPDU_ActivityStatus {
 
@@ -672,10 +682,10 @@ export class UPDU_ActivityStatus extends PDUTemplate<I_UPDU_ActivityStatus> impl
 
 // TODO: what are the possible values of tag? What does it mean?
 
-export interface I_UPDU_ConfigReport {          // 11..31 bytes
-    header:                  CPDU_Header,          // 5 bytes
-    tag:                     E_Tag,           // 1 byte =2
-    params:                  CPDU_Parameter[]      // n x 5 bytes, n=1..5
+export interface I_UPDU_ConfigReport {         // 11..31 bytes
+    header:                  CPDU_Header,      // 5 bytes
+    tag:                     E_Tag,            // 1 byte =2
+    params:                  CPDU_Parameter[]  // n x 5 bytes, n=1..5
 }
 export class UPDU_ConfigReport extends PDUTemplate<I_UPDU_ConfigReport> implements I_UPDU_ConfigReport {
    

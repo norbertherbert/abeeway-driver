@@ -120,14 +120,14 @@ var UPDU_PosGPSFix = /** @class */ (function (_super) {
         },
         // *** encrypted ***
         set: function (x) {
-            assert.ok(x.length === 3, 'UPDU_PosGPSFix.encryptedPos: Invalid Buffer length!');
+            assert.ok((x.length === 0) || (x.length === 3), 'UPDU_PosGPSFix.encryptedPos: Invalid Buffer length!');
             this._props.encryptedPos = x;
         },
         enumerable: true,
         configurable: true
     });
     UPDU_PosGPSFix.prototype.setFromBuffer = function (x) {
-        assert.ok(x.length === 16, 'UPDU_PosGPSFix.setFromBuffer(): Invalid buffer legth!');
+        assert.ok((x.length === 13) || (x.length === 16), 'UPDU_PosGPSFix.setFromBuffer(): Invalid buffer legth!');
         this.header = new CPDU_1.CPDU_Header(x.slice(0, 5));
         this.age = utils_1.mt_value_decode(x[5], 0, 2040, 8, 0);
         var l;
@@ -143,7 +143,13 @@ var UPDU_PosGPSFix = /** @class */ (function (_super) {
         this.encryptedPos = buffer_1.Buffer.from(x.slice(13, 16));
     };
     UPDU_PosGPSFix.prototype.toBuffer = function () {
-        var y = buffer_1.Buffer.allocUnsafe(16);
+        var y;
+        if (this.encryptedPos.length == 0) {
+            y = buffer_1.Buffer.allocUnsafe(13);
+        }
+        else {
+            y = buffer_1.Buffer.allocUnsafe(16);
+        }
         this.header.toBuffer().copy(y);
         y[5] = utils_1.mt_value_encode(this.age, 0, 2040, 8, 0);
         var l;
@@ -163,7 +169,9 @@ var UPDU_PosGPSFix = /** @class */ (function (_super) {
         y[10] = (l >> 16) & 0xff;
         y[11] = (l >> 8) & 0xff;
         y[12] = utils_1.mt_value_encode(this.ehpe, 0, 1000, 8, 0);
-        this.encryptedPos.copy(y, 13);
+        if (this.encryptedPos.length > 0) {
+            this.encryptedPos.copy(y, 13);
+        }
         return y;
     };
     return UPDU_PosGPSFix;
