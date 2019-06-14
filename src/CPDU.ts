@@ -15,11 +15,12 @@ import {
 
 
 // ***************************************************************
-// *** CPDU_ParamConfigFlags *****************************************
+// *** CPDU_ParamConfigFlags *************************************
 // ***************************************************************
 
 export interface I_CPDU_ParamConfigFlags {                 // 1 byte
-                                                           // bit 7-6
+    LedBlinksOnGPSFix:                    boolean,         // bit 7
+    WiFiScanWhenGeolocStarts:             boolean,         // bit 6
     BLEAdvertisingActive:                 boolean,         // bit 5
     WiFiPayloadCyphered:                  boolean,         // bit 4
     ConfigReqsAcknoledged:                boolean,         // bit 3
@@ -28,6 +29,22 @@ export interface I_CPDU_ParamConfigFlags {                 // 1 byte
     FramePendingMechanismActive:          boolean,         // bit 0
 }
 export class CPDU_ParamConfigFlags extends PDUTemplate<I_CPDU_ParamConfigFlags> implements I_CPDU_ParamConfigFlags {
+
+    // *** LedBlinksOnGPSFix ***
+    set LedBlinksOnGPSFix(x:boolean) {
+        this._props.LedBlinksOnGPSFix = x;
+    }
+    get LedBlinksOnGPSFix():boolean {
+        return this._props.LedBlinksOnGPSFix;
+    }
+
+    // *** WiFiScanWhenGeolocStarts ***
+    set WiFiScanWhenGeolocStarts(x:boolean) {
+        this._props.WiFiScanWhenGeolocStarts = x;
+    }
+    get WiFiScanWhenGeolocStarts():boolean {
+        return this._props.WiFiScanWhenGeolocStarts;
+    }
 
     // *** BLEAdvertisingActive ***
     set BLEAdvertisingActive(x:boolean) {
@@ -79,22 +96,26 @@ export class CPDU_ParamConfigFlags extends PDUTemplate<I_CPDU_ParamConfigFlags> 
 
     setFromValue(x:number):void {
         assert.ok(isUint8(x), 'CPDU_ParamConfigFlags.setFromValue(): Invalid value!' );
-        this.BLEAdvertisingActive           = (x & 0b100000) === 0b100000;
-        this.WiFiPayloadCyphered            = (x &  0b10000) ===  0b10000;
-        this.ConfigReqsAcknoledged          = (x &   0b1000) ===   0b1000;
-        this.DoubleShortButtonPressForSOS   = (x &    0b100) ===    0b100;
-        this.LongButtonPressToSwitchOff     = (x &     0b10) ===     0b10;
-        this.FramePendingMechanismActive    = (x &      0b1) ===      0b1;
+        this.LedBlinksOnGPSFix              = (x & 0b10000000) === 0b10000000;
+        this.WiFiScanWhenGeolocStarts       = (x &  0b1000000) ===  0b1000000;
+        this.BLEAdvertisingActive           = (x &   0b100000) ===   0b100000;
+        this.WiFiPayloadCyphered            = (x &    0b10000) ===    0b10000;
+        this.ConfigReqsAcknoledged          = (x &     0b1000) ===     0b1000;
+        this.DoubleShortButtonPressForSOS   = (x &      0b100) ===      0b100;
+        this.LongButtonPressToSwitchOff     = (x &       0b10) ===       0b10;
+        this.FramePendingMechanismActive    = (x &        0b1) ===        0b1;
     }
 
     toValue():number {
         let y: number = 0;
-        y |= this.BLEAdvertisingActive         ? 0b100000 : 0;
-        y |= this.WiFiPayloadCyphered          ?  0b10000 : 0;
-        y |= this.ConfigReqsAcknoledged        ?   0b1000 : 0;
-        y |= this.DoubleShortButtonPressForSOS ?    0b100 : 0;
-        y |= this.LongButtonPressToSwitchOff   ?     0b10 : 0;
-        y |= this.FramePendingMechanismActive  ?      0b1 : 0;
+        y |= this.LedBlinksOnGPSFix            ? 0b10000000 : 0;
+        y |= this.WiFiScanWhenGeolocStarts     ?  0b1000000 : 0;
+        y |= this.BLEAdvertisingActive         ?   0b100000 : 0;
+        y |= this.WiFiPayloadCyphered          ?    0b10000 : 0;
+        y |= this.ConfigReqsAcknoledged        ?     0b1000 : 0;
+        y |= this.DoubleShortButtonPressForSOS ?      0b100 : 0;
+        y |= this.LongButtonPressToSwitchOff   ?       0b10 : 0;
+        y |= this.FramePendingMechanismActive  ?        0b1 : 0;
         return y;
     }
 

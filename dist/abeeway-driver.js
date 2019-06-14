@@ -41,6 +41,7 @@ exports.UPDU_ActivityStatus = UPDU_1.UPDU_ActivityStatus;
 exports.UPDU_ConfigReport = UPDU_1.UPDU_ConfigReport;
 exports.UPDU_Shutdown = UPDU_1.UPDU_Shutdown;
 exports.UPDU_Debug = UPDU_1.UPDU_Debug;
+exports.UPDU_GeolocStart = UPDU_1.UPDU_GeolocStart;
 exports.createUPDU = UPDU_1.createUPDU;
 /* Downlink Protocol Data Units (DPDU) */
 var DPDU_1 = require("./DPDU");

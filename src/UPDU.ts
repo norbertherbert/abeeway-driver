@@ -845,9 +845,53 @@ export class UPDU_LPGPS extends PDUTemplate<I_UPDU_LPGPS> implements I_UPDU_LPGP
 
 
 
+// ***************************************************************
+// *** UPDU_GeolocStart **********************************************
+// ***************************************************************
+
+export interface I_UPDU_GeolocStart {      // 6 bytes
+    header:                  CPDU_Header,  // 5 bytes
+    data:                    number,       // 1 byte
+}
+export class UPDU_GeolocStart extends PDUTemplate<I_UPDU_HeartBeat> implements I_UPDU_GeolocStart {
+
+    // *** header ***
+    set header(x:CPDU_Header) {
+        assert.ok(x.type       === E_UPDUType.GEOLOC_START, 'UPDU_GeolocStart.header: Invalid MessageType!');
+        this._props.header = x;
+    }
+    get header():CPDU_Header {
+        return this._props.header;
+    }
+
+    // *** cause ***
+    set data(x:number) {
+        this._props.data = x;
+    }
+    get data():number {
+        return this._props.data;
+    }
+
+    setFromBuffer(x:Buffer) {
+        let l = x.length;
+        assert.ok(l==6, 'UPDU_HeartBeat.setFromBuffer(): Invalid buffer legth!');
+        this.header = new CPDU_Header(x.slice(0,5));
+        this.data = x[5];
+    }
+    toBuffer():Buffer {
+        let y = Buffer.allocUnsafe(6);
+        this.header.toBuffer().copy(y);
+        y[5] = this.data;
+        return y;
+    }
+
+}
+
+
+
 type UPDU_Generic = UPDU_FramePending | UPDU_PosGPSFix | UPDU_PosGPSTimeout | UPDU_PosWiFiTimeout | 
      UPDU_PosWiFiFailure | UPDU_PosWiFiBSSIDs | UPDU_PosBLEFailure | UPDU_EnergyStatus |
-     UPDU_HeartBeat | UPDU_ActivityStatus | UPDU_ConfigReport | UPDU_Shutdown | UPDU_Debug;
+     UPDU_HeartBeat | UPDU_ActivityStatus | UPDU_ConfigReport | UPDU_Shutdown | UPDU_Debug | UPDU_GeolocStart;
 
 export let createUPDU = (x: Buffer|string):UPDU_Generic => {
 
@@ -925,6 +969,9 @@ export let createUPDU = (x: Buffer|string):UPDU_Generic => {
             break;
         case E_UPDUType.DEBUG:
             updu = new UPDU_Debug(buf);
+            break;
+        case E_UPDUType.GEOLOC_START:
+            updu = new UPDU_GeolocStart(buf);
             break;
         default:
             updu = undefined;

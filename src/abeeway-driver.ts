@@ -24,13 +24,13 @@ export {
 import { 
     UPDU_FramePending, UPDU_PosGPSFix, UPDU_PosGPSTimeout, UPDU_PosWiFiTimeout, 
     UPDU_PosWiFiFailure, UPDU_PosWiFiBSSIDs, UPDU_PosBLEFailure, UPDU_EnergyStatus,
-    UPDU_HeartBeat, UPDU_ActivityStatus, UPDU_ConfigReport, UPDU_Shutdown, UPDU_Debug,
+    UPDU_HeartBeat, UPDU_ActivityStatus, UPDU_ConfigReport, UPDU_Shutdown, UPDU_Debug, UPDU_GeolocStart,
     createUPDU,
 } from './UPDU';
 export {
     UPDU_FramePending, UPDU_PosGPSFix, UPDU_PosGPSTimeout, UPDU_PosWiFiTimeout, 
     UPDU_PosWiFiFailure, UPDU_PosWiFiBSSIDs, UPDU_PosBLEFailure, UPDU_EnergyStatus,
-    UPDU_HeartBeat, UPDU_ActivityStatus, UPDU_ConfigReport, UPDU_Shutdown, UPDU_Debug,
+    UPDU_HeartBeat, UPDU_ActivityStatus, UPDU_ConfigReport, UPDU_Shutdown, UPDU_Debug, UPDU_GeolocStart,
     createUPDU,
 }
 

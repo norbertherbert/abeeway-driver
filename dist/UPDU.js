@@ -833,6 +833,49 @@ var UPDU_LPGPS = /** @class */ (function (_super) {
     return UPDU_LPGPS;
 }(utils_1.PDUTemplate));
 exports.UPDU_LPGPS = UPDU_LPGPS;
+var UPDU_GeolocStart = /** @class */ (function (_super) {
+    __extends(UPDU_GeolocStart, _super);
+    function UPDU_GeolocStart() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Object.defineProperty(UPDU_GeolocStart.prototype, "header", {
+        get: function () {
+            return this._props.header;
+        },
+        // *** header ***
+        set: function (x) {
+            assert.ok(x.type === constants_1.E_UPDUType.GEOLOC_START, 'UPDU_GeolocStart.header: Invalid MessageType!');
+            this._props.header = x;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UPDU_GeolocStart.prototype, "data", {
+        get: function () {
+            return this._props.data;
+        },
+        // *** cause ***
+        set: function (x) {
+            this._props.data = x;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    UPDU_GeolocStart.prototype.setFromBuffer = function (x) {
+        var l = x.length;
+        assert.ok(l == 6, 'UPDU_HeartBeat.setFromBuffer(): Invalid buffer legth!');
+        this.header = new CPDU_1.CPDU_Header(x.slice(0, 5));
+        this.data = x[5];
+    };
+    UPDU_GeolocStart.prototype.toBuffer = function () {
+        var y = buffer_1.Buffer.allocUnsafe(6);
+        this.header.toBuffer().copy(y);
+        y[5] = this.data;
+        return y;
+    };
+    return UPDU_GeolocStart;
+}(utils_1.PDUTemplate));
+exports.UPDU_GeolocStart = UPDU_GeolocStart;
 exports.createUPDU = function (x) {
     var buf;
     if (typeof (x) == 'string') {
@@ -908,6 +951,9 @@ exports.createUPDU = function (x) {
             break;
         case constants_1.E_UPDUType.DEBUG:
             updu = new UPDU_Debug(buf);
+            break;
+        case constants_1.E_UPDUType.GEOLOC_START:
+            updu = new UPDU_GeolocStart(buf);
             break;
         default:
             updu = undefined;

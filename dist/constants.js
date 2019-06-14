@@ -11,6 +11,7 @@ var E_UPDUType;
     E_UPDUType[E_UPDUType["HEART_BEAT"] = 5] = "HEART_BEAT";
     E_UPDUType[E_UPDUType["ACTIVITY_OR_CONFIG"] = 7] = "ACTIVITY_OR_CONFIG";
     E_UPDUType[E_UPDUType["SHUTDOWN"] = 9] = "SHUTDOWN";
+    E_UPDUType[E_UPDUType["GEOLOC_START"] = 10] = "GEOLOC_START";
     E_UPDUType[E_UPDUType["DEBUG"] = 255] = "DEBUG";
 })(E_UPDUType = exports.E_UPDUType || (exports.E_UPDUType = {}));
 var E_Tag;
@@ -143,8 +144,8 @@ exports.C_ParamDescriptions = {
     BLE_BEACON_TIMEOUT: { code: 0x10, name: 'BLE_BEACON_TIMEOUT', unit: 's', min: 1, max: 5,
         description: 'Timeout used by the BLE beacon for geolocation. [1..5 s]',
     },
-    GPS_STANDBY_TIMEOUT: { code: 0x11, name: 'GPS_STANDBY_TIMEOUT', unit: 's', min: 10, max: 7200,
-        description: 'Duration of GPS standby mode before going OFF. [10..7200 s]',
+    GPS_STANDBY_TIMEOUT: { code: 0x11, name: 'GPS_STANDBY_TIMEOUT', unit: 's', min: 10, max: 28800,
+        description: 'Duration of GPS standby mode before going OFF. [10..28800 s]',
     },
     CONFIRMED_UL_BITMAP: { code: 0x12, name: 'CONFIRMED_UL_BITMAP', unit: '', min: 0x00, max: 0xff,
         description: 'Bitmap enabling the LoRa confirmation of specific type of uplink message. [0x00..0xff]',

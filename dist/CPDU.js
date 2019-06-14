@@ -24,6 +24,28 @@ var CPDU_ParamConfigFlags = /** @class */ (function (_super) {
     function CPDU_ParamConfigFlags() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    Object.defineProperty(CPDU_ParamConfigFlags.prototype, "LedBlinksOnGPSFix", {
+        get: function () {
+            return this._props.LedBlinksOnGPSFix;
+        },
+        // *** LedBlinksOnGPSFix ***
+        set: function (x) {
+            this._props.LedBlinksOnGPSFix = x;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CPDU_ParamConfigFlags.prototype, "WiFiScanWhenGeolocStarts", {
+        get: function () {
+            return this._props.WiFiScanWhenGeolocStarts;
+        },
+        // *** WiFiScanWhenGeolocStarts ***
+        set: function (x) {
+            this._props.WiFiScanWhenGeolocStarts = x;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(CPDU_ParamConfigFlags.prototype, "BLEAdvertisingActive", {
         get: function () {
             return this._props.BLEAdvertisingActive;
@@ -92,6 +114,8 @@ var CPDU_ParamConfigFlags = /** @class */ (function (_super) {
     });
     CPDU_ParamConfigFlags.prototype.setFromValue = function (x) {
         assert.ok(utils_1.isUint8(x), 'CPDU_ParamConfigFlags.setFromValue(): Invalid value!');
+        this.LedBlinksOnGPSFix = (x & 128) === 128;
+        this.WiFiScanWhenGeolocStarts = (x & 64) === 64;
         this.BLEAdvertisingActive = (x & 32) === 32;
         this.WiFiPayloadCyphered = (x & 16) === 16;
         this.ConfigReqsAcknoledged = (x & 8) === 8;
@@ -101,6 +125,8 @@ var CPDU_ParamConfigFlags = /** @class */ (function (_super) {
     };
     CPDU_ParamConfigFlags.prototype.toValue = function () {
         var y = 0;
+        y |= this.LedBlinksOnGPSFix ? 128 : 0;
+        y |= this.WiFiScanWhenGeolocStarts ? 64 : 0;
         y |= this.BLEAdvertisingActive ? 32 : 0;
         y |= this.WiFiPayloadCyphered ? 16 : 0;
         y |= this.ConfigReqsAcknoledged ? 8 : 0;
