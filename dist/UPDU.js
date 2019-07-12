@@ -427,6 +427,70 @@ var UPDU_PosWiFiBSSIDs = /** @class */ (function (_super) {
     return UPDU_PosWiFiBSSIDs;
 }(utils_1.PDUTemplate));
 exports.UPDU_PosWiFiBSSIDs = UPDU_PosWiFiBSSIDs;
+var UPDU_PosBLEBeaconIDs = /** @class */ (function (_super) {
+    __extends(UPDU_PosBLEBeaconIDs, _super);
+    function UPDU_PosBLEBeaconIDs() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Object.defineProperty(UPDU_PosBLEBeaconIDs.prototype, "header", {
+        get: function () {
+            return this._props.header;
+        },
+        // *** header ***
+        set: function (x) {
+            assert.ok(x.type === constants_1.E_UPDUType.POSITION, 'UPDU_PosBLEBeaconIDs.header: Invalid MessageType!');
+            assert.ok(x.optData === constants_1.E_PositionInformation.BLE_BEACONIDS, 'UPDU_PosBLEBeaconIDs.header: Invalid PositionInformation!');
+            this._props.header = x;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UPDU_PosBLEBeaconIDs.prototype, "age", {
+        get: function () {
+            return this._props.age;
+        },
+        // *** age ***
+        set: function (x) {
+            assert.ok((0 <= x) && (x <= 2040), 'UPDU_PosBLEBeaconIDs.age: Invalid value!');
+            this._props.age = x;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UPDU_PosBLEBeaconIDs.prototype, "bleBeacons", {
+        get: function () {
+            return this._props.bleBeacons;
+        },
+        // *** bleBeacons ***
+        set: function (x) {
+            assert.ok(x.length === 4, 'UPDU_PosBLEBeaconIDs.bleBeacons: Invalid value!');
+            this._props.bleBeacons = x;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    UPDU_PosBLEBeaconIDs.prototype.setFromBuffer = function (x) {
+        assert.ok(x.length === 34, 'UPDU_PosBLEBeaconIDs.setFromBuffer(): Invalid buffer legth!');
+        this.header = new CPDU_1.CPDU_Header(x.slice(0, 5));
+        this.age = utils_1.mt_value_decode(x[5], 0, 2040, 8, 0);
+        var bleBeacons = [];
+        for (var i = 0; i < 4; i++) {
+            bleBeacons.push(new CPDU_1.CPDU_BLEBeaconIDs(x.slice(6 + (i * 7), 13 + (i * 7))));
+        }
+        this.bleBeacons = bleBeacons;
+    };
+    UPDU_PosBLEBeaconIDs.prototype.toBuffer = function () {
+        var y = buffer_1.Buffer.allocUnsafe(34);
+        this.header.toBuffer().copy(y);
+        y[5] = utils_1.mt_value_decode(this.age, 0, 2040, 8, 0);
+        for (var i = 0; i < 4; i++) {
+            this.bleBeacons[i].toBuffer().copy(y, 6 + i * 7);
+        }
+        return y;
+    };
+    return UPDU_PosBLEBeaconIDs;
+}(utils_1.PDUTemplate));
+exports.UPDU_PosBLEBeaconIDs = UPDU_PosBLEBeaconIDs;
 var UPDU_PosBLEFailure = /** @class */ (function (_super) {
     __extends(UPDU_PosBLEFailure, _super);
     function UPDU_PosBLEFailure() {
@@ -913,8 +977,8 @@ exports.createUPDU = function (x) {
                     updu = new UPDU_LPGPS(buf);
                     ;
                     break;
-                case constants_1.E_PositionInformation.BLE_BACON_SCAN:
-                    updu = new UPDU_LPGPS(buf); // TODO: verify the format, // added here just for safety...
+                case constants_1.E_PositionInformation.BLE_BEACONIDS:
+                    updu = new UPDU_PosBLEBeaconIDs(buf);
                     break;
                 case constants_1.E_PositionInformation.BLE_BACON_FAILURE:
                     updu = new UPDU_PosBLEFailure(buf);

@@ -15,7 +15,8 @@ import {
 
 /* Component Protocol Data Units (CPDU) */
 import { 
-    CPDU_ParamConfigFlags, CPDU_Status, CPDU_Header, CPDU_UlHeaderShort, CPDU_DlHeaderShort, CPDU_WiFiBSSIDs, CPDU_Parameter, 
+    CPDU_ParamConfigFlags, CPDU_Status, CPDU_Header, CPDU_UlHeaderShort, 
+    CPDU_DlHeaderShort, CPDU_WiFiBSSIDs, CPDU_BLEBeaconIDs, CPDU_Parameter, 
 } from './CPDU';
 
 
@@ -418,6 +419,72 @@ export class UPDU_PosWiFiBSSIDs extends PDUTemplate<I_UPDU_PosWiFiBSSIDs> implem
 
         for (let i=0; i<4; i++) {
             this.wifiHotspots[i].toBuffer().copy(y, 6+i*7);
+        }
+        return y;
+    }
+
+}
+
+// ***************************************************************
+// *** UPDU_PosBLEBeaconIDs **************************************
+// ***************************************************************
+
+export interface I_UPDU_PosBLEBeaconIDs {         // 34 bytes
+    header:                  CPDU_Header,         // 5 bytes
+    age:                     number,              // 1 byte
+    bleBeacons:              CPDU_BLEBeaconIDs[], //
+}
+export class UPDU_PosBLEBeaconIDs extends PDUTemplate<I_UPDU_PosBLEBeaconIDs> implements I_UPDU_PosBLEBeaconIDs {
+
+    // *** header ***
+    set header(x:CPDU_Header) {
+        assert.ok(x.type       === E_UPDUType.POSITION, 'UPDU_PosBLEBeaconIDs.header: Invalid MessageType!');
+        assert.ok(x.optData === E_PositionInformation.BLE_BEACONIDS, 'UPDU_PosBLEBeaconIDs.header: Invalid PositionInformation!');
+        this._props.header = x;
+    }
+    get header():CPDU_Header {
+        return this._props.header;
+    }
+
+    // *** age ***
+    set age(x:number) {
+        assert.ok( (0<=x) && (x<=2040), 'UPDU_PosBLEBeaconIDs.age: Invalid value!');
+        this._props.age = x;
+    }
+    get age():number {
+        return this._props.age;
+    }
+
+    // *** bleBeacons ***
+    set bleBeacons(x:CPDU_BLEBeaconIDs[]) {
+        assert.ok( x.length === 4, 'UPDU_PosBLEBeaconIDs.bleBeacons: Invalid value!');
+        this._props.bleBeacons = x;
+    }
+    get bleBeacons():CPDU_BLEBeaconIDs[] {
+        return this._props.bleBeacons;
+    }
+
+    setFromBuffer(x:Buffer) {
+        assert.ok(x.length === 34, 'UPDU_PosBLEBeaconIDs.setFromBuffer(): Invalid buffer legth!');
+        this.header = new CPDU_Header(x.slice(0,5));
+        this.age = mt_value_decode(x[5], 0, 2040, 8, 0);
+
+        let bleBeacons: CPDU_BLEBeaconIDs[] = [];
+        for (let i=0; i<4; i++) {
+            bleBeacons.push( 
+                new CPDU_BLEBeaconIDs( x.slice(6+(i*7), 13+(i*7)) )
+            );
+        }
+        this.bleBeacons = bleBeacons;
+
+    }
+    toBuffer():Buffer {
+        let y = Buffer.allocUnsafe(34);
+        this.header.toBuffer().copy(y);
+        y[5] = mt_value_decode(this.age, 0, 2040, 8, 0);
+
+        for (let i=0; i<4; i++) {
+            this.bleBeacons[i].toBuffer().copy(y, 6+i*7);
         }
         return y;
     }
@@ -931,8 +998,8 @@ export let createUPDU = (x: Buffer|string):UPDU_Generic => {
                 case E_PositionInformation.LPGPS_DATA2:
                     updu = new UPDU_LPGPS(buf);;
                     break;
-                case E_PositionInformation.BLE_BACON_SCAN:
-                    updu = new UPDU_LPGPS(buf); // TODO: verify the format, // added here just for safety...
+                case E_PositionInformation.BLE_BEACONIDS:
+                    updu = new UPDU_PosBLEBeaconIDs(buf);
                     break;
                 case E_PositionInformation.BLE_BACON_FAILURE:
                     updu = new UPDU_PosBLEFailure(buf);

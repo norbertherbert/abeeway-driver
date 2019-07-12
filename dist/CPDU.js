@@ -584,6 +584,52 @@ var CPDU_WiFiBSSIDs = /** @class */ (function (_super) {
     return CPDU_WiFiBSSIDs;
 }(utils_1.PDUTemplate));
 exports.CPDU_WiFiBSSIDs = CPDU_WiFiBSSIDs;
+var CPDU_BLEBeaconIDs = /** @class */ (function (_super) {
+    __extends(CPDU_BLEBeaconIDs, _super);
+    function CPDU_BLEBeaconIDs() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Object.defineProperty(CPDU_BLEBeaconIDs.prototype, "beaconid", {
+        get: function () {
+            return this._props.beaconid;
+        },
+        // *** beaconid ***
+        set: function (x) {
+            assert.ok(x.match(/^[0-9A-Fa-f]{12}$/), 'CPDU_BLEBeaconIDs.beaconid: Invalid value!');
+            this._props.beaconid = x.toLowerCase();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CPDU_BLEBeaconIDs.prototype, "rssi", {
+        get: function () {
+            return this._props.rssi;
+        },
+        // *** rssi ***
+        set: function (x) {
+            assert.ok((-0x7f <= x) && (x <= 0x7f), 'CPDU_BLEBeaconIDs.rssi: Invalid value!');
+            this._props.rssi = x;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    CPDU_BLEBeaconIDs.prototype.setFromBuffer = function (x) {
+        assert.ok(x.length === 7, 'CPDU_BLEBeaconIDs.setFromBuffer(): Invalid buffer legth!');
+        this.beaconid = x.slice(0, 6).toString('hex');
+        this.rssi = x.readInt8(6);
+    };
+    CPDU_BLEBeaconIDs.prototype.toBuffer = function () {
+        var y = buffer_1.Buffer.allocUnsafe(7);
+        for (var i = 0; i < 6; i++) {
+            var s = this.beaconid;
+            y[i] = parseInt(s.substring(2 * i, 2 * (i + 1)), 16);
+        }
+        y.writeInt8(this.rssi, 6);
+        return y;
+    };
+    return CPDU_BLEBeaconIDs;
+}(utils_1.PDUTemplate));
+exports.CPDU_BLEBeaconIDs = CPDU_BLEBeaconIDs;
 var CPDU_Parameter = /** @class */ (function (_super) {
     __extends(CPDU_Parameter, _super);
     function CPDU_Parameter() {

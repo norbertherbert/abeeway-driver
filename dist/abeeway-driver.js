@@ -25,6 +25,7 @@ exports.CPDU_Header = CPDU_1.CPDU_Header;
 exports.CPDU_UlHeaderShort = CPDU_1.CPDU_UlHeaderShort;
 exports.CPDU_DlHeaderShort = CPDU_1.CPDU_DlHeaderShort;
 exports.CPDU_WiFiBSSIDs = CPDU_1.CPDU_WiFiBSSIDs;
+exports.CPDU_BLEBeaconIDs = CPDU_1.CPDU_BLEBeaconIDs;
 exports.CPDU_Parameter = CPDU_1.CPDU_Parameter;
 /* Uplink Protocol Data Units (UPDU)*/
 var UPDU_1 = require("./UPDU");
@@ -35,6 +36,7 @@ exports.UPDU_PosWiFiTimeout = UPDU_1.UPDU_PosWiFiTimeout;
 exports.UPDU_PosWiFiFailure = UPDU_1.UPDU_PosWiFiFailure;
 exports.UPDU_PosWiFiBSSIDs = UPDU_1.UPDU_PosWiFiBSSIDs;
 exports.UPDU_PosBLEFailure = UPDU_1.UPDU_PosBLEFailure;
+exports.UPDU_PosBLEBeaconIDs = UPDU_1.UPDU_PosBLEBeaconIDs;
 exports.UPDU_EnergyStatus = UPDU_1.UPDU_EnergyStatus;
 exports.UPDU_HeartBeat = UPDU_1.UPDU_HeartBeat;
 exports.UPDU_ActivityStatus = UPDU_1.UPDU_ActivityStatus;

@@ -14,22 +14,24 @@ export {
 
 /* Component Protocol Data Units (CPDU) */
 import { 
-    CPDU_ParamConfirmedUlBitmap, CPDU_ParamConfigFlags, CPDU_Status, CPDU_Header, CPDU_UlHeaderShort, CPDU_DlHeaderShort, CPDU_WiFiBSSIDs, CPDU_Parameter, 
+    CPDU_ParamConfirmedUlBitmap, CPDU_ParamConfigFlags, CPDU_Status, CPDU_Header, CPDU_UlHeaderShort, 
+    CPDU_DlHeaderShort, CPDU_WiFiBSSIDs, CPDU_BLEBeaconIDs, CPDU_Parameter, 
 } from './CPDU';
 export {
-    CPDU_ParamConfirmedUlBitmap, CPDU_ParamConfigFlags, CPDU_Status, CPDU_Header, CPDU_UlHeaderShort, CPDU_DlHeaderShort, CPDU_WiFiBSSIDs, CPDU_Parameter, 
+    CPDU_ParamConfirmedUlBitmap, CPDU_ParamConfigFlags, CPDU_Status, CPDU_Header, CPDU_UlHeaderShort, 
+    CPDU_DlHeaderShort, CPDU_WiFiBSSIDs, CPDU_BLEBeaconIDs, CPDU_Parameter, 
 }
 
 /* Uplink Protocol Data Units (UPDU)*/
 import { 
     UPDU_FramePending, UPDU_PosGPSFix, UPDU_PosGPSTimeout, UPDU_PosWiFiTimeout, 
-    UPDU_PosWiFiFailure, UPDU_PosWiFiBSSIDs, UPDU_PosBLEFailure, UPDU_EnergyStatus,
+    UPDU_PosWiFiFailure, UPDU_PosWiFiBSSIDs, UPDU_PosBLEFailure,  UPDU_PosBLEBeaconIDs, UPDU_EnergyStatus,
     UPDU_HeartBeat, UPDU_ActivityStatus, UPDU_ConfigReport, UPDU_Shutdown, UPDU_Debug, UPDU_GeolocStart,
     createUPDU,
 } from './UPDU';
 export {
     UPDU_FramePending, UPDU_PosGPSFix, UPDU_PosGPSTimeout, UPDU_PosWiFiTimeout, 
-    UPDU_PosWiFiFailure, UPDU_PosWiFiBSSIDs, UPDU_PosBLEFailure, UPDU_EnergyStatus,
+    UPDU_PosWiFiFailure, UPDU_PosWiFiBSSIDs, UPDU_PosBLEFailure, UPDU_PosBLEBeaconIDs, UPDU_EnergyStatus,
     UPDU_HeartBeat, UPDU_ActivityStatus, UPDU_ConfigReport, UPDU_Shutdown, UPDU_Debug, UPDU_GeolocStart,
     createUPDU,
 }

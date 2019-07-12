@@ -37,7 +37,7 @@ var E_PositionInformation;
     E_PositionInformation[E_PositionInformation["WIFI_FAILURE"] = 4] = "WIFI_FAILURE";
     E_PositionInformation[E_PositionInformation["LPGPS_DATA1"] = 5] = "LPGPS_DATA1";
     E_PositionInformation[E_PositionInformation["LPGPS_DATA2"] = 6] = "LPGPS_DATA2";
-    E_PositionInformation[E_PositionInformation["BLE_BACON_SCAN"] = 7] = "BLE_BACON_SCAN";
+    E_PositionInformation[E_PositionInformation["BLE_BEACONIDS"] = 7] = "BLE_BEACONIDS";
     E_PositionInformation[E_PositionInformation["BLE_BACON_FAILURE"] = 8] = "BLE_BACON_FAILURE";
     E_PositionInformation[E_PositionInformation["WIFI_BSSIDS"] = 9] = "WIFI_BSSIDS";
 })(E_PositionInformation = exports.E_PositionInformation || (exports.E_PositionInformation = {}));
@@ -163,7 +163,7 @@ var E_Param_GeolocSensor;
     E_Param_GeolocSensor[E_Param_GeolocSensor["WiFiGPS"] = 6] = "WiFiGPS";
     E_Param_GeolocSensor[E_Param_GeolocSensor["WiFiLPGPS"] = 7] = "WiFiLPGPS";
     E_Param_GeolocSensor[E_Param_GeolocSensor["WiFiLPGPS_WiFiGPS_WiFiLPGPS"] = 9] = "WiFiLPGPS_WiFiGPS_WiFiLPGPS";
-    E_Param_GeolocSensor[E_Param_GeolocSensor["BLE"] = 16] = "BLE";
+    E_Param_GeolocSensor[E_Param_GeolocSensor["BLE"] = 10] = "BLE";
 })(E_Param_GeolocSensor = exports.E_Param_GeolocSensor || (exports.E_Param_GeolocSensor = {}));
 var E_Param_GeolocMethod;
 (function (E_Param_GeolocMethod) {

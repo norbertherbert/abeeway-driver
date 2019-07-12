@@ -37,7 +37,7 @@ msg = new DPDU_SetParam({
         }),
         new CPDU_Parameter({
             id: E_ParameterId.GEOLOC_SENSOR,
-            value: E_Param_GeolocSensor.WiFiLPGPS,
+            value: E_Param_GeolocSensor.BLE,
         }),
     ]
 });

@@ -35,7 +35,7 @@ export enum E_PositionInformation {
     WIFI_FAILURE                 = 0x04,
     LPGPS_DATA1                  = 0x05,
     LPGPS_DATA2                  = 0x06,
-    BLE_BACON_SCAN               = 0x07,
+    BLE_BEACONIDS                = 0x07,
     BLE_BACON_FAILURE            = 0x08,
     WIFI_BSSIDS                  = 0x09,
 }
@@ -169,7 +169,7 @@ export enum E_Param_GeolocSensor {
     WiFiGPS                     = 0x06,
     WiFiLPGPS                   = 0x07,
     WiFiLPGPS_WiFiGPS_WiFiLPGPS = 0x09,
-    BLE                         = 0x10,
+    BLE                         = 0x0a,
 }
 
 export enum E_Param_GeolocMethod {

@@ -548,6 +548,50 @@ export class CPDU_WiFiBSSIDs extends PDUTemplate<I_CPDU_WiFiBSSIDs> implements I
 }
 
 // ***************************************************************
+// *** CPDU_BLEBeaconIDs *****************************************
+// ***************************************************************
+
+export interface I_CPDU_BLEBeaconIDs {         // 7 bytes
+    beaconid:                   string,        // 6 bytes
+    rssi:                       number,        // 1 byte
+}
+export class CPDU_BLEBeaconIDs extends PDUTemplate<I_CPDU_BLEBeaconIDs> implements I_CPDU_BLEBeaconIDs {
+
+    // *** beaconid ***
+    set beaconid(x:string) {
+        assert.ok( x.match(/^[0-9A-Fa-f]{12}$/), 'CPDU_BLEBeaconIDs.beaconid: Invalid value!');
+        this._props.beaconid = x.toLowerCase();
+    }
+    get beaconid():string {
+        return this._props.beaconid;
+    }
+
+    // *** rssi ***
+    set rssi(x:number) {
+        assert.ok( (-0x7f<=x) && (x<=0x7f), 'CPDU_BLEBeaconIDs.rssi: Invalid value!');
+        this._props.rssi = x;
+    }
+    get rssi():number {
+        return this._props.rssi;
+    }
+
+    setFromBuffer(x:Buffer) {
+        assert.ok(x.length === 7, 'CPDU_BLEBeaconIDs.setFromBuffer(): Invalid buffer legth!');
+        this.beaconid = x.slice(0,6).toString('hex');
+        this.rssi  = x.readInt8(6);
+    }
+    toBuffer():Buffer {
+        let y = Buffer.allocUnsafe(7);
+        for (let i=0; i<6; i++) {
+            let s = this.beaconid;
+            y[i] = parseInt(s.substring(2*i, 2*(i+1)), 16);
+        }
+        y.writeInt8(this.rssi, 6);
+        return y;
+    }
+}
+
+// ***************************************************************
 // *** CPDU_Parameter ********************************************
 // ***************************************************************
 
