@@ -28,6 +28,6 @@
     "typescript": "^3.5.3"
   },
   "dependencies": {
-    "@types/node": "^11.13.17"
+    "@types/node": "^11.13.21"
   }
 }

@@ -302,7 +302,7 @@ export interface I_CPDU_Header {                          // 5 bytes
     type:                    E_UPDUType,     // 1 byte
     _type?:                  string,
     status:                  CPDU_Status,          // 1 byte
-    battery:                 number,          // 1 byte lo=2.8, hi=4.2, nbits=8, nresv=2, step=5.5mV
+    battery:                 number|string,          // 1 byte lo=2.8, hi=4.2, nbits=8, nresv=2, step=5.5mV, 
     temperature:             number,          // 1 byte lo=-44, hi=85,  nbits=8, nresv=0, step=0.5C
     ackToken:                number,                       // 4 bits [7-4]
     optData:                 number|E_PositionInformation, // 4 bits [3-0]
@@ -330,11 +330,15 @@ export class CPDU_Header extends PDUTemplate<I_CPDU_Header> implements I_CPDU_He
     }
 
     // *** battery ***
-    set battery(x:number) {
-        assert.ok( (2.8<=x) && (x<=4.2), 'Header.battery: Invalid value!' )
+    set battery(x:number|string) {
+        if (typeof x == "number") {
+            assert.ok( (2.8<=x) && (x<=4.2), 'Header.battery: Invalid value!' );
+        } else {
+            assert.ok( (x == "MAINS_POWER") || (x == "NOT_AVAILABLE"), 'Header.battery: Invalid value!' )
+        }
         this._props.battery = x;
     }
-    get battery():number {
+    get battery():number|string {
         return this._props.battery;
     }
 
@@ -383,7 +387,13 @@ export class CPDU_Header extends PDUTemplate<I_CPDU_Header> implements I_CPDU_He
         this._props._type = E_UPDUType[x[0]];
 
         this.status = new CPDU_Status(x[1]);
-        this.battery     = mt_value_decode(x[2],   2.8,  4.2, 8, 2);
+        if (x[2] == 0x00) {
+            this.battery = "MAINS_POWER";
+        } else if (x[2] == 0xff) {
+            this.battery = "NOT_AVAILABLE";
+        } else {
+            this.battery = mt_value_decode(x[2], 2.8, 4.2, 8, 2);
+        }
         this.temperature = mt_value_decode(x[3], -44.0, 85.0, 8, 0);
         this.ackToken = x[4] >>> 4;
         this.optData  = x[4] & 0x0f;
@@ -392,7 +402,13 @@ export class CPDU_Header extends PDUTemplate<I_CPDU_Header> implements I_CPDU_He
         let y = Buffer.allocUnsafe(5);
         y[0] = this.type;
         y[1] = this.status.toValue();
-        y[2] = mt_value_encode(this.battery,       2.8,  4.2, 8, 2);
+        if (this.battery == "MAINS_POWER") {
+            y[2] = 0x00;
+        } if (this.battery == "NOT_AVAILABLE") {
+            y[2] = 0xff;
+        } else if ( typeof this.battery == "number" ) {
+            y[2] = mt_value_encode(this.battery, 2.8,  4.2, 8, 2);
+        }
         y[3] = mt_value_encode(this.temperature, -44.0, 85.0, 8, 0);
         y[4] = (this.ackToken << 4) | this.optData;
         return y;

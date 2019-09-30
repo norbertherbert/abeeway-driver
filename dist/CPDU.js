@@ -362,7 +362,12 @@ var CPDU_Header = /** @class */ (function (_super) {
         },
         // *** battery ***
         set: function (x) {
-            assert.ok((2.8 <= x) && (x <= 4.2), 'Header.battery: Invalid value!');
+            if (typeof x == "number") {
+                assert.ok((2.8 <= x) && (x <= 4.2), 'Header.battery: Invalid value!');
+            }
+            else {
+                assert.ok((x == "MAINS_POWER") || (x == "NOT_AVAILABLE"), 'Header.battery: Invalid value!');
+            }
             this._props.battery = x;
         },
         enumerable: true,
@@ -420,7 +425,15 @@ var CPDU_Header = /** @class */ (function (_super) {
         this._props.type = x[0];
         this._props._type = constants_1.E_UPDUType[x[0]];
         this.status = new CPDU_Status(x[1]);
-        this.battery = utils_1.mt_value_decode(x[2], 2.8, 4.2, 8, 2);
+        if (x[2] == 0x00) {
+            this.battery = "MAINS_POWER";
+        }
+        else if (x[2] == 0xff) {
+            this.battery = "NOT_AVAILABLE";
+        }
+        else {
+            this.battery = utils_1.mt_value_decode(x[2], 2.8, 4.2, 8, 2);
+        }
         this.temperature = utils_1.mt_value_decode(x[3], -44.0, 85.0, 8, 0);
         this.ackToken = x[4] >>> 4;
         this.optData = x[4] & 0x0f;
@@ -429,7 +442,15 @@ var CPDU_Header = /** @class */ (function (_super) {
         var y = buffer_1.Buffer.allocUnsafe(5);
         y[0] = this.type;
         y[1] = this.status.toValue();
-        y[2] = utils_1.mt_value_encode(this.battery, 2.8, 4.2, 8, 2);
+        if (this.battery == "MAINS_POWER") {
+            y[2] = 0x00;
+        }
+        if (this.battery == "NOT_AVAILABLE") {
+            y[2] = 0xff;
+        }
+        else if (typeof this.battery == "number") {
+            y[2] = utils_1.mt_value_encode(this.battery, 2.8, 4.2, 8, 2);
+        }
         y[3] = utils_1.mt_value_encode(this.temperature, -44.0, 85.0, 8, 0);
         y[4] = (this.ackToken << 4) | this.optData;
         return y;

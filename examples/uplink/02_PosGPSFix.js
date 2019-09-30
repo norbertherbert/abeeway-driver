@@ -17,6 +17,8 @@ let gpsPosFix = new UPDU_PosGPSFix ({
             positionOnDemandMessage: true,
         }),
         battery:      4.175,
+        // battery:      "MAINS_POWER",
+        // battery:      "NOT_AVAILABLE",
         temperature:  22.5,
         ackToken:     0x5,
         optData:      E_PositionInformation.GPS_FIX,
