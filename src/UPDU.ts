@@ -459,7 +459,7 @@ export class UPDU_PosBLEBeaconIDs extends PDUTemplate<I_UPDU_PosBLEBeaconIDs> im
 
     // *** bleBeacons ***
     set bleBeacons(x:CPDU_BLEBeaconIDs[]) {
-        assert.ok( x.length === 4, 'UPDU_PosBLEBeaconIDs.bleBeacons: Invalid value!');
+        assert.ok( x.length <= 4, 'UPDU_PosBLEBeaconIDs.bleBeacons: Invalid value!');
         this._props.bleBeacons = x;
     }
     get bleBeacons():CPDU_BLEBeaconIDs[] {
@@ -467,12 +467,13 @@ export class UPDU_PosBLEBeaconIDs extends PDUTemplate<I_UPDU_PosBLEBeaconIDs> im
     }
 
     setFromBuffer(x:Buffer) {
-        assert.ok(x.length === 34, 'UPDU_PosBLEBeaconIDs.setFromBuffer(): Invalid buffer legth!');
+        assert.ok([6, 13, 20, 27, 34].includes(x.length), 'UPDU_PosBLEBeaconIDs.setFromBuffer(): Invalid buffer legth!');
         this.header = new CPDU_Header(x.slice(0,5));
         this.age = mt_value_decode(x[5], 0, 2040, 8, 0);
 
         let bleBeacons: CPDU_BLEBeaconIDs[] = [];
-        for (let i=0; i<4; i++) {
+        let len = (x.length-6)/7;
+        for (let i=0; i<len; i++) {
             bleBeacons.push( 
                 new CPDU_BLEBeaconIDs( x.slice(6+(i*7), 13+(i*7)) )
             );
@@ -481,11 +482,12 @@ export class UPDU_PosBLEBeaconIDs extends PDUTemplate<I_UPDU_PosBLEBeaconIDs> im
 
     }
     toBuffer():Buffer {
-        let y = Buffer.allocUnsafe(34);
+        let len = this.bleBeacons.length;
+        let y = Buffer.allocUnsafe(6+(7*len));
         this.header.toBuffer().copy(y);
         y[5] = mt_value_decode(this.age, 0, 2040, 8, 0);
 
-        for (let i=0; i<4; i++) {
+        for (let i=0; i<len; i++) {
             this.bleBeacons[i].toBuffer().copy(y, 6+i*7);
         }
         return y;

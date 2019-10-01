@@ -36,10 +36,10 @@ let posBLEBeaconIDs = new UPDU_PosBLEBeaconIDs ({
             beaconid: 'aabbccaabb03',
             rssi: -33,
         }),
-        new CPDU_BLEBeaconIDs({
-            beaconid: 'aabbccaabb04',
-            rssi: -12,
-        }),
+        // new CPDU_BLEBeaconIDs({
+        //     beaconid: 'aabbccaabb04',
+        //     rssi: -12,
+        // }),
     ],
 });
 console.log(posBLEBeaconIDs.toJSON());
