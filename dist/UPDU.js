@@ -399,27 +399,29 @@ var UPDU_PosWiFiBSSIDs = /** @class */ (function (_super) {
         },
         // *** wifiHotspots ***
         set: function (x) {
-            assert.ok(x.length === 4, 'UPDU_PosWiFiBSSIDs.wifiHotspots: Invalid value!');
+            assert.ok(x.length <= 4, 'UPDU_PosWiFiBSSIDs.wifiHotspots: Invalid value!');
             this._props.wifiHotspots = x;
         },
         enumerable: true,
         configurable: true
     });
     UPDU_PosWiFiBSSIDs.prototype.setFromBuffer = function (x) {
-        assert.ok(x.length === 34, 'UPDU_PosWiFiBSSIDs.setFromBuffer(): Invalid buffer legth!');
+        assert.ok([6, 13, 20, 27, 34].includes(x.length), 'UPDU_PosWiFiBSSIDs.setFromBuffer(): Invalid buffer legth!');
         this.header = new CPDU_1.CPDU_Header(x.slice(0, 5));
         this.age = utils_1.mt_value_decode(x[5], 0, 2040, 8, 0);
         var wifiHotspots = [];
-        for (var i = 0; i < 4; i++) {
+        var len = (x.length - 6) / 7;
+        for (var i = 0; i < len; i++) {
             wifiHotspots.push(new CPDU_1.CPDU_WiFiBSSIDs(x.slice(6 + (i * 7), 13 + (i * 7))));
         }
         this.wifiHotspots = wifiHotspots;
     };
     UPDU_PosWiFiBSSIDs.prototype.toBuffer = function () {
-        var y = buffer_1.Buffer.allocUnsafe(34);
+        var len = this.wifiHotspots.length;
+        var y = buffer_1.Buffer.allocUnsafe(6 + (7 * len));
         this.header.toBuffer().copy(y);
         y[5] = utils_1.mt_value_decode(this.age, 0, 2040, 8, 0);
-        for (var i = 0; i < 4; i++) {
+        for (var i = 0; i < len; i++) {
             this.wifiHotspots[i].toBuffer().copy(y, 6 + i * 7);
         }
         return y;

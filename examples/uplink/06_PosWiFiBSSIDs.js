@@ -36,10 +36,10 @@ let posWiFiBSSIDs = new UPDU_PosWiFiBSSIDs ({
             bssid: 'aabbccaabb03',
             rssi: -33,
         }),
-        new CPDU_WiFiBSSIDs({
-            bssid: 'aabbccaabb04',
-            rssi: -12,
-        }),
+        // new CPDU_WiFiBSSIDs({
+        //     bssid: 'aabbccaabb04',
+        //     rssi: -12,
+        // }),
     ],
 });
 console.log(posWiFiBSSIDs.toJSON());

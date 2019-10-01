@@ -391,7 +391,7 @@ export class UPDU_PosWiFiBSSIDs extends PDUTemplate<I_UPDU_PosWiFiBSSIDs> implem
 
     // *** wifiHotspots ***
     set wifiHotspots(x:CPDU_WiFiBSSIDs[]) {
-        assert.ok( x.length === 4, 'UPDU_PosWiFiBSSIDs.wifiHotspots: Invalid value!');
+        assert.ok( x.length <= 4, 'UPDU_PosWiFiBSSIDs.wifiHotspots: Invalid value!');
         this._props.wifiHotspots = x;
     }
     get wifiHotspots():CPDU_WiFiBSSIDs[] {
@@ -399,12 +399,13 @@ export class UPDU_PosWiFiBSSIDs extends PDUTemplate<I_UPDU_PosWiFiBSSIDs> implem
     }
 
     setFromBuffer(x:Buffer) {
-        assert.ok(x.length === 34, 'UPDU_PosWiFiBSSIDs.setFromBuffer(): Invalid buffer legth!');
+        assert.ok( [6, 13, 20, 27, 34].includes(x.length), 'UPDU_PosWiFiBSSIDs.setFromBuffer(): Invalid buffer legth!');
         this.header = new CPDU_Header(x.slice(0,5));
         this.age = mt_value_decode(x[5], 0, 2040, 8, 0);
 
         let wifiHotspots: CPDU_WiFiBSSIDs[] = [];
-        for (let i=0; i<4; i++) {
+        let len = (x.length-6)/7;
+        for (let i=0; i<len; i++) {
             wifiHotspots.push( 
                 new CPDU_WiFiBSSIDs( x.slice(6+(i*7), 13+(i*7)) )
             );
@@ -413,11 +414,12 @@ export class UPDU_PosWiFiBSSIDs extends PDUTemplate<I_UPDU_PosWiFiBSSIDs> implem
 
     }
     toBuffer():Buffer {
-        let y = Buffer.allocUnsafe(34);
+        let len = this.wifiHotspots.length;
+        let y = Buffer.allocUnsafe(6+(7*len));
         this.header.toBuffer().copy(y);
         y[5] = mt_value_decode(this.age, 0, 2040, 8, 0);
 
-        for (let i=0; i<4; i++) {
+        for (let i=0; i<len; i++) {
             this.wifiHotspots[i].toBuffer().copy(y, 6+i*7);
         }
         return y;

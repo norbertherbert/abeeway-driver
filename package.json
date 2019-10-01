@@ -24,8 +24,8 @@
     "url": "https://github.com/norbertherbert/abeeway-driver.git"
   },
   "devDependencies": {
-    "ts-node": "^8.3.0",
-    "typescript": "^3.5.3"
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.3"
   },
   "dependencies": {
     "@types/node": "^11.13.21"
