@@ -97,6 +97,8 @@ var E_ParameterId;
     //TODO: what is this?
     E_ParameterId[E_ParameterId["CONFIRMED_UL_BITMAP"] = 18] = "CONFIRMED_UL_BITMAP";
     E_ParameterId[E_ParameterId["CONFIRMED_UL_RETRY"] = 19] = "CONFIRMED_UL_RETRY";
+    E_ParameterId[E_ParameterId["BLE_VERSION"] = 253] = "BLE_VERSION";
+    E_ParameterId[E_ParameterId["FIRMWARE_VERSION"] = 254] = "FIRMWARE_VERSION";
 })(E_ParameterId = exports.E_ParameterId || (exports.E_ParameterId = {}));
 exports.C_ParamDescriptions = {
     UL_PERIOD: { code: 0x00, name: 'UL_PERIOD', unit: 's', min: 60, max: 86400,
@@ -152,6 +154,12 @@ exports.C_ParamDescriptions = {
     },
     CONFIRMED_UL_RETRY: { code: 0x13, name: 'CONFIRMED_UL_RETRY', unit: '', min: 0, max: 8,
         description: 'The number of retries for each confirmed uplink when the confirmation is not received. [0..8]',
+    },
+    BLE_VERSION: { code: 0xfd, name: 'BLE_VERSION', unit: '', min: 0, max: 0,
+        description: 'Get the BLE version.',
+    },
+    FIRMWARE_VERSION: { code: 0xfe, name: 'FIRMWARE_VERSION', unit: '', min: 0, max: 0,
+        description: 'Get the firmware version.',
     },
 };
 var E_Param_GeolocSensor;

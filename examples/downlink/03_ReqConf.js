@@ -15,7 +15,9 @@ let msg = new DPDU_ReqConf ({
     paramIDs: [ 
         // up to 20 requested parameters can be listed here
         E_ParameterId.GPS_CONVERGENCE, 
-        E_ParameterId.GPS_TIMEOUT
+        E_ParameterId.GPS_TIMEOUT,
+        E_ParameterId.BLE_VERSION,
+        E_ParameterId.FIRMWARE_VERSION
     ], 
 });
 

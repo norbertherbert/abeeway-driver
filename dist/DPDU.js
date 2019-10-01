@@ -118,9 +118,10 @@ var DPDU_ReqConf = /** @class */ (function (_super) {
             var paramIDsLength = x.length;
             assert.ok(paramIDsLength <= 20, 'DPDU_ReqConf.paramIDs: Invalid length!');
             var _x = [];
-            for (var i in x) {
-                assert.ok(x[i] in constants_1.E_ParameterId, 'DPDU_ReqConf.paramIDs: Invalid value!');
-                _x.push(constants_1.E_ParameterId[i]);
+            for (var _i = 0, x_1 = x; _i < x_1.length; _i++) {
+                var paramId = x_1[_i];
+                assert.ok(paramId in constants_1.E_ParameterId, 'DPDU_ReqConf.paramIDs: Invalid value!');
+                _x.push(constants_1.E_ParameterId[paramId]);
             }
             this._props.paramIDs = x;
             this._props._paramIDs = _x;

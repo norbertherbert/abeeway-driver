@@ -96,9 +96,13 @@ export enum E_ParameterId {
     GPS_STANDBY_TIMEOUT          = 0x11, // s, 10-7200
 
     //TODO: what is this?
-    CONFIRMED_UL_BITMAP        = 0x12, // 0x00-0xff
+    CONFIRMED_UL_BITMAP          = 0x12, // 0x00-0xff
 
-    CONFIRMED_UL_RETRY         = 0x13, // 0-8
+    CONFIRMED_UL_RETRY           = 0x13, // 0-8
+
+    BLE_VERSION                  = 0xfd,
+    FIRMWARE_VERSION             = 0xfe,
+
 }
 
 export const C_ParamDescriptions = {
@@ -158,6 +162,17 @@ export const C_ParamDescriptions = {
     CONFIRMED_UL_RETRY:  { code: 0x13, name: 'CONFIRMED_UL_RETRY',  unit:'',  min: 0,    max: 8,
         description: 'The number of retries for each confirmed uplink when the confirmation is not received. [0..8]',
     },
+
+
+
+    BLE_VERSION: { code: 0xfd, name: 'BLE_VERSION', unit:'', min: 0, max: 0,
+        description: 'Get the BLE version.',
+    },
+    FIRMWARE_VERSION:  { code: 0xfe, name: 'FIRMWARE_VERSION', unit:'', min: 0, max: 0,
+        description: 'Get the firmware version.',
+    },
+
+
 }
 
 export enum E_Param_GeolocSensor {

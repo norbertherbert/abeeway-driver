@@ -116,9 +116,9 @@ export class DPDU_ReqConf extends PDUTemplate<I_DPDU_ReqConf> implements I_DPDU_
         let paramIDsLength = x.length;
         assert.ok(paramIDsLength<=20, 'DPDU_ReqConf.paramIDs: Invalid length!');
         let _x: string[] = [];
-        for (let i in x) {
-            assert.ok(x[i] in E_ParameterId, 'DPDU_ReqConf.paramIDs: Invalid value!');
-            _x.push(E_ParameterId[i]);
+        for (let paramId of x) {
+            assert.ok(paramId in E_ParameterId, 'DPDU_ReqConf.paramIDs: Invalid value!');
+            _x.push(E_ParameterId[paramId]);
         }
         this._props.paramIDs = x;
         this._props._paramIDs = _x;
