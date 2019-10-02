@@ -38,9 +38,13 @@ let configReport = new UPDU_ConfigReport ({
             id: E_ParameterId.TRANSMIT_STRAT,
             value: E_Param_TransmitStrat.DUAL_FIXED,
         }),
+        // new CPDU_Parameter({
+        //     id: E_ParameterId.BLE_BEACON_COUNT,
+        //     value: 1,
+        // }),
         new CPDU_Parameter({
-            id: E_ParameterId.BLE_BEACON_COUNT,
-            value: 1,
+            id: E_ParameterId.RESERVED,
+            value: 0,
         }),
     ],
 });

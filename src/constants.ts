@@ -81,6 +81,8 @@ export enum E_ParameterId {
     PW_STAT_PERIOD               = 0x02, // s, 0 | 300-604800
     PERIODIC_POS_PERIOD          = 0x03, // s, 0 | 900-604800
 
+    RESERVED                     = 0x04,
+
     GEOLOC_SENSOR                = 0x05, // E_Param_GeolocSensor
     GEOLOC_METHOD                = 0x06, // E_Param_GeolocMethod
 
@@ -99,6 +101,14 @@ export enum E_ParameterId {
     CONFIRMED_UL_BITMAP          = 0x12, // 0x00-0xff
 
     CONFIRMED_UL_RETRY           = 0x13, // 0-8
+
+    MOTION_SENSITIVITY           = 0x14,
+    SHOCK_DETECTION              = 0x15,
+    PERIODIC_ACTIVITY_PERIOD     = 0x16,
+    MOTION_DURATION              = 0x17,
+    RESERVED1                    = 0x18,
+    RESERVED2                    = 0x19,
+    BLE_RSSI_FILTER              = 0x1A,
 
     BLE_VERSION                  = 0xfd,
     FIRMWARE_VERSION             = 0xfe,
