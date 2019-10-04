@@ -23,6 +23,7 @@ let heartBeat = new UPDU_HeartBeat ({
     }),
     cause:      1,
     fwVersion:  '1.2.3',
+    bleFwVersion:  '2.3.4',
 });
 console.log(heartBeat.toJSON());
 console.log(heartBeat.toHexString());

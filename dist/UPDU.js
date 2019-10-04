@@ -666,27 +666,75 @@ var UPDU_HeartBeat = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(UPDU_HeartBeat.prototype, "bleFwVersion", {
+        get: function () {
+            if ('bleFwVersion' in this._props) {
+                return this._props.bleFwVersion;
+            }
+            return '';
+        },
+        // *** bleFwVersion ***
+        set: function (x) {
+            if (x === '') {
+                if ('bleFwVersion' in this._props) {
+                    delete this._props.bleFwVersion;
+                }
+            }
+            else {
+                assert.ok(x.match(/^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/), 'UPDU_HeartBeat.bleFwVersion: invalid value!');
+                var fwStrArray = x.split('.');
+                var fwValArray = [];
+                var fwVal = void 0;
+                for (var i = 0; i < 3; i++) {
+                    fwVal = parseInt(fwStrArray[i]);
+                    assert.ok(utils_1.isUint8(fwVal), 'UPDU_HeartBeat.bleFwVersion: invalid value!');
+                    fwValArray.push(fwVal);
+                }
+                this._props.bleFwVersion = fwValArray.join('.');
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
     UPDU_HeartBeat.prototype.setFromBuffer = function (x) {
         var l = x.length;
-        assert.ok([6, 9].includes(l), 'UPDU_HeartBeat.setFromBuffer(): Invalid buffer legth!');
+        assert.ok([6, 9, 12].includes(l), 'UPDU_HeartBeat.setFromBuffer(): Invalid buffer legth!');
         this.header = new CPDU_1.CPDU_Header(x.slice(0, 5));
         this.cause = x[5];
-        if (l === 9) {
+        if (l > 6) {
             this.fwVersion = x.slice(6, 9).join('.');
         }
         else {
             this.fwVersion = '';
         }
+        if (l > 9) {
+            this.bleFwVersion = x.slice(9, 12).join('.');
+        }
+        else {
+            this.bleFwVersion = '';
+        }
     };
     UPDU_HeartBeat.prototype.toBuffer = function () {
-        var l = (this.fwVersion == '') ? 6 : 9;
+        var l = 6;
+        if (this.fwVersion) {
+            l = 9;
+            if (this.bleFwVersion) {
+                l = 12;
+            }
+        }
         var y = buffer_1.Buffer.allocUnsafe(l);
         this.header.toBuffer().copy(y);
         y[5] = this.cause;
-        if (l = 9) {
+        if (l > 6) {
             var fwVersionArray = this.fwVersion.split('.');
             for (var i = 0; i < 3; i++) {
                 y[6 + i] = parseInt(fwVersionArray[i]);
+            }
+        }
+        if (l > 9) {
+            var bleFwVersionArray = this.bleFwVersion.split('.');
+            for (var i = 0; i < 3; i++) {
+                y[9 + i] = parseInt(bleFwVersionArray[i]);
             }
         }
         return y;

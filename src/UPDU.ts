@@ -614,6 +614,7 @@ export interface I_UPDU_HeartBeat {        // 6|9 bytes
     header:                  CPDU_Header,  // 5 bytes
     cause:                   number,       // 1 byte
     fwVersion?:              string,       // 3 bytes (optional)
+    bleFwVersion?:           string,       // 3 bytes (optional)
 }
 export class UPDU_HeartBeat extends PDUTemplate<I_UPDU_HeartBeat> implements I_UPDU_HeartBeat {
 
@@ -660,29 +661,75 @@ export class UPDU_HeartBeat extends PDUTemplate<I_UPDU_HeartBeat> implements I_U
         return '';
     }
 
+    // *** bleFwVersion ***
+    set bleFwVersion(x:string) {
+        if (x === '') {
+            if ('bleFwVersion' in this._props) {
+                delete this._props.bleFwVersion
+            }
+        } else {
+            assert.ok(x.match(/^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/), 'UPDU_HeartBeat.bleFwVersion: invalid value!');
+            let fwStrArray = x.split('.');
+            let fwValArray: number[] = [];
+            let fwVal: number;
+            for (let i=0; i<3; i++) {
+                fwVal = parseInt(fwStrArray[i]);
+                assert.ok(isUint8(fwVal), 'UPDU_HeartBeat.bleFwVersion: invalid value!');
+                fwValArray.push(fwVal);
+            }
+            this._props.bleFwVersion = fwValArray.join('.');
+        }
+    }
+    get bleFwVersion():string {
+        if ('bleFwVersion' in this._props) {
+            return this._props.bleFwVersion;    
+        }
+        return '';
+    }
+
     setFromBuffer(x:Buffer) {
         let l = x.length;
-        assert.ok([6, 9].includes(l), 'UPDU_HeartBeat.setFromBuffer(): Invalid buffer legth!');
+        assert.ok([6, 9, 12].includes(l), 'UPDU_HeartBeat.setFromBuffer(): Invalid buffer legth!');
         this.header = new CPDU_Header(x.slice(0,5));
 
         this.cause = x[5];
 
-        if (l === 9) {
+        if (l > 6) {
             this.fwVersion = x.slice(6,9).join('.');
         } else {
             this.fwVersion = '';
         }
+
+        if (l > 9) {
+            this.bleFwVersion = x.slice(9,12).join('.');
+        } else {
+            this.bleFwVersion = '';
+        }
+
     }
     toBuffer():Buffer {
-        let l = (this.fwVersion == '') ? 6 : 9;
+
+        let l = 6;
+        if (this.fwVersion) {
+            l = 9;
+            if (this.bleFwVersion) {
+                l = 12;
+            }
+        }
         let y = Buffer.allocUnsafe(l);
         this.header.toBuffer().copy(y);
         y[5] = this.cause;
 
-        if (l = 9) {
+        if (l > 6) {
             let fwVersionArray = this.fwVersion.split('.');
             for (let i=0; i<3; i++) {
                 y[6+i] = parseInt(fwVersionArray[i]);
+            }
+        }
+        if (l > 9) {
+            let bleFwVersionArray = this.bleFwVersion.split('.');
+            for (let i=0; i<3; i++) {
+                y[9+i] = parseInt(bleFwVersionArray[i]);
             }
         }
         return y;
