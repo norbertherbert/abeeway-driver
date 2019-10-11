@@ -16,6 +16,12 @@ exports.C_ParamDescriptions = constants_1.C_ParamDescriptions;
 exports.E_Param_GeolocSensor = constants_1.E_Param_GeolocSensor;
 exports.E_Param_GeolocMethod = constants_1.E_Param_GeolocMethod;
 exports.E_Param_TransmitStrat = constants_1.E_Param_TransmitStrat;
+exports.E_LastResetCause = 
+// NEW
+constants_1.E_LastResetCause;
+exports.E_DebugAction = constants_1.E_DebugAction;
+exports.E_ShutdownCause = constants_1.E_ShutdownCause;
+exports.E_EventValue = constants_1.E_EventValue;
 /* Component Protocol Data Units (CPDU) */
 var CPDU_1 = require("./CPDU");
 exports.CPDU_ParamConfirmedUlBitmap = CPDU_1.CPDU_ParamConfirmedUlBitmap;
@@ -43,8 +49,12 @@ exports.UPDU_ActivityStatus = UPDU_1.UPDU_ActivityStatus;
 exports.UPDU_ConfigReport = UPDU_1.UPDU_ConfigReport;
 exports.UPDU_Shutdown = UPDU_1.UPDU_Shutdown;
 exports.UPDU_Debug = UPDU_1.UPDU_Debug;
-exports.UPDU_GeolocStart = UPDU_1.UPDU_GeolocStart;
 exports.createUPDU = UPDU_1.createUPDU;
+exports.UPDU_ActivityStatusSideOp = 
+// NEW
+UPDU_1.UPDU_ActivityStatusSideOp;
+exports.UPDU_ShockDetection = UPDU_1.UPDU_ShockDetection;
+exports.UPDU_EventMessage = UPDU_1.UPDU_EventMessage;
 /* Downlink Protocol Data Units (DPDU) */
 var DPDU_1 = require("./DPDU");
 exports.DPDU_PosOnDem = DPDU_1.DPDU_PosOnDem;

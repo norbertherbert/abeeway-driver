@@ -10,7 +10,7 @@ const {
 
 let configReport = new UPDU_ConfigReport ({
     header: new CPDU_Header({
-        type:         E_UPDUType.ACTIVITY_OR_CONFIG,
+        type:         E_UPDUType.ACTIVITY_CONFIG_SHOCKDETECT,
         status:       new CPDU_Status({
             operatingMode:           E_OperatingMode.ACTIVITY_TRACKING,
             sosState:                false,
@@ -38,14 +38,14 @@ let configReport = new UPDU_ConfigReport ({
             id: E_ParameterId.TRANSMIT_STRAT,
             value: E_Param_TransmitStrat.DUAL_FIXED,
         }),
-        // new CPDU_Parameter({
-        //     id: E_ParameterId.BLE_BEACON_COUNT,
-        //     value: 1,
-        // }),
         new CPDU_Parameter({
-            id: E_ParameterId.RESERVED,
-            value: 0,
+            id: E_ParameterId.BLE_BEACON_COUNT,
+            value: 1,
         }),
+        // new CPDU_Parameter({
+        //     id: E_ParameterId.RESERVED_04,
+        //     value: 0,
+        // }),
     ],
 });
 console.log(configReport.toJSON());

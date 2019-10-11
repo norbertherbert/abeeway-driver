@@ -5,11 +5,16 @@ import {
     E_UPDUType, E_Tag, E_OperatingMode, E_PositionInformation, E_WiFiFailure,
     E_BLEFailure, E_DPDUType, E_DebugCmd, E_GPSTimeoutCause, E_ParameterId, 
     C_ParamDescriptions, E_Param_GeolocSensor, E_Param_GeolocMethod, E_Param_TransmitStrat,
+
+    // NEW
+    E_LastResetCause, E_DebugAction, E_ShutdownCause, E_EventValue,
+
 } from './constants';
 export {
     E_UPDUType, E_Tag, E_OperatingMode, E_PositionInformation, E_WiFiFailure,
     E_BLEFailure, E_DPDUType, E_DebugCmd, E_GPSTimeoutCause, E_ParameterId, 
     C_ParamDescriptions, E_Param_GeolocSensor, E_Param_GeolocMethod, E_Param_TransmitStrat,
+    E_LastResetCause, E_DebugAction, E_ShutdownCause, E_EventValue,
 }
 
 /* Component Protocol Data Units (CPDU) */
@@ -26,14 +31,18 @@ export {
 import { 
     UPDU_FramePending, UPDU_PosGPSFix, UPDU_PosGPSTimeout, UPDU_PosWiFiTimeout, 
     UPDU_PosWiFiFailure, UPDU_PosWiFiBSSIDs, UPDU_PosBLEFailure,  UPDU_PosBLEBeaconIDs, UPDU_EnergyStatus,
-    UPDU_HeartBeat, UPDU_ActivityStatus, UPDU_ConfigReport, UPDU_Shutdown, UPDU_Debug, UPDU_GeolocStart,
-    createUPDU,
+    UPDU_HeartBeat, UPDU_ActivityStatus, UPDU_ConfigReport, UPDU_Shutdown, UPDU_Debug,
+    createUPDU, 
+    
+    // NEW
+    UPDU_ActivityStatusSideOp, UPDU_ShockDetection, UPDU_EventMessage,
+
 } from './UPDU';
 export {
     UPDU_FramePending, UPDU_PosGPSFix, UPDU_PosGPSTimeout, UPDU_PosWiFiTimeout, 
     UPDU_PosWiFiFailure, UPDU_PosWiFiBSSIDs, UPDU_PosBLEFailure, UPDU_PosBLEBeaconIDs, UPDU_EnergyStatus,
-    UPDU_HeartBeat, UPDU_ActivityStatus, UPDU_ConfigReport, UPDU_Shutdown, UPDU_Debug, UPDU_GeolocStart,
-    createUPDU,
+    UPDU_HeartBeat, UPDU_ActivityStatus, UPDU_ConfigReport, UPDU_Shutdown, UPDU_Debug,
+    createUPDU, UPDU_ActivityStatusSideOp, UPDU_ShockDetection, UPDU_EventMessage,
 }
 
 /* Downlink Protocol Data Units (DPDU) */

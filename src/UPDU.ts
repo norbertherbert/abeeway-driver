@@ -3,9 +3,10 @@ import { Buffer } from 'buffer';
 
 /* Constants */
 import { 
-    E_UPDUType, E_Tag, E_OperatingMode, E_PositionInformation, E_WiFiFailure,
+    E_UPDUType, E_LastResetCause, E_Tag, E_OperatingMode, E_PositionInformation, E_WiFiFailure,
     E_BLEFailure, E_DPDUType, E_DebugCmd, E_GPSTimeoutCause, E_ParameterId, 
     C_ParamDescriptions, E_Param_GeolocSensor, E_Param_GeolocMethod, E_Param_TransmitStrat,
+    E_ShutdownCause, E_EventValue, E_DebugAction,
 } from './constants';
 
 /* Utils */
@@ -20,33 +21,6 @@ import {
 } from './CPDU';
 
 
-// ***************************************************************
-// *** UPDU_FramePending *******************************************
-// ***************************************************************
-
-export interface I_UPDU_FramePending {
-    header:                  CPDU_UlHeaderShort,     // 2 bytes
-}
-export class UPDU_FramePending extends PDUTemplate<I_UPDU_FramePending> implements I_UPDU_FramePending {
-
-    // *** header ***
-    set header(x:CPDU_UlHeaderShort) {
-        assert.ok(x.type === E_UPDUType.FRAME_PENDING, 'UPDU_FramePending.header: Invalid MessageType!');
-        this._props.header = x;
-    }
-    get header():CPDU_UlHeaderShort {
-        return this._props.header;
-    }
-
-    setFromBuffer(x:Buffer) {
-        assert.ok(x.length === 2, 'UPDU_FramePending.setFromBuffer(): Invalid buffer legth!');
-        this.header = new CPDU_UlHeaderShort(x);
-    }
-    toBuffer():Buffer {
-        return this.header.toBuffer();
-    }
-
-}
 
 // ***************************************************************
 // *** UPDU_PosGPSFix **********************************************
@@ -325,7 +299,7 @@ export class UPDU_PosWiFiFailure extends PDUTemplate<I_UPDU_PosWiFiFailure> impl
 
     // *** error ***
     set error(x:E_WiFiFailure) {
-        assert.ok( x in E_WiFiFailure, 'UPDU_PosWiFiFailure.error: invalid value');
+        assert.ok(x in E_WiFiFailure, 'UPDU_PosWiFiFailure.error: invalid value');
         this._props.error = x;
         this._props._error = E_WiFiFailure[x];
     }
@@ -607,14 +581,12 @@ export class UPDU_EnergyStatus extends PDUTemplate<I_UPDU_EnergyStatus> implemen
 // *** UPDU_HeartBeat **********************************************
 // ***************************************************************
 
-// TODO: What is the format of fwVersion?
-// TODO: What are the possible values of cause?
-
-export interface I_UPDU_HeartBeat {        // 6|9 bytes
-    header:                  CPDU_Header,  // 5 bytes
-    cause:                   number,       // 1 byte
-    fwVersion?:              string,       // 3 bytes (optional)
-    bleFwVersion?:           string,       // 3 bytes (optional)
+export interface I_UPDU_HeartBeat {            // 6|9 bytes
+    header:                  CPDU_Header,      // 5 bytes
+    lastResetCause:          E_LastResetCause, // 1 byte
+    _lastResetCause?:        string;
+    fwVersion?:              string,           // 3 bytes (optional)
+    bleFwVersion?:           string,           // 3 bytes (optional)
 }
 export class UPDU_HeartBeat extends PDUTemplate<I_UPDU_HeartBeat> implements I_UPDU_HeartBeat {
 
@@ -628,11 +600,12 @@ export class UPDU_HeartBeat extends PDUTemplate<I_UPDU_HeartBeat> implements I_U
     }
 
     // *** cause ***
-    set cause(x:number) {
-        this._props.cause = x;
+    set lastResetCause(x:E_LastResetCause) {
+        this._props.lastResetCause = x;
+        this._props._lastResetCause = E_LastResetCause[x];
     }
-    get cause():number {
-        return this._props.cause;
+    get lastResetCause():E_LastResetCause {
+        return this._props.lastResetCause;
     }
 
     // *** fwVersion ***
@@ -692,7 +665,7 @@ export class UPDU_HeartBeat extends PDUTemplate<I_UPDU_HeartBeat> implements I_U
         assert.ok([6, 9, 12].includes(l), 'UPDU_HeartBeat.setFromBuffer(): Invalid buffer legth!');
         this.header = new CPDU_Header(x.slice(0,5));
 
-        this.cause = x[5];
+        this.lastResetCause = x[5];
 
         if (l > 6) {
             this.fwVersion = x.slice(6,9).join('.');
@@ -718,7 +691,7 @@ export class UPDU_HeartBeat extends PDUTemplate<I_UPDU_HeartBeat> implements I_U
         }
         let y = Buffer.allocUnsafe(l);
         this.header.toBuffer().copy(y);
-        y[5] = this.cause;
+        y[5] = this.lastResetCause;
 
         if (l > 6) {
             let fwVersionArray = this.fwVersion.split('.');
@@ -741,18 +714,16 @@ export class UPDU_HeartBeat extends PDUTemplate<I_UPDU_HeartBeat> implements I_U
 // *** UPDU_ActivityStatus *****************************************
 // ***************************************************************
 
-// TODO: what are the possible values of tag? What does it mean?
-
 export interface I_UPDU_ActivityStatus {    // 10 bytes
     header:                  CPDU_Header,   // 5 bytes
-    tag:                     E_Tag,         // 1 byte =1
+    tag:                     E_Tag,         // 1 byte
     activityCount:           number,        // 4 bytes
 }
 export class UPDU_ActivityStatus extends PDUTemplate<I_UPDU_ActivityStatus> implements I_UPDU_ActivityStatus {
 
     // *** header ***
     set header(x:CPDU_Header) {
-        assert.ok(x.type       === E_UPDUType.ACTIVITY_OR_CONFIG, 'UPDU_ActivityStatus.header: Invalid MessageType!');
+        assert.ok(x.type       === E_UPDUType.ACTIVITY_CONFIG_SHOCKDETECT, 'UPDU_ActivityStatus.header: Invalid MessageType!');
         this._props.header = x;
     }
     get header():CPDU_Header {
@@ -794,11 +765,89 @@ export class UPDU_ActivityStatus extends PDUTemplate<I_UPDU_ActivityStatus> impl
 
 }
 
+
+
+// ***************************************************************
+// *** UPDU_ActivityStatusSideOp *********************************
+// ***************************************************************
+
+export interface I_UPDU_ActivityStatusSideOp {    // 10 bytes
+    header:                  CPDU_Header,   // 5 bytes
+    tag:                     E_Tag,         // 1 byte
+    activityCounts:          number[];      // 12 bytes (6*2 bytes)
+    globalCounter:           number,        // 4 bytes
+}
+export class UPDU_ActivityStatusSideOp extends PDUTemplate<I_UPDU_ActivityStatusSideOp> implements I_UPDU_ActivityStatusSideOp {
+
+    // *** header ***
+    set header(x:CPDU_Header) {
+        assert.ok(x.type       === E_UPDUType.ACTIVITY_CONFIG_SHOCKDETECT, 'UPDU_ActivityStatusSideOp.header: Invalid MessageType!');
+        this._props.header = x;
+    }
+    get header():CPDU_Header {
+        return this._props.header;
+    }
+
+    // *** tag ***
+    set tag(x:E_Tag) {
+        assert.ok(x === E_Tag.ACTIVITY_SIDEOP, 'UPDU_ActivityStatusSideOp.tag(): Invalid value!');
+        this._props.tag = x;
+        this._props._tag = E_Tag[x];
+    }
+    get tag():E_Tag {
+        return this._props.tag;
+    }
+
+    // *** activityCounts ***
+    set activityCounts(x:number[]) {
+        assert.ok(x.length === 6, 'UPDU_ActivityStatusSideOp.activityCounts: Invalid Values!');
+        for (let i=0; i<6; i++) {
+            assert.ok( x[i] === (x[i] & 0xffff), 'UPDU_ActivityStatusSideOp.activityCounts: Invalid Value!');
+        }
+        this._props.activityCounts = x;
+    }
+    get activityCounts():number[] {
+        return this._props.activityCounts;
+    }
+
+    // *** globalCounter ***
+    set globalCounter(x:number) {
+        assert.ok(x >= 0, 'UPDU_ActivityStatusSideOp.globalCounter(): Invalid value!');
+        this._props.globalCounter = x;
+    }
+    get globalCounter():number {
+        return this._props.globalCounter;
+    }
+
+    setFromBuffer(x:Buffer) {
+        assert.ok(x.length === 22, 'UPDU_ActivityStatusSideOp.setFromBuffer(): Invalid buffer legth!');
+        this.header = new CPDU_Header(x.slice(0,5));
+        this.tag = x[5];
+        let a: number[] = [];
+        for (let i=0; i<6; i++) {
+            a.push(x.readUInt16BE(6+(2*i)));
+        }
+        this.activityCounts = a;
+        this.globalCounter = x.readUInt32BE(18);
+    }
+    toBuffer():Buffer {
+        let y = Buffer.allocUnsafe(22);
+        this.header.toBuffer().copy(y);
+        y[5] = this.tag;
+        for (let i=0; i<6; i++) {
+            y.writeUInt16BE(this.activityCounts[i], 6+(2*i));
+        }
+        y.writeUInt32BE(this.globalCounter, 18);
+        return y;
+    }
+
+}
+
+
+
 // ***************************************************************
 // *** UPDU_ConfigReport ******************************************
 // ***************************************************************
-
-// TODO: what are the possible values of tag? What does it mean?
 
 export interface I_UPDU_ConfigReport {         // 11..31 bytes
     header:                  CPDU_Header,      // 5 bytes
@@ -809,7 +858,7 @@ export class UPDU_ConfigReport extends PDUTemplate<I_UPDU_ConfigReport> implemen
    
     // *** header ***
     set header(x:CPDU_Header) {
-        assert.ok(x.type   === E_UPDUType.ACTIVITY_OR_CONFIG, 'UPDU_ConfigReport.header: Invalid MessageType!');
+        assert.ok(x.type   === E_UPDUType.ACTIVITY_CONFIG_SHOCKDETECT, 'UPDU_ConfigReport.header: Invalid MessageType!');
         this._props.header = x;
     }
     get header():CPDU_Header {
@@ -865,66 +914,155 @@ export class UPDU_ConfigReport extends PDUTemplate<I_UPDU_ConfigReport> implemen
 
 }
 
+
 // ****************************************************************
-// *** UPDU_Shutdown ************************************************
+// *** UPDU_ShockDetection ****************************************
 // ****************************************************************
 
-// TODO: Verify if the implementation below is correct!
+export interface I_UPDU_ShockDetection {        // 13 bytes
+    header:                  CPDU_Header,       // 5 bytes
+    tag:                     E_Tag,             // 1 byte
+    numberOfShocks:          number,            // 1 byte
+    acceleration:            number[],          // 6 bytes (3*2 bytes)
+}
+export class UPDU_ShockDetection extends PDUTemplate<I_UPDU_ShockDetection> implements I_UPDU_ShockDetection {
+
+    // *** header ***
+    set header(x:CPDU_Header) {
+        assert.ok(x.type       === E_UPDUType.ACTIVITY_CONFIG_SHOCKDETECT, 'UPDU_ShockDetection.header: Invalid MessageType!');
+        this._props.header = x;
+    }
+    get header():CPDU_Header {
+        return this._props.header;
+    }
+
+    // *** tag ***
+    set tag(x:E_Tag) {
+        assert.ok(x === E_Tag.SHOCK_DETECTION, 'UPDU_ShockDetection.tag(): Invalid value!');
+        this._props.tag = x;
+        this._props._tag = E_Tag[x];
+    }
+    get tag():E_Tag {
+        return this._props.tag;
+    }
+
+    // *** acceleration ***
+    set acceleration(x:number[]) {
+        // assert.ok(this.eventValue == E_EventValue.MOTION_END);
+        assert.ok(x.length == 3, 'UPDU_EventMessage.acceleration(): Invalid array legth!');
+        for (let i=0; i<3; i++) {
+            assert.ok( (-0x8000 <= x[i]) && (0x7fff >= x[i]), 'UPDU_EventMessage.acceleration['+i+']: Invalid value!');
+        }
+        this._props.acceleration = x;
+    }
+    get acceleration():number[] {
+        return this._props.acceleration;
+    }
+
+    // *** numberOfShocks ***
+    set numberOfShocks(x:number) {
+        assert.ok(x == (x & 0xff), 'UPDU_ShockDetection.numberOfShocks(): Invalid value!');
+        this._props.numberOfShocks = x;
+    }
+    get numberOfShocks():number {
+        return this._props.numberOfShocks;
+    }
+
+    setFromBuffer(x:Buffer) {
+        assert.ok(x.length === 13, 'UPDU_ShockDetection.setFromBuffer(): Invalid buffer legth!');
+        this.header = new CPDU_Header(x.slice(0,5));
+        this.tag = x[5];
+        this.numberOfShocks = x[6];
+        let a: number[] = [];
+        for (let i=0; i<3; i++) {
+            a.push(x.readInt16BE(7+(2*i)));
+        }
+        this.acceleration = a;
+    }
+    toBuffer():Buffer {
+        let y = Buffer.allocUnsafe(13);
+        this.header.toBuffer().copy(y);
+        y[5] = this.tag;
+        y[6] = this.numberOfShocks;
+        for (let i=0; i<3; i++) {
+            y.writeInt16BE(this.acceleration[i], 7+(2*i));
+        }
+        return y;
+    }
+
+}
+
+
+
+// ***************************************************************
+// *** UPDU_FramePending *******************************************
+// ***************************************************************
+
+export interface I_UPDU_FramePending {
+    header:                  CPDU_UlHeaderShort,     // 2 bytes
+}
+export class UPDU_FramePending extends PDUTemplate<I_UPDU_FramePending> implements I_UPDU_FramePending {
+
+    // *** header ***
+    set header(x:CPDU_UlHeaderShort) {
+        assert.ok(x.type === E_UPDUType.FRAME_PENDING, 'UPDU_FramePending.header: Invalid MessageType!');
+        this._props.header = x;
+    }
+    get header():CPDU_UlHeaderShort {
+        return this._props.header;
+    }
+
+    setFromBuffer(x:Buffer) {
+        assert.ok(x.length === 2, 'UPDU_FramePending.setFromBuffer(): Invalid buffer legth!');
+        this.header = new CPDU_UlHeaderShort(x);
+    }
+    toBuffer():Buffer {
+        return this.header.toBuffer();
+    }
+
+}
+
+
+
+// ****************************************************************
+// *** UPDU_Shutdown **********************************************
+// ****************************************************************
 
 export interface I_UPDU_Shutdown {
-    header:                  CPDU_UlHeaderShort,     // 2 bytes
-    // The documentation does not say anything about the additional fields of SHUTHDOWN messages
+    header:          CPDU_Header,      // 5 bytes
+    shutdownCause:   E_ShutdownCause,  // 1 byte
 }
 export class UPDU_Shutdown extends PDUTemplate<I_UPDU_Shutdown> implements I_UPDU_Shutdown {
 
     // *** header ***
-    set header(x:CPDU_UlHeaderShort) {
+    set header(x:CPDU_Header) {
         assert.ok(x.type === E_UPDUType.SHUTDOWN, 'UPDU_Shutdown.header: Invalid MessageType!');
         this._props.header = x;
     }
-    get header():CPDU_UlHeaderShort {
+    get header():CPDU_Header {
         return this._props.header;
     }
 
-    setFromBuffer(x:Buffer) {
-        // assert.ok(x.length === 2, 'UPDU_Shutdown.setFromBuffer(): Invalid buffer legth!');
-        // The documentation does not say anything about the length of SHUTHDOWN messages
-        this.header = new CPDU_UlHeaderShort(x.slice(0,2));
+    // *** shutdownCause ***
+    set shutdownCause(x:E_ShutdownCause) {
+        assert.ok(x in E_ShutdownCause, 'UPDU_Shutdown.shutdownCause(): Invalid value!');
+        this._props.shutdownCause = x;
+        this._props._shutdownCause = E_ShutdownCause[x];
     }
-    toBuffer():Buffer {
-        return this.header.toBuffer();
-    }
-
-}
-
-// ****************************************************************
-// *** UPDU_Debug ***************************************************
-// ****************************************************************
-
-// TODO: Verify if the implementation below is correct!
-
-export interface I_UPDU_Debug {
-    header:                  CPDU_UlHeaderShort,     // 2 bytes
-    // The documentation does not say anything about the additional fields of DEBUG messages
-}
-export class UPDU_Debug extends PDUTemplate<I_UPDU_Debug> implements I_UPDU_Debug {
-
-    // *** header ***
-    set header(x:CPDU_UlHeaderShort) {
-        assert.ok(x.type === E_UPDUType.DEBUG, 'UPDU_Debug.header: Invalid MessageType!');
-        this._props.header = x;
-    }
-    get header():CPDU_UlHeaderShort {
-        return this._props.header;
+    get shutdownCause():E_ShutdownCause {
+        return this._props.shutdownCause;
     }
 
     setFromBuffer(x:Buffer) {
-        // assert.ok(x.length === 2, 'UPDU_Debug.setFromBuffer(): Invalid buffer legth!');
-        // The documentation does not say anything about the length of DEBUG messages
-        this.header = new CPDU_UlHeaderShort(x.slice(0,2));
+        assert.ok(x.length === 6, 'UPDU_Shutdown.setFromBuffer(): Invalid buffer legth!');
+        this.header = new CPDU_Header(x.slice(0,5));
+        this.shutdownCause = x[5];   
     }
     toBuffer():Buffer {
-        return this.header.toBuffer();
+        let y = Buffer.allocUnsafe(6);
+        this.header.toBuffer().copy(y);
+        y[5] = this.shutdownCause;
+        return y;
     }
 
 }
@@ -964,42 +1102,140 @@ export class UPDU_LPGPS extends PDUTemplate<I_UPDU_LPGPS> implements I_UPDU_LPGP
 
 
 // ***************************************************************
-// *** UPDU_GeolocStart **********************************************
+// *** UPDU_EventMessage *****************************************
 // ***************************************************************
 
-export interface I_UPDU_GeolocStart {      // 6 bytes
-    header:                  CPDU_Header,  // 5 bytes
-    data:                    number,       // 1 byte
+export interface I_UPDU_EventMessage {          // 6 or 12 bytes
+    header:                  CPDU_Header,       // 5 bytes
+    eventValue:              E_EventValue,      // 1 byte
+    acceleration?:           number[],          // 6 bytes (3*2 bytes)
 }
-export class UPDU_GeolocStart extends PDUTemplate<I_UPDU_HeartBeat> implements I_UPDU_GeolocStart {
+export class UPDU_EventMessage extends PDUTemplate<I_UPDU_EventMessage> implements I_UPDU_EventMessage {
 
     // *** header ***
     set header(x:CPDU_Header) {
-        assert.ok(x.type       === E_UPDUType.GEOLOC_START, 'UPDU_GeolocStart.header: Invalid MessageType!');
+        assert.ok(x.type       === E_UPDUType.EVENT_MESSAGE, 'UPDU_GeolocStart.header: Invalid MessageType!');
         this._props.header = x;
     }
     get header():CPDU_Header {
         return this._props.header;
     }
 
-    // *** cause ***
-    set data(x:number) {
-        this._props.data = x;
+    // *** eventValue ***
+    set eventValue(x:E_EventValue) {
+        this._props.eventValue = x;
+        this._props._eventValue = E_EventValue[x];
     }
-    get data():number {
-        return this._props.data;
+    get eventValue():E_EventValue {
+        return this._props.eventValue;
+    }
+
+    // *** acceleration ***
+    set acceleration(x:number[]) {
+        // assert.ok(this.eventValue == E_EventValue.MOTION_END);
+        assert.ok(x.length == 3, 'UPDU_EventMessage.acceleration(): Invalid array legth!');
+        for (let i=0; i<3; i++) {
+            assert.ok( (-0x8000 <= x[i]) && (0x7fff >= x[i]), 'UPDU_EventMessage.acceleration['+i+']: Invalid value!');
+        }
+        this._props.acceleration = x;
+    }
+    get acceleration(): number[] {
+        // assert.ok(this.eventValue == E_EventValue.MOTION_END);
+        if ( this._props.acceleration ) {
+            return this._props.acceleration;
+        } else {
+            return [];
+        }
     }
 
     setFromBuffer(x:Buffer) {
         let l = x.length;
-        assert.ok(l==6, 'UPDU_HeartBeat.setFromBuffer(): Invalid buffer legth!');
+        assert.ok([6, 12].includes(l), 'UPDU_EventMessage.setFromBuffer(): Invalid buffer legth!');
         this.header = new CPDU_Header(x.slice(0,5));
-        this.data = x[5];
+        this.eventValue = x[5];
+        if (l === 12) {
+            let a: number[] = [];
+            for (let i=0; i<3; i++) {
+                a.push(x.readInt16BE(6+(2*i)));
+            }
+            this.acceleration = a;
+        }
+
     }
     toBuffer():Buffer {
-        let y = Buffer.allocUnsafe(6);
+        let l = (this._props.acceleration) ? 12: 6;
+        let y = Buffer.allocUnsafe(l);
         this.header.toBuffer().copy(y);
-        y[5] = this.data;
+        y[5] = this.eventValue;
+        if (l == 12) {
+            for (let i=0; i<3; i++) {
+                y.writeInt16BE(this.acceleration[i], 6+(2*i));
+            }
+        }
+        return y;
+    }
+
+}
+
+
+// ****************************************************************
+// *** UPDU_Debug *************************************************
+// ****************************************************************
+
+export interface I_UPDU_Debug {
+    header:                  CPDU_UlHeaderShort,     // 2 bytes
+    debugCmdId:              E_DebugCmd,             // 1 byte
+    action?:                 E_DebugAction,          // 1 byte, only if debugCmdId == E_DebugCmd.RESET_DEVICE
+}
+export class UPDU_Debug extends PDUTemplate<I_UPDU_Debug> implements I_UPDU_Debug {
+
+    // *** header ***
+    set header(x:CPDU_UlHeaderShort) {
+        assert.ok(x.type === E_UPDUType.DEBUG, 'UPDU_Debug.header: Invalid MessageType!');
+        this._props.header = x;
+    }
+    get header():CPDU_UlHeaderShort {
+        return this._props.header;
+    }
+
+    // *** debugCmdId ***
+    set debugCmdId(x:E_DebugCmd) {
+        assert.ok(x in E_DebugCmd, 'UPDU_Debug.debugCmdId(): Invalid value!');
+        this._props.debugCmdId = x;
+        this._props._debugCmdId = E_DebugCmd[x];
+    }
+    get debugCmdId():E_DebugCmd {
+        return this._props.debugCmdId;
+    }
+
+    // *** action ***
+    set action(x:E_DebugAction) {
+        // assert.ok(this.debugCmdId==E_DebugCmd.RESET_DEVICE, 'UPDU_Debug.action(): Invalid value!');
+        assert.ok(x in E_DebugAction, 'UPDU_Debug.action(): Invalid value!');
+        this._props.action = x;
+        this._props._action = E_DebugAction[x];
+    }
+    get action():E_DebugAction {
+        return this._props.action;
+    }
+
+    setFromBuffer(x:Buffer) {
+        let l = x.length;
+        assert.ok([3, 4].includes(l), 'UPDU_Debug.setFromBuffer(): Invalid buffer legth!');
+        this.header = new CPDU_UlHeaderShort(x.slice(0,2));
+        this.debugCmdId = x[2];
+        if ( l == 4 ) {
+            this.action = x[3];
+        }
+    }
+    toBuffer():Buffer {
+        let l = (this.action) ? 4 : 3;
+        let y = Buffer.allocUnsafe(l);
+        this.header.toBuffer().copy(y);
+        y[2] = this.debugCmdId;
+        if (l == 4) {
+            y[3] = this.action;
+        }
         return y;
     }
 
@@ -1009,7 +1245,7 @@ export class UPDU_GeolocStart extends PDUTemplate<I_UPDU_HeartBeat> implements I
 
 type UPDU_Generic = UPDU_FramePending | UPDU_PosGPSFix | UPDU_PosGPSTimeout | UPDU_PosWiFiTimeout | 
      UPDU_PosWiFiFailure | UPDU_PosWiFiBSSIDs | UPDU_PosBLEFailure | UPDU_EnergyStatus |
-     UPDU_HeartBeat | UPDU_ActivityStatus | UPDU_ConfigReport | UPDU_Shutdown | UPDU_Debug | UPDU_GeolocStart;
+     UPDU_HeartBeat | UPDU_ActivityStatus | UPDU_ConfigReport | UPDU_Shutdown | UPDU_Debug | UPDU_EventMessage;
 
 export let createUPDU = (x: Buffer|string):UPDU_Generic => {
 
@@ -1069,7 +1305,7 @@ export let createUPDU = (x: Buffer|string):UPDU_Generic => {
         case E_UPDUType.HEART_BEAT:
             updu = new UPDU_HeartBeat(buf);
             break;
-        case E_UPDUType.ACTIVITY_OR_CONFIG:
+        case E_UPDUType.ACTIVITY_CONFIG_SHOCKDETECT:
             switch(buf[5]) {
                 case E_Tag.ACTIVITY:
                     updu = new UPDU_ActivityStatus(buf);
@@ -1088,8 +1324,8 @@ export let createUPDU = (x: Buffer|string):UPDU_Generic => {
         case E_UPDUType.DEBUG:
             updu = new UPDU_Debug(buf);
             break;
-        case E_UPDUType.GEOLOC_START:
-            updu = new UPDU_GeolocStart(buf);
+        case E_UPDUType.EVENT_MESSAGE:
+            updu = new UPDU_EventMessage(buf);
             break;
         default:
             updu = undefined;

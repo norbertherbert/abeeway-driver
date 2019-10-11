@@ -1,5 +1,5 @@
 # abeeway-driver
-This is an open driver software for Abeeway Micro Tracker and Industrial Tracker devices (with firmware v1.7). The driver can be used to decode LoRaWAN uplink message payload and to encode device configuration commands so that they can be sent as LoRaWAN downlink payload. An online application demonstrating all features of this driver is aveilable here: [>>](https://nano-things.net/abeeway-demo/home) 
+This is an open driver software for Abeeway Micro Tracker and Industrial Tracker devices (with firmware v1.8). The driver can be used to decode LoRaWAN uplink message payload and to encode device configuration commands so that they can be sent as LoRaWAN downlink payload. An online application demonstrating all features of this driver is aveilable here: [>>](https://nano-things.net/abeeway-demo/home) 
 
 For more details on Abeeway tracker devices please visit the 
 [Abeeway](https://www.abeeway.com/products/) 

@@ -1,15 +1,16 @@
-const {
-    UPDU_GeolocStart, 
+const { 
+    UPDU_ShockDetection,
     CPDU_Header, E_UPDUType,
     CPDU_Status, E_OperatingMode,
+    E_Tag,
 } = require('../../dist/abeeway-driver');
 // if you use the module from the public npm repository use require('abeeway-driver') instead.
 
-let geolocStart = new UPDU_GeolocStart ({
+let shockDetection = new UPDU_ShockDetection ({
     header: new CPDU_Header({
-        type:         E_UPDUType.GEOLOC_START,
+        type:         E_UPDUType.ACTIVITY_CONFIG_SHOCKDETECT,
         status:       new CPDU_Status({
-            operatingMode:           E_OperatingMode.MOTION_TRACKING,
+            operatingMode:           E_OperatingMode.ACTIVITY_TRACKING,
             sosState:                false,
             trackingState:           false,
             movingState:             false,
@@ -21,11 +22,14 @@ let geolocStart = new UPDU_GeolocStart ({
         ackToken:     0x5,
         optData:      0,
     }),
-    data:      0x00,
+    tag:           E_Tag.SHOCK_DETECTION,
+    numberOfShocks: 123,
+    acceleration: [-121, 6, 780],
 });
-console.log(geolocStart.toJSON());
-console.log(geolocStart.toHexString());
+console.log(shockDetection.toJSON());
+console.log(shockDetection.toHexString());
 
-let buffer = geolocStart.toBuffer();
-let geolocStart1 = new UPDU_GeolocStart(buffer);
-console.log(geolocStart1.toJSON());
+let buffer = shockDetection.toBuffer();
+let shockDetection1 = new UPDU_ShockDetection(buffer);
+console.log(shockDetection1.toJSON());
+

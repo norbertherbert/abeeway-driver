@@ -1,16 +1,16 @@
 const {
-    UPDU_HeartBeat, 
+    UPDU_ActivityStatusSideOp, 
     CPDU_Header, E_UPDUType,
     CPDU_Status, E_OperatingMode,
-    E_LastResetCause,
+    E_Tag,
 } = require('../../dist/abeeway-driver');
 // if you use the module from the public npm repository use require('abeeway-driver') instead.
 
-let heartBeat = new UPDU_HeartBeat ({
+let activityStatusSideOp = new UPDU_ActivityStatusSideOp ({
     header: new CPDU_Header({
-        type:         E_UPDUType.HEART_BEAT,
+        type:         E_UPDUType.ACTIVITY_CONFIG_SHOCKDETECT,
         status:       new CPDU_Status({
-            operatingMode:           E_OperatingMode.MOTION_TRACKING,
+            operatingMode:           E_OperatingMode.ACTIVITY_TRACKING,
             sosState:                false,
             trackingState:           false,
             movingState:             false,
@@ -22,13 +22,14 @@ let heartBeat = new UPDU_HeartBeat ({
         ackToken:     0x5,
         optData:      0,
     }),
-    lastResetCause:   E_LastResetCause.EXTERNAL_PIN_RESET,
-    fwVersion:  '1.2.3',
-    bleFwVersion:  '2.3.4',
+    tag:           E_Tag.ACTIVITY_SIDEOP,
+    activityCounts: [1, 2, 3, 4, 5, 6],
+    globalCounter: 255,
 });
-console.log(heartBeat.toJSON());
-console.log(heartBeat.toHexString());
+console.log(activityStatusSideOp.toJSON());
+console.log(activityStatusSideOp.toHexString());
 
-let buffer = heartBeat.toBuffer();
-let heartBeat1 = new UPDU_HeartBeat(buffer);
-console.log(heartBeat1.toJSON());
+let buffer = activityStatusSideOp.toBuffer();
+let activityStatusSideOp1 = new UPDU_ActivityStatusSideOp(buffer);
+console.log(activityStatusSideOp1.toJSON());
+

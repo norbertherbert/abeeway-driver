@@ -24,6 +24,50 @@ var CPDU_ParamConfigFlags = /** @class */ (function (_super) {
     function CPDU_ParamConfigFlags() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    Object.defineProperty(CPDU_ParamConfigFlags.prototype, "AsymmetricBLEPairingRejected", {
+        get: function () {
+            return this._props.AsymmetricBLEPairingRejected;
+        },
+        // *** AsymmetricBLEPairingRejected ***
+        set: function (x) {
+            this._props.AsymmetricBLEPairingRejected = x;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CPDU_ParamConfigFlags.prototype, "NewJoinReqOnLeavingOffMode", {
+        get: function () {
+            return this._props.NewJoinReqOnLeavingOffMode;
+        },
+        // *** NewJoinReqOnLeavingOffMode ***
+        set: function (x) {
+            this._props.NewJoinReqOnLeavingOffMode = x;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CPDU_ParamConfigFlags.prototype, "MotionEndMessageEnabled", {
+        get: function () {
+            return this._props.MotionEndMessageEnabled;
+        },
+        // *** MotionEndMessageEnabled ***
+        set: function (x) {
+            this._props.MotionEndMessageEnabled = x;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CPDU_ParamConfigFlags.prototype, "MotionStartMessageEnabled", {
+        get: function () {
+            return this._props.MotionStartMessageEnabled;
+        },
+        // *** MotionStartMessageEnabled ***
+        set: function (x) {
+            this._props.MotionStartMessageEnabled = x;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(CPDU_ParamConfigFlags.prototype, "LedBlinksOnGPSFix", {
         get: function () {
             return this._props.LedBlinksOnGPSFix;
@@ -113,7 +157,11 @@ var CPDU_ParamConfigFlags = /** @class */ (function (_super) {
         configurable: true
     });
     CPDU_ParamConfigFlags.prototype.setFromValue = function (x) {
-        assert.ok(utils_1.isUint8(x), 'CPDU_ParamConfigFlags.setFromValue(): Invalid value!');
+        assert.ok(utils_1.isUint16(x), 'CPDU_ParamConfigFlags.setFromValue(): Invalid value!');
+        this.AsymmetricBLEPairingRejected = (x & 2048) === 2048;
+        this.NewJoinReqOnLeavingOffMode = (x & 1024) === 1024;
+        this.MotionEndMessageEnabled = (x & 512) === 512;
+        this.MotionStartMessageEnabled = (x & 256) === 256;
         this.LedBlinksOnGPSFix = (x & 128) === 128;
         this.WiFiScanWhenGeolocStarts = (x & 64) === 64;
         this.BLEAdvertisingActive = (x & 32) === 32;
@@ -125,6 +173,10 @@ var CPDU_ParamConfigFlags = /** @class */ (function (_super) {
     };
     CPDU_ParamConfigFlags.prototype.toValue = function () {
         var y = 0;
+        y |= this.AsymmetricBLEPairingRejected ? 2048 : 0;
+        y |= this.NewJoinReqOnLeavingOffMode ? 1024 : 0;
+        y |= this.MotionEndMessageEnabled ? 512 : 0;
+        y |= this.MotionStartMessageEnabled ? 256 : 0;
         y |= this.LedBlinksOnGPSFix ? 128 : 0;
         y |= this.WiFiScanWhenGeolocStarts ? 64 : 0;
         y |= this.BLEAdvertisingActive ? 32 : 0;
@@ -215,7 +267,7 @@ var CPDU_ParamConfirmedUlBitmap = /** @class */ (function (_super) {
         this.Position = ((x >> constants_1.E_UPDUType.POSITION) & 1) === 1;
         this.EnergyStatus = ((x >> constants_1.E_UPDUType.ENERGY_STATUS) & 1) === 1;
         this.HeartBeat = ((x >> constants_1.E_UPDUType.HEART_BEAT) & 1) === 1;
-        this.ActivityOrConfig = ((x >> constants_1.E_UPDUType.ACTIVITY_OR_CONFIG) & 1) === 1;
+        this.ActivityOrConfig = ((x >> constants_1.E_UPDUType.ACTIVITY_CONFIG_SHOCKDETECT) & 1) === 1;
         this.Shutdown = ((x >> constants_1.E_UPDUType.SHUTDOWN) & 1) === 1;
     };
     CPDU_ParamConfirmedUlBitmap.prototype.toValue = function () {
@@ -224,7 +276,7 @@ var CPDU_ParamConfirmedUlBitmap = /** @class */ (function (_super) {
         y |= this.Position ? (1 << constants_1.E_UPDUType.POSITION) : 0;
         y |= this.EnergyStatus ? (1 << constants_1.E_UPDUType.ENERGY_STATUS) : 0;
         y |= this.HeartBeat ? (1 << constants_1.E_UPDUType.HEART_BEAT) : 0;
-        y |= this.ActivityOrConfig ? (1 << constants_1.E_UPDUType.ACTIVITY_OR_CONFIG) : 0;
+        y |= this.ActivityOrConfig ? (1 << constants_1.E_UPDUType.ACTIVITY_CONFIG_SHOCKDETECT) : 0;
         y |= this.Shutdown ? (1 << constants_1.E_UPDUType.SHUTDOWN) : 0;
         return y;
     };
@@ -260,11 +312,11 @@ var CPDU_Status = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(CPDU_Status.prototype, "trackingState", {
+    Object.defineProperty(CPDU_Status.prototype, "reservedBit", {
         get: function () {
             return this._props.trackingState;
         },
-        // *** trackingState ***
+        // *** reservedBit ***
         set: function (x) {
             this._props.trackingState = x;
         },
@@ -308,7 +360,7 @@ var CPDU_Status = /** @class */ (function (_super) {
         assert.ok(utils_1.isUint8(x), 'Status.setFromValue(): Invalid value!');
         this.operatingMode = (x >>> 5);
         this.sosState = (x & 16) === 16;
-        this.trackingState = (x & 8) === 8;
+        this.reservedBit = (x & 8) === 8;
         this.movingState = (x & 4) === 4;
         this.periodicPositionMessage = (x & 2) === 2;
         this.positionOnDemandMessage = (x & 1) === 1;
@@ -317,7 +369,7 @@ var CPDU_Status = /** @class */ (function (_super) {
         var y = 0;
         y = this.operatingMode << 5;
         y |= this.sosState ? 16 : 0;
-        y |= this.trackingState ? 8 : 0;
+        y |= this.reservedBit ? 8 : 0;
         y |= this.movingState ? 4 : 0;
         y |= this.periodicPositionMessage ? 2 : 0;
         y |= this.positionOnDemandMessage ? 1 : 0;
@@ -701,7 +753,7 @@ var CPDU_Parameter = /** @class */ (function (_super) {
                 this.value = new CPDU_ParamConfirmedUlBitmap((x[3] << 8) + x[4]);
                 break;
             case constants_1.E_ParameterId.CONFIG_FLAGS:
-                this.value = new CPDU_ParamConfigFlags(x[4]);
+                this.value = new CPDU_ParamConfigFlags((x[3] << 8) + x[4]);
                 break;
             default:
                 this.value = (x[1] << 24) + (x[2] << 16) + (x[3] << 8) + x[4];

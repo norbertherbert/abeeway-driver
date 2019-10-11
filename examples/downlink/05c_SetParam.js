@@ -26,14 +26,18 @@ msg = new DPDU_SetParam({
         new CPDU_Parameter({
             id: E_ParameterId.CONFIG_FLAGS,
             value: new CPDU_ParamConfigFlags({
-                LedBlinksOnGPSFix:            false,
-                WiFiScanWhenGeolocStarts:     true,
-                BLEAdvertisingActive:         false,
-                WiFiPayloadCyphered:          true,
-                ConfigReqsAcknoledged:        false,
-                DoubleShortButtonPressForSOS: true,
-                LongButtonPressToSwitchOff:   false,
-                FramePendingMechanismActive:  true,
+                AsymmetricBLEPairingRejected: true, 
+                NewJoinReqOnLeavingOffMode:   false,
+                MotionEndMessageEnabled:      true,
+                MotionStartMessageEnabled:    false,
+                LedBlinksOnGPSFix:            true,
+                WiFiScanWhenGeolocStarts:     false,
+                BLEAdvertisingActive:         true,
+                WiFiPayloadCyphered:          false,
+                ConfigReqsAcknoledged:        true,
+                DoubleShortButtonPressForSOS: false,
+                LongButtonPressToSwitchOff:   true,
+                FramePendingMechanismActive:  false,
             })
         }),
         new CPDU_Parameter({

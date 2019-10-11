@@ -21,33 +21,6 @@ var constants_1 = require("./constants");
 var utils_1 = require("./utils");
 /* Component Protocol Data Units (CPDU) */
 var CPDU_1 = require("./CPDU");
-var UPDU_FramePending = /** @class */ (function (_super) {
-    __extends(UPDU_FramePending, _super);
-    function UPDU_FramePending() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Object.defineProperty(UPDU_FramePending.prototype, "header", {
-        get: function () {
-            return this._props.header;
-        },
-        // *** header ***
-        set: function (x) {
-            assert.ok(x.type === constants_1.E_UPDUType.FRAME_PENDING, 'UPDU_FramePending.header: Invalid MessageType!');
-            this._props.header = x;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    UPDU_FramePending.prototype.setFromBuffer = function (x) {
-        assert.ok(x.length === 2, 'UPDU_FramePending.setFromBuffer(): Invalid buffer legth!');
-        this.header = new CPDU_1.CPDU_UlHeaderShort(x);
-    };
-    UPDU_FramePending.prototype.toBuffer = function () {
-        return this.header.toBuffer();
-    };
-    return UPDU_FramePending;
-}(utils_1.PDUTemplate));
-exports.UPDU_FramePending = UPDU_FramePending;
 var UPDU_PosGPSFix = /** @class */ (function (_super) {
     __extends(UPDU_PosGPSFix, _super);
     function UPDU_PosGPSFix() {
@@ -625,13 +598,14 @@ var UPDU_HeartBeat = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(UPDU_HeartBeat.prototype, "cause", {
+    Object.defineProperty(UPDU_HeartBeat.prototype, "lastResetCause", {
         get: function () {
-            return this._props.cause;
+            return this._props.lastResetCause;
         },
         // *** cause ***
         set: function (x) {
-            this._props.cause = x;
+            this._props.lastResetCause = x;
+            this._props._lastResetCause = constants_1.E_LastResetCause[x];
         },
         enumerable: true,
         configurable: true
@@ -700,7 +674,7 @@ var UPDU_HeartBeat = /** @class */ (function (_super) {
         var l = x.length;
         assert.ok([6, 9, 12].includes(l), 'UPDU_HeartBeat.setFromBuffer(): Invalid buffer legth!');
         this.header = new CPDU_1.CPDU_Header(x.slice(0, 5));
-        this.cause = x[5];
+        this.lastResetCause = x[5];
         if (l > 6) {
             this.fwVersion = x.slice(6, 9).join('.');
         }
@@ -724,7 +698,7 @@ var UPDU_HeartBeat = /** @class */ (function (_super) {
         }
         var y = buffer_1.Buffer.allocUnsafe(l);
         this.header.toBuffer().copy(y);
-        y[5] = this.cause;
+        y[5] = this.lastResetCause;
         if (l > 6) {
             var fwVersionArray = this.fwVersion.split('.');
             for (var i = 0; i < 3; i++) {
@@ -753,7 +727,7 @@ var UPDU_ActivityStatus = /** @class */ (function (_super) {
         },
         // *** header ***
         set: function (x) {
-            assert.ok(x.type === constants_1.E_UPDUType.ACTIVITY_OR_CONFIG, 'UPDU_ActivityStatus.header: Invalid MessageType!');
+            assert.ok(x.type === constants_1.E_UPDUType.ACTIVITY_CONFIG_SHOCKDETECT, 'UPDU_ActivityStatus.header: Invalid MessageType!');
             this._props.header = x;
         },
         enumerable: true,
@@ -800,6 +774,87 @@ var UPDU_ActivityStatus = /** @class */ (function (_super) {
     return UPDU_ActivityStatus;
 }(utils_1.PDUTemplate));
 exports.UPDU_ActivityStatus = UPDU_ActivityStatus;
+var UPDU_ActivityStatusSideOp = /** @class */ (function (_super) {
+    __extends(UPDU_ActivityStatusSideOp, _super);
+    function UPDU_ActivityStatusSideOp() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Object.defineProperty(UPDU_ActivityStatusSideOp.prototype, "header", {
+        get: function () {
+            return this._props.header;
+        },
+        // *** header ***
+        set: function (x) {
+            assert.ok(x.type === constants_1.E_UPDUType.ACTIVITY_CONFIG_SHOCKDETECT, 'UPDU_ActivityStatusSideOp.header: Invalid MessageType!');
+            this._props.header = x;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UPDU_ActivityStatusSideOp.prototype, "tag", {
+        get: function () {
+            return this._props.tag;
+        },
+        // *** tag ***
+        set: function (x) {
+            assert.ok(x === constants_1.E_Tag.ACTIVITY_SIDEOP, 'UPDU_ActivityStatusSideOp.tag(): Invalid value!');
+            this._props.tag = x;
+            this._props._tag = constants_1.E_Tag[x];
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UPDU_ActivityStatusSideOp.prototype, "activityCounts", {
+        get: function () {
+            return this._props.activityCounts;
+        },
+        // *** activityCounts ***
+        set: function (x) {
+            assert.ok(x.length === 6, 'UPDU_ActivityStatusSideOp.activityCounts: Invalid Values!');
+            for (var i = 0; i < 6; i++) {
+                assert.ok(x[i] === (x[i] & 0xffff), 'UPDU_ActivityStatusSideOp.activityCounts: Invalid Value!');
+            }
+            this._props.activityCounts = x;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UPDU_ActivityStatusSideOp.prototype, "globalCounter", {
+        get: function () {
+            return this._props.globalCounter;
+        },
+        // *** globalCounter ***
+        set: function (x) {
+            assert.ok(x >= 0, 'UPDU_ActivityStatusSideOp.globalCounter(): Invalid value!');
+            this._props.globalCounter = x;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    UPDU_ActivityStatusSideOp.prototype.setFromBuffer = function (x) {
+        assert.ok(x.length === 22, 'UPDU_ActivityStatusSideOp.setFromBuffer(): Invalid buffer legth!');
+        this.header = new CPDU_1.CPDU_Header(x.slice(0, 5));
+        this.tag = x[5];
+        var a = [];
+        for (var i = 0; i < 6; i++) {
+            a.push(x.readUInt16BE(6 + (2 * i)));
+        }
+        this.activityCounts = a;
+        this.globalCounter = x.readUInt32BE(18);
+    };
+    UPDU_ActivityStatusSideOp.prototype.toBuffer = function () {
+        var y = buffer_1.Buffer.allocUnsafe(22);
+        this.header.toBuffer().copy(y);
+        y[5] = this.tag;
+        for (var i = 0; i < 6; i++) {
+            y.writeUInt16BE(this.activityCounts[i], 6 + (2 * i));
+        }
+        y.writeUInt32BE(this.globalCounter, 18);
+        return y;
+    };
+    return UPDU_ActivityStatusSideOp;
+}(utils_1.PDUTemplate));
+exports.UPDU_ActivityStatusSideOp = UPDU_ActivityStatusSideOp;
 var UPDU_ConfigReport = /** @class */ (function (_super) {
     __extends(UPDU_ConfigReport, _super);
     function UPDU_ConfigReport() {
@@ -811,7 +866,7 @@ var UPDU_ConfigReport = /** @class */ (function (_super) {
         },
         // *** header ***
         set: function (x) {
-            assert.ok(x.type === constants_1.E_UPDUType.ACTIVITY_OR_CONFIG, 'UPDU_ConfigReport.header: Invalid MessageType!');
+            assert.ok(x.type === constants_1.E_UPDUType.ACTIVITY_CONFIG_SHOCKDETECT, 'UPDU_ConfigReport.header: Invalid MessageType!');
             this._props.header = x;
         },
         enumerable: true,
@@ -865,6 +920,115 @@ var UPDU_ConfigReport = /** @class */ (function (_super) {
     return UPDU_ConfigReport;
 }(utils_1.PDUTemplate));
 exports.UPDU_ConfigReport = UPDU_ConfigReport;
+var UPDU_ShockDetection = /** @class */ (function (_super) {
+    __extends(UPDU_ShockDetection, _super);
+    function UPDU_ShockDetection() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Object.defineProperty(UPDU_ShockDetection.prototype, "header", {
+        get: function () {
+            return this._props.header;
+        },
+        // *** header ***
+        set: function (x) {
+            assert.ok(x.type === constants_1.E_UPDUType.ACTIVITY_CONFIG_SHOCKDETECT, 'UPDU_ShockDetection.header: Invalid MessageType!');
+            this._props.header = x;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UPDU_ShockDetection.prototype, "tag", {
+        get: function () {
+            return this._props.tag;
+        },
+        // *** tag ***
+        set: function (x) {
+            assert.ok(x === constants_1.E_Tag.SHOCK_DETECTION, 'UPDU_ShockDetection.tag(): Invalid value!');
+            this._props.tag = x;
+            this._props._tag = constants_1.E_Tag[x];
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UPDU_ShockDetection.prototype, "acceleration", {
+        get: function () {
+            return this._props.acceleration;
+        },
+        // *** acceleration ***
+        set: function (x) {
+            // assert.ok(this.eventValue == E_EventValue.MOTION_END);
+            assert.ok(x.length == 3, 'UPDU_EventMessage.acceleration(): Invalid array legth!');
+            for (var i = 0; i < 3; i++) {
+                assert.ok((-0x8000 <= x[i]) && (0x7fff >= x[i]), 'UPDU_EventMessage.acceleration[' + i + ']: Invalid value!');
+            }
+            this._props.acceleration = x;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UPDU_ShockDetection.prototype, "numberOfShocks", {
+        get: function () {
+            return this._props.numberOfShocks;
+        },
+        // *** numberOfShocks ***
+        set: function (x) {
+            assert.ok(x == (x & 0xff), 'UPDU_ShockDetection.numberOfShocks(): Invalid value!');
+            this._props.numberOfShocks = x;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    UPDU_ShockDetection.prototype.setFromBuffer = function (x) {
+        assert.ok(x.length === 13, 'UPDU_ShockDetection.setFromBuffer(): Invalid buffer legth!');
+        this.header = new CPDU_1.CPDU_Header(x.slice(0, 5));
+        this.tag = x[5];
+        this.numberOfShocks = x[6];
+        var a = [];
+        for (var i = 0; i < 3; i++) {
+            a.push(x.readInt16BE(7 + (2 * i)));
+        }
+        this.acceleration = a;
+    };
+    UPDU_ShockDetection.prototype.toBuffer = function () {
+        var y = buffer_1.Buffer.allocUnsafe(13);
+        this.header.toBuffer().copy(y);
+        y[5] = this.tag;
+        y[6] = this.numberOfShocks;
+        for (var i = 0; i < 3; i++) {
+            y.writeInt16BE(this.acceleration[i], 7 + (2 * i));
+        }
+        return y;
+    };
+    return UPDU_ShockDetection;
+}(utils_1.PDUTemplate));
+exports.UPDU_ShockDetection = UPDU_ShockDetection;
+var UPDU_FramePending = /** @class */ (function (_super) {
+    __extends(UPDU_FramePending, _super);
+    function UPDU_FramePending() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Object.defineProperty(UPDU_FramePending.prototype, "header", {
+        get: function () {
+            return this._props.header;
+        },
+        // *** header ***
+        set: function (x) {
+            assert.ok(x.type === constants_1.E_UPDUType.FRAME_PENDING, 'UPDU_FramePending.header: Invalid MessageType!');
+            this._props.header = x;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    UPDU_FramePending.prototype.setFromBuffer = function (x) {
+        assert.ok(x.length === 2, 'UPDU_FramePending.setFromBuffer(): Invalid buffer legth!');
+        this.header = new CPDU_1.CPDU_UlHeaderShort(x);
+    };
+    UPDU_FramePending.prototype.toBuffer = function () {
+        return this.header.toBuffer();
+    };
+    return UPDU_FramePending;
+}(utils_1.PDUTemplate));
+exports.UPDU_FramePending = UPDU_FramePending;
 var UPDU_Shutdown = /** @class */ (function (_super) {
     __extends(UPDU_Shutdown, _super);
     function UPDU_Shutdown() {
@@ -882,45 +1046,33 @@ var UPDU_Shutdown = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    UPDU_Shutdown.prototype.setFromBuffer = function (x) {
-        // assert.ok(x.length === 2, 'UPDU_Shutdown.setFromBuffer(): Invalid buffer legth!');
-        // The documentation does not say anything about the length of SHUTHDOWN messages
-        this.header = new CPDU_1.CPDU_UlHeaderShort(x.slice(0, 2));
-    };
-    UPDU_Shutdown.prototype.toBuffer = function () {
-        return this.header.toBuffer();
-    };
-    return UPDU_Shutdown;
-}(utils_1.PDUTemplate));
-exports.UPDU_Shutdown = UPDU_Shutdown;
-var UPDU_Debug = /** @class */ (function (_super) {
-    __extends(UPDU_Debug, _super);
-    function UPDU_Debug() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Object.defineProperty(UPDU_Debug.prototype, "header", {
+    Object.defineProperty(UPDU_Shutdown.prototype, "shutdownCause", {
         get: function () {
-            return this._props.header;
+            return this._props.shutdownCause;
         },
-        // *** header ***
+        // *** shutdownCause ***
         set: function (x) {
-            assert.ok(x.type === constants_1.E_UPDUType.DEBUG, 'UPDU_Debug.header: Invalid MessageType!');
-            this._props.header = x;
+            assert.ok(x in constants_1.E_ShutdownCause, 'UPDU_Shutdown.shutdownCause(): Invalid value!');
+            this._props.shutdownCause = x;
+            this._props._shutdownCause = constants_1.E_ShutdownCause[x];
         },
         enumerable: true,
         configurable: true
     });
-    UPDU_Debug.prototype.setFromBuffer = function (x) {
-        // assert.ok(x.length === 2, 'UPDU_Debug.setFromBuffer(): Invalid buffer legth!');
-        // The documentation does not say anything about the length of DEBUG messages
-        this.header = new CPDU_1.CPDU_UlHeaderShort(x.slice(0, 2));
+    UPDU_Shutdown.prototype.setFromBuffer = function (x) {
+        assert.ok(x.length === 6, 'UPDU_Shutdown.setFromBuffer(): Invalid buffer legth!');
+        this.header = new CPDU_1.CPDU_Header(x.slice(0, 5));
+        this.shutdownCause = x[5];
     };
-    UPDU_Debug.prototype.toBuffer = function () {
-        return this.header.toBuffer();
+    UPDU_Shutdown.prototype.toBuffer = function () {
+        var y = buffer_1.Buffer.allocUnsafe(6);
+        this.header.toBuffer().copy(y);
+        y[5] = this.shutdownCause;
+        return y;
     };
-    return UPDU_Debug;
+    return UPDU_Shutdown;
 }(utils_1.PDUTemplate));
-exports.UPDU_Debug = UPDU_Debug;
+exports.UPDU_Shutdown = UPDU_Shutdown;
 var UPDU_LPGPS = /** @class */ (function (_super) {
     __extends(UPDU_LPGPS, _super);
     function UPDU_LPGPS() {
@@ -949,49 +1101,151 @@ var UPDU_LPGPS = /** @class */ (function (_super) {
     return UPDU_LPGPS;
 }(utils_1.PDUTemplate));
 exports.UPDU_LPGPS = UPDU_LPGPS;
-var UPDU_GeolocStart = /** @class */ (function (_super) {
-    __extends(UPDU_GeolocStart, _super);
-    function UPDU_GeolocStart() {
+var UPDU_EventMessage = /** @class */ (function (_super) {
+    __extends(UPDU_EventMessage, _super);
+    function UPDU_EventMessage() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Object.defineProperty(UPDU_GeolocStart.prototype, "header", {
+    Object.defineProperty(UPDU_EventMessage.prototype, "header", {
         get: function () {
             return this._props.header;
         },
         // *** header ***
         set: function (x) {
-            assert.ok(x.type === constants_1.E_UPDUType.GEOLOC_START, 'UPDU_GeolocStart.header: Invalid MessageType!');
+            assert.ok(x.type === constants_1.E_UPDUType.EVENT_MESSAGE, 'UPDU_GeolocStart.header: Invalid MessageType!');
             this._props.header = x;
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(UPDU_GeolocStart.prototype, "data", {
+    Object.defineProperty(UPDU_EventMessage.prototype, "eventValue", {
         get: function () {
-            return this._props.data;
+            return this._props.eventValue;
         },
-        // *** cause ***
+        // *** eventValue ***
         set: function (x) {
-            this._props.data = x;
+            this._props.eventValue = x;
+            this._props._eventValue = constants_1.E_EventValue[x];
         },
         enumerable: true,
         configurable: true
     });
-    UPDU_GeolocStart.prototype.setFromBuffer = function (x) {
+    Object.defineProperty(UPDU_EventMessage.prototype, "acceleration", {
+        get: function () {
+            // assert.ok(this.eventValue == E_EventValue.MOTION_END);
+            if (this._props.acceleration) {
+                return this._props.acceleration;
+            }
+            else {
+                return [];
+            }
+        },
+        // *** acceleration ***
+        set: function (x) {
+            // assert.ok(this.eventValue == E_EventValue.MOTION_END);
+            assert.ok(x.length == 3, 'UPDU_EventMessage.acceleration(): Invalid array legth!');
+            for (var i = 0; i < 3; i++) {
+                assert.ok((-0x8000 <= x[i]) && (0x7fff >= x[i]), 'UPDU_EventMessage.acceleration[' + i + ']: Invalid value!');
+            }
+            this._props.acceleration = x;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    UPDU_EventMessage.prototype.setFromBuffer = function (x) {
         var l = x.length;
-        assert.ok(l == 6, 'UPDU_HeartBeat.setFromBuffer(): Invalid buffer legth!');
+        assert.ok([6, 12].includes(l), 'UPDU_EventMessage.setFromBuffer(): Invalid buffer legth!');
         this.header = new CPDU_1.CPDU_Header(x.slice(0, 5));
-        this.data = x[5];
+        this.eventValue = x[5];
+        if (l === 12) {
+            var a = [];
+            for (var i = 0; i < 3; i++) {
+                a.push(x.readInt16BE(6 + (2 * i)));
+            }
+            this.acceleration = a;
+        }
     };
-    UPDU_GeolocStart.prototype.toBuffer = function () {
-        var y = buffer_1.Buffer.allocUnsafe(6);
+    UPDU_EventMessage.prototype.toBuffer = function () {
+        var l = (this._props.acceleration) ? 12 : 6;
+        var y = buffer_1.Buffer.allocUnsafe(l);
         this.header.toBuffer().copy(y);
-        y[5] = this.data;
+        y[5] = this.eventValue;
+        if (l == 12) {
+            for (var i = 0; i < 3; i++) {
+                y.writeInt16BE(this.acceleration[i], 6 + (2 * i));
+            }
+        }
         return y;
     };
-    return UPDU_GeolocStart;
+    return UPDU_EventMessage;
 }(utils_1.PDUTemplate));
-exports.UPDU_GeolocStart = UPDU_GeolocStart;
+exports.UPDU_EventMessage = UPDU_EventMessage;
+var UPDU_Debug = /** @class */ (function (_super) {
+    __extends(UPDU_Debug, _super);
+    function UPDU_Debug() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Object.defineProperty(UPDU_Debug.prototype, "header", {
+        get: function () {
+            return this._props.header;
+        },
+        // *** header ***
+        set: function (x) {
+            assert.ok(x.type === constants_1.E_UPDUType.DEBUG, 'UPDU_Debug.header: Invalid MessageType!');
+            this._props.header = x;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UPDU_Debug.prototype, "debugCmdId", {
+        get: function () {
+            return this._props.debugCmdId;
+        },
+        // *** debugCmdId ***
+        set: function (x) {
+            assert.ok(x in constants_1.E_DebugCmd, 'UPDU_Debug.debugCmdId(): Invalid value!');
+            this._props.debugCmdId = x;
+            this._props._debugCmdId = constants_1.E_DebugCmd[x];
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UPDU_Debug.prototype, "action", {
+        get: function () {
+            return this._props.action;
+        },
+        // *** action ***
+        set: function (x) {
+            // assert.ok(this.debugCmdId==E_DebugCmd.RESET_DEVICE, 'UPDU_Debug.action(): Invalid value!');
+            assert.ok(x in constants_1.E_DebugAction, 'UPDU_Debug.action(): Invalid value!');
+            this._props.action = x;
+            this._props._action = constants_1.E_DebugAction[x];
+        },
+        enumerable: true,
+        configurable: true
+    });
+    UPDU_Debug.prototype.setFromBuffer = function (x) {
+        var l = x.length;
+        assert.ok([3, 4].includes(l), 'UPDU_Debug.setFromBuffer(): Invalid buffer legth!');
+        this.header = new CPDU_1.CPDU_UlHeaderShort(x.slice(0, 2));
+        this.debugCmdId = x[2];
+        if (l == 4) {
+            this.action = x[3];
+        }
+    };
+    UPDU_Debug.prototype.toBuffer = function () {
+        var l = (this.action) ? 4 : 3;
+        var y = buffer_1.Buffer.allocUnsafe(l);
+        this.header.toBuffer().copy(y);
+        y[2] = this.debugCmdId;
+        if (l == 4) {
+            y[3] = this.action;
+        }
+        return y;
+    };
+    return UPDU_Debug;
+}(utils_1.PDUTemplate));
+exports.UPDU_Debug = UPDU_Debug;
 exports.createUPDU = function (x) {
     var buf;
     if (typeof (x) == 'string') {
@@ -1049,7 +1303,7 @@ exports.createUPDU = function (x) {
         case constants_1.E_UPDUType.HEART_BEAT:
             updu = new UPDU_HeartBeat(buf);
             break;
-        case constants_1.E_UPDUType.ACTIVITY_OR_CONFIG:
+        case constants_1.E_UPDUType.ACTIVITY_CONFIG_SHOCKDETECT:
             switch (buf[5]) {
                 case constants_1.E_Tag.ACTIVITY:
                     updu = new UPDU_ActivityStatus(buf);
@@ -1068,8 +1322,8 @@ exports.createUPDU = function (x) {
         case constants_1.E_UPDUType.DEBUG:
             updu = new UPDU_Debug(buf);
             break;
-        case constants_1.E_UPDUType.GEOLOC_START:
-            updu = new UPDU_GeolocStart(buf);
+        case constants_1.E_UPDUType.EVENT_MESSAGE:
+            updu = new UPDU_EventMessage(buf);
             break;
         default:
             updu = undefined;

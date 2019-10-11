@@ -18,7 +18,11 @@ import {
 // *** CPDU_ParamConfigFlags *************************************
 // ***************************************************************
 
-export interface I_CPDU_ParamConfigFlags {                 // 1 byte
+export interface I_CPDU_ParamConfigFlags {                 // 2 bytes
+    AsymmetricBLEPairingRejected:         boolean,         // bit 11 
+    NewJoinReqOnLeavingOffMode:           boolean,         // bit 10
+    MotionEndMessageEnabled:              boolean,         // bit 9
+    MotionStartMessageEnabled:            boolean,         // bit 8
     LedBlinksOnGPSFix:                    boolean,         // bit 7
     WiFiScanWhenGeolocStarts:             boolean,         // bit 6
     BLEAdvertisingActive:                 boolean,         // bit 5
@@ -29,6 +33,38 @@ export interface I_CPDU_ParamConfigFlags {                 // 1 byte
     FramePendingMechanismActive:          boolean,         // bit 0
 }
 export class CPDU_ParamConfigFlags extends PDUTemplate<I_CPDU_ParamConfigFlags> implements I_CPDU_ParamConfigFlags {
+
+    // *** AsymmetricBLEPairingRejected ***
+    set AsymmetricBLEPairingRejected(x:boolean) {
+        this._props.AsymmetricBLEPairingRejected = x;
+    }
+    get AsymmetricBLEPairingRejected():boolean {
+        return this._props.AsymmetricBLEPairingRejected;
+    }
+
+        // *** NewJoinReqOnLeavingOffMode ***
+    set NewJoinReqOnLeavingOffMode(x:boolean) {
+        this._props.NewJoinReqOnLeavingOffMode = x;
+    }
+    get NewJoinReqOnLeavingOffMode():boolean {
+        return this._props.NewJoinReqOnLeavingOffMode;
+    }
+
+    // *** MotionEndMessageEnabled ***
+    set MotionEndMessageEnabled(x:boolean) {
+        this._props.MotionEndMessageEnabled = x;
+    }
+    get MotionEndMessageEnabled():boolean {
+        return this._props.MotionEndMessageEnabled;
+    }
+
+    // *** MotionStartMessageEnabled ***
+    set MotionStartMessageEnabled(x:boolean) {
+        this._props.MotionStartMessageEnabled = x;
+    }
+    get MotionStartMessageEnabled():boolean {
+        return this._props.MotionStartMessageEnabled;
+    }
 
     // *** LedBlinksOnGPSFix ***
     set LedBlinksOnGPSFix(x:boolean) {
@@ -95,27 +131,35 @@ export class CPDU_ParamConfigFlags extends PDUTemplate<I_CPDU_ParamConfigFlags> 
     }
 
     setFromValue(x:number):void {
-        assert.ok(isUint8(x), 'CPDU_ParamConfigFlags.setFromValue(): Invalid value!' );
-        this.LedBlinksOnGPSFix              = (x & 0b10000000) === 0b10000000;
-        this.WiFiScanWhenGeolocStarts       = (x &  0b1000000) ===  0b1000000;
-        this.BLEAdvertisingActive           = (x &   0b100000) ===   0b100000;
-        this.WiFiPayloadCyphered            = (x &    0b10000) ===    0b10000;
-        this.ConfigReqsAcknoledged          = (x &     0b1000) ===     0b1000;
-        this.DoubleShortButtonPressForSOS   = (x &      0b100) ===      0b100;
-        this.LongButtonPressToSwitchOff     = (x &       0b10) ===       0b10;
-        this.FramePendingMechanismActive    = (x &        0b1) ===        0b1;
+        assert.ok(isUint16(x), 'CPDU_ParamConfigFlags.setFromValue(): Invalid value!' );
+        this.AsymmetricBLEPairingRejected   = (x & 0b100000000000) === 0b100000000000; 
+        this.NewJoinReqOnLeavingOffMode     = (x &  0b10000000000) ===  0b10000000000;
+        this.MotionEndMessageEnabled        = (x &   0b1000000000) ===   0b1000000000;
+        this.MotionStartMessageEnabled      = (x &    0b100000000) ===    0b100000000;
+        this.LedBlinksOnGPSFix              = (x &     0b10000000) ===     0b10000000;
+        this.WiFiScanWhenGeolocStarts       = (x &      0b1000000) ===      0b1000000;
+        this.BLEAdvertisingActive           = (x &       0b100000) ===       0b100000;
+        this.WiFiPayloadCyphered            = (x &        0b10000) ===        0b10000;
+        this.ConfigReqsAcknoledged          = (x &         0b1000) ===         0b1000;
+        this.DoubleShortButtonPressForSOS   = (x &          0b100) ===          0b100;
+        this.LongButtonPressToSwitchOff     = (x &           0b10) ===           0b10;
+        this.FramePendingMechanismActive    = (x &            0b1) ===            0b1;
     }
 
     toValue():number {
         let y: number = 0;
-        y |= this.LedBlinksOnGPSFix            ? 0b10000000 : 0;
-        y |= this.WiFiScanWhenGeolocStarts     ?  0b1000000 : 0;
-        y |= this.BLEAdvertisingActive         ?   0b100000 : 0;
-        y |= this.WiFiPayloadCyphered          ?    0b10000 : 0;
-        y |= this.ConfigReqsAcknoledged        ?     0b1000 : 0;
-        y |= this.DoubleShortButtonPressForSOS ?      0b100 : 0;
-        y |= this.LongButtonPressToSwitchOff   ?       0b10 : 0;
-        y |= this.FramePendingMechanismActive  ?        0b1 : 0;
+        y |= this.AsymmetricBLEPairingRejected ? 0b100000000000 : 0;
+        y |= this.NewJoinReqOnLeavingOffMode   ?  0b10000000000 : 0;
+        y |= this.MotionEndMessageEnabled      ?   0b1000000000 : 0;
+        y |= this.MotionStartMessageEnabled    ?    0b100000000 : 0;
+        y |= this.LedBlinksOnGPSFix            ?     0b10000000 : 0;
+        y |= this.WiFiScanWhenGeolocStarts     ?      0b1000000 : 0;
+        y |= this.BLEAdvertisingActive         ?       0b100000 : 0;
+        y |= this.WiFiPayloadCyphered          ?        0b10000 : 0;
+        y |= this.ConfigReqsAcknoledged        ?         0b1000 : 0;
+        y |= this.DoubleShortButtonPressForSOS ?          0b100 : 0;
+        y |= this.LongButtonPressToSwitchOff   ?           0b10 : 0;
+        y |= this.FramePendingMechanismActive  ?            0b1 : 0;
         return y;
     }
 
@@ -189,7 +233,7 @@ export class CPDU_ParamConfirmedUlBitmap extends PDUTemplate<I_CPDU_ParamConfirm
         this.Position            = ((x >> E_UPDUType.POSITION      ) & 1) === 1;
         this.EnergyStatus        = ((x >> E_UPDUType.ENERGY_STATUS ) & 1) === 1;
         this.HeartBeat           = ((x >> E_UPDUType.HEART_BEAT    ) & 1) === 1;
-        this.ActivityOrConfig    = ((x >> E_UPDUType.ACTIVITY_OR_CONFIG) & 1) === 1;
+        this.ActivityOrConfig    = ((x >> E_UPDUType.ACTIVITY_CONFIG_SHOCKDETECT) & 1) === 1;
         this.Shutdown            = ((x >> E_UPDUType.SHUTDOWN      ) & 1) === 1;
     }
 
@@ -199,7 +243,7 @@ export class CPDU_ParamConfirmedUlBitmap extends PDUTemplate<I_CPDU_ParamConfirm
         y |= this.Position          ? ( 1 << E_UPDUType.POSITION )           : 0; 
         y |= this.EnergyStatus      ? ( 1 << E_UPDUType.ENERGY_STATUS )      : 0; 
         y |= this.HeartBeat         ? ( 1 << E_UPDUType.HEART_BEAT )         : 0;
-        y |= this.ActivityOrConfig  ? ( 1 << E_UPDUType.ACTIVITY_OR_CONFIG ) : 0;
+        y |= this.ActivityOrConfig  ? ( 1 << E_UPDUType.ACTIVITY_CONFIG_SHOCKDETECT ) : 0;
         y |= this.Shutdown          ? ( 1 << E_UPDUType.SHUTDOWN )           : 0;
         return y;
     }
@@ -212,9 +256,9 @@ export class CPDU_ParamConfirmedUlBitmap extends PDUTemplate<I_CPDU_ParamConfirm
 
 export interface I_CPDU_Status {                          // 1 byte
     operatingMode:           E_OperatingMode, // bit 7-5
-    _operatingMode?:      string,
+    _operatingMode?:         string,
     sosState:                boolean,         // bit 4
-    trackingState:           boolean,         // bit 3
+    reservedBit:             boolean,         // bit 3
     movingState:             boolean,         // bit 2
     periodicPositionMessage: boolean,         // bit 1
     positionOnDemandMessage: boolean,         // bit 0
@@ -239,11 +283,11 @@ export class CPDU_Status extends PDUTemplate<I_CPDU_Status> implements I_CPDU_St
         return this._props.sosState;
     }
 
-    // *** trackingState ***
-    set trackingState(x:boolean) {
+    // *** reservedBit ***
+    set reservedBit(x:boolean) {
         this._props.trackingState = x;
     }
-    get trackingState():boolean {
+    get reservedBit():boolean {
         return this._props.trackingState;
     }
 
@@ -275,7 +319,7 @@ export class CPDU_Status extends PDUTemplate<I_CPDU_Status> implements I_CPDU_St
         assert.ok(isUint8(x), 'Status.setFromValue(): Invalid value!' );
         this.operatingMode            = (x >>> 5);
         this.sosState                 = (x & 0b10000) === 0b10000; 
-        this.trackingState            = (x &  0b1000) ===  0b1000;
+        this.reservedBit              = (x &  0b1000) ===  0b1000;
         this.movingState              = (x &   0b100) ===   0b100;
         this.periodicPositionMessage  = (x &    0b10) ===    0b10;
         this.positionOnDemandMessage  = (x &     0b1) ===     0b1;
@@ -285,7 +329,7 @@ export class CPDU_Status extends PDUTemplate<I_CPDU_Status> implements I_CPDU_St
         let y: number = 0;
         y  = this.operatingMode << 5;
         y |= this.sosState                ? 0b10000 : 0;
-        y |= this.trackingState           ?  0b1000 : 0;
+        y |= this.reservedBit             ?  0b1000 : 0;
         y |= this.movingState             ?   0b100 : 0;
         y |= this.periodicPositionMessage ?    0b10 : 0;
         y |= this.positionOnDemandMessage ?     0b1 : 0;
@@ -298,13 +342,13 @@ export class CPDU_Status extends PDUTemplate<I_CPDU_Status> implements I_CPDU_St
 // *** CPDU_Header ****************************************************
 // ***************************************************************
 
-export interface I_CPDU_Header {                          // 5 bytes
-    type:                    E_UPDUType,     // 1 byte
+export interface I_CPDU_Header {              // 5 bytes
+    type:                    E_UPDUType,      // 1 byte
     _type?:                  string,
-    status:                  CPDU_Status,          // 1 byte
-    battery:                 number|string,          // 1 byte lo=2.8, hi=4.2, nbits=8, nresv=2, step=5.5mV, 
+    status:                  CPDU_Status,     // 1 byte
+    battery:                 number|string,   // 1 byte lo=2.8, hi=4.2, nbits=8, nresv=2, step=5.5mV, 
     temperature:             number,          // 1 byte lo=-44, hi=85,  nbits=8, nresv=0, step=0.5C
-    ackToken:                number,                       // 4 bits [7-4]
+    ackToken:                number,          // 4 bits [7-4]
     optData:                 number|E_PositionInformation, // 4 bits [3-0]
     _optData?:               string,
 }
@@ -422,9 +466,9 @@ export class CPDU_Header extends PDUTemplate<I_CPDU_Header> implements I_CPDU_He
 
 // TODO: To make it generic for UL and DL!
 
-export interface I_CPDU_UlHeaderShort {                 // 2 bytes
-    type:                    E_UPDUType,   // 1 byte
-    _type?:               string,        
+export interface I_CPDU_UlHeaderShort {     // 2 bytes
+    type:                    E_UPDUType,    // 1 byte
+    _type?:                  string,        
     ackToken:                number,        // 4 bits [7-4]
     optData:                 number,        // 4 bits [3-0]
 }
@@ -474,15 +518,15 @@ export class CPDU_UlHeaderShort extends PDUTemplate<I_CPDU_UlHeaderShort> implem
 }
 
 // ***************************************************************
-// *** CPDU_DlHeaderShort *********************************************
+// *** CPDU_DlHeaderShort ****************************************
 // ***************************************************************
 
 // TODO: To make it generic for UL and DL!
 
-export interface I_CPDU_DlHeaderShort {                 // 2 bytes
-    type:                    E_DPDUType,   // 1 byte
-    _type?:               string,
-    ackToken:                number,        // 4 bits [7-4]
+export interface I_CPDU_DlHeaderShort {    // 2 bytes
+    type:                  E_DPDUType,     // 1 byte
+    _type?:                string,
+    ackToken:              number,         // 4 bits [7-4]
 }
 export class CPDU_DlHeaderShort extends PDUTemplate<I_CPDU_DlHeaderShort> implements I_CPDU_DlHeaderShort {
 
@@ -657,7 +701,7 @@ export class CPDU_Parameter extends PDUTemplate<I_CPDU_Parameter> implements I_C
                 this.value = new CPDU_ParamConfirmedUlBitmap((x[3] << 8) + x[4]);
                 break;
             case E_ParameterId.CONFIG_FLAGS:
-                this.value = new CPDU_ParamConfigFlags(x[4]);
+                this.value = new CPDU_ParamConfigFlags((x[3] << 8) + x[4]);
                 break;
             default:
                 this.value = (x[1] << 24) + (x[2] << 16) + (x[3] << 8) + x[4];

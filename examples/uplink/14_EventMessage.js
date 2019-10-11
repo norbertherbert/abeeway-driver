@@ -1,16 +1,16 @@
 const {
-    UPDU_ActivityStatus, 
+    UPDU_EventMessage, 
     CPDU_Header, E_UPDUType,
     CPDU_Status, E_OperatingMode,
-    E_Tag,
+    E_EventValue,
 } = require('../../dist/abeeway-driver');
 // if you use the module from the public npm repository use require('abeeway-driver') instead.
 
-let activityStatus = new UPDU_ActivityStatus ({
+let eventMessage = new UPDU_EventMessage ({
     header: new CPDU_Header({
-        type:         E_UPDUType.ACTIVITY_OR_CONFIG,
+        type:         E_UPDUType.EVENT_MESSAGE,
         status:       new CPDU_Status({
-            operatingMode:           E_OperatingMode.ACTIVITY_TRACKING,
+            operatingMode:           E_OperatingMode.MOTION_TRACKING,
             sosState:                false,
             trackingState:           false,
             movingState:             false,
@@ -22,13 +22,12 @@ let activityStatus = new UPDU_ActivityStatus ({
         ackToken:     0x5,
         optData:      0,
     }),
-    tag:           E_Tag.ACTIVITY,
-    activityCount: 123,
+    eventValue:       E_EventValue.BLE_CONNECTED,
+    acceleration:     [-10, 123, -2220],
 });
-console.log(activityStatus.toJSON());
-console.log(activityStatus.toHexString());
+console.log(eventMessage.toJSON());
+console.log(eventMessage.toHexString());
 
-let buffer = activityStatus.toBuffer();
-let activityStatus1 = new UPDU_ActivityStatus(buffer);
-console.log(activityStatus1.toJSON());
-
+let buffer = eventMessage.toBuffer();
+let eventMessage1 = new UPDU_EventMessage(buffer);
+console.log(eventMessage1.toJSON());
