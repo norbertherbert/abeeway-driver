@@ -127,7 +127,7 @@ export enum E_ParameterId {
     MOTION_SENSITIVITY           = 0x14, // %, 0-100
     SHOCK_DETECTION              = 0x15, // %, 0-100
     PERIODIC_ACTIVITY_PERIOD     = 0x16, // s, 0 | 1800-86400
-    MOTION_DURATION              = 0x17, // 0x17
+    MOTION_DURATION              = 0x17, // 60..3600S
     RESERVED_18                  = 0x18,
     RESERVED_19                  = 0x19,
     BLE_RSSI_FILTER              = 0x1a, // -100..-40, RSSI value to filter BLE beacons with BLE-GPS geolocation mode. 

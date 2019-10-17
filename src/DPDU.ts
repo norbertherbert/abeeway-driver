@@ -98,7 +98,7 @@ export class DPDU_SetMode extends PDUTemplate<I_DPDU_SetMode> implements I_DPDU_
 export interface I_DPDU_ReqConf {                       // 2..22
     header:                  CPDU_DlHeaderShort,        // 2 bytes
     paramIDs:                E_ParameterId[],  // 0..20 bytes
-    _paramIDs?:           string[],
+    _paramIDs?:              string[],
 }
 export class DPDU_ReqConf extends PDUTemplate<I_DPDU_ReqConf> implements I_DPDU_ReqConf {
 
@@ -186,7 +186,7 @@ export class DPDU_SOSMode extends PDUTemplate<I_DPDU_SOSMode> implements I_DPDU_
 
 export interface I_DPDU_SetParam {                   // 7..27
     header:                  CPDU_DlHeaderShort,     // 2 bytes
-    params:                  CPDU_Parameter[]      // n x 5 bytes, n= 1..5
+    params:                  CPDU_Parameter[]        // n x 5 bytes, n= 1..5
 }
 export class DPDU_SetParam extends PDUTemplate<I_DPDU_SetParam> implements I_DPDU_SetParam {
    
@@ -240,10 +240,10 @@ export class DPDU_SetParam extends PDUTemplate<I_DPDU_SetParam> implements I_DPD
 // *** DPDU_DebugCmd *********************************************
 // ***************************************************************
 
-export interface I_DPDU_DebugCmd {                   // 3 bytes
+export interface I_DPDU_DebugCmd {                   // 2 bytes
     header:                  CPDU_DlHeaderShort,     // 2 bytes
-    debugCmd:                E_DebugCmd,      // 1 byte
-    _debugCmd?:            string,
+    debugCmd:                E_DebugCmd,             // 1 byte
+    _debugCmd?:              string,
 }
 export class DPDU_DebugCmd extends PDUTemplate<I_DPDU_DebugCmd> implements I_DPDU_DebugCmd {
 

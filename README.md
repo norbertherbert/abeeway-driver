@@ -45,7 +45,7 @@ Please note that all enum constants are referred with prefix E_.
 
 ### Use abeeway-driver to decode an uplink message
 ```javascript
-const createUPDU = require('abeeway-driver');
+const { createUPDU } = require('abeeway-driver');
 
 const uplinkPayloadHex = '0781f98350020e000000030f00000001';
 let pdu = createUPDU(uplinkPayloadHex);
