@@ -711,7 +711,7 @@ export class CPDU_Parameter extends PDUTemplate<I_CPDU_Parameter> implements I_C
                     if ( ((x < C_ParamDescriptions[paramKey].min ) || (x > C_ParamDescriptions[paramKey].max )) && (x!==0) ) {
                         throw (new Error(ERR_MSG));
                     }
-                    this._props._value = x;
+                    this._props.value = x;
                     break;
                 default:
                     if ((x < C_ParamDescriptions[paramKey].min ) || (x > C_ParamDescriptions[paramKey].max )) {

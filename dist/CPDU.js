@@ -765,7 +765,7 @@ var CPDU_Parameter = /** @class */ (function (_super) {
                         if (((x < constants_1.C_ParamDescriptions[paramKey].min) || (x > constants_1.C_ParamDescriptions[paramKey].max)) && (x !== 0)) {
                             throw (new Error(ERR_MSG));
                         }
-                        this._props._value = x;
+                        this._props.value = x;
                         break;
                     default:
                         if ((x < constants_1.C_ParamDescriptions[paramKey].min) || (x > constants_1.C_ParamDescriptions[paramKey].max)) {
