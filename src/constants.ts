@@ -208,7 +208,7 @@ export const C_ParamDescriptions = {
     },
 
     PERIODIC_ACTIVITY_PERIOD:  { code: 0x16, name: 'PERIODIC_ACTIVITY_PERIOD',  unit:'s',  min: 1800,    max: 86400,
-        description: 'Period of the periodic activity report. The value must be a multiple of 6. When set to 0, the reporting is disabled. [1800..86400]',
+        description: 'Period of the periodic activity report. The value must be a multiple of 6. When set to 0, the reporting is disabled. [0, 1800..86400]',
     },
 
     MOTION_DURATION:  { code: 0x17, name: 'MOTION_DURATION',  unit:'s',  min: 60,    max: 3600,

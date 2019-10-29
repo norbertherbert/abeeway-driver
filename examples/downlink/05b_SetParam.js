@@ -29,7 +29,7 @@ msg = new DPDU_SetParam({
         }),
         new CPDU_Parameter({
             id: E_ParameterId.GPS_TIMEOUT,
-            value: 3,
+            value: 30,
         }),
         new CPDU_Parameter({
             id: E_ParameterId.AGPS_TIMEOUT,

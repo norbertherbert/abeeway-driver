@@ -727,19 +727,55 @@ var CPDU_Parameter = /** @class */ (function (_super) {
         },
         // *** value ***
         set: function (x) {
-            this._props.value = x;
-            if (typeof x === 'number') {
+            var paramKey = constants_1.E_ParameterId[this.id];
+            var ERR_MSG = 'Parameter ' + paramKey + ' has invalid value.';
+            if (x instanceof CPDU_ParamConfirmedUlBitmap) {
+                assert.ok((paramKey === 'CONFIRMED_UL_BITMAP'), ERR_MSG);
+                this._props.value = x;
+            }
+            else if (x instanceof CPDU_ParamConfigFlags) {
+                assert.ok((paramKey === 'CONFIG_FLAGS'), ERR_MSG);
+                this._props.value = x;
+            }
+            else if ((typeof x === 'string')) {
+                assert.ok((paramKey === 'BLE_VERSION') || (paramKey === 'FIRMWARE_VERSION'), ERR_MSG);
+                this._props.value = x;
+            }
+            else if (typeof x === 'number') {
+                assert.ok(x === Math.floor(x));
                 switch (this.id) {
                     case constants_1.E_ParameterId.GEOLOC_SENSOR:
+                        assert.ok(x in constants_1.E_Param_GeolocSensor, ERR_MSG);
+                        this._props.value = x;
                         this._props._value = constants_1.E_Param_GeolocSensor[x];
                         break;
                     case constants_1.E_ParameterId.GEOLOC_METHOD:
+                        assert.ok(x in constants_1.E_Param_GeolocMethod, ERR_MSG);
+                        this._props.value = x;
                         this._props._value = constants_1.E_Param_GeolocMethod[x];
                         break;
                     case constants_1.E_ParameterId.TRANSMIT_STRAT:
+                        assert.ok(x in constants_1.E_Param_TransmitStrat, ERR_MSG);
+                        this._props.value = x;
                         this._props._value = constants_1.E_Param_TransmitStrat[x];
                         break;
+                    case constants_1.E_ParameterId.PERIODIC_POS_PERIOD:
+                    case constants_1.E_ParameterId.PERIODIC_ACTIVITY_PERIOD:
+                    case constants_1.E_ParameterId.PW_STAT_PERIOD:
+                        if (((x < constants_1.C_ParamDescriptions[paramKey].min) || (x > constants_1.C_ParamDescriptions[paramKey].max)) && (x !== 0)) {
+                            throw (new Error(ERR_MSG));
+                        }
+                        this._props._value = x;
+                        break;
+                    default:
+                        if ((x < constants_1.C_ParamDescriptions[paramKey].min) || (x > constants_1.C_ParamDescriptions[paramKey].max)) {
+                            throw (new Error(ERR_MSG));
+                        }
+                        this._props.value = x;
                 }
+            }
+            else {
+                throw (new Error(ERR_MSG));
             }
         },
         enumerable: true,
