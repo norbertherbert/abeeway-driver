@@ -239,13 +239,13 @@ var CPDU_ParamConfirmedUlBitmap = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(CPDU_ParamConfirmedUlBitmap.prototype, "ActivityOrConfig", {
+    Object.defineProperty(CPDU_ParamConfirmedUlBitmap.prototype, "ActivityConfigShock", {
         get: function () {
-            return this._props.ActivityOrConfig;
+            return this._props.ActivityConfigShock;
         },
-        // *** ActivityOrConfig ***
+        // *** ActivityConfigShock ***
         set: function (x) {
-            this._props.ActivityOrConfig = x;
+            this._props.ActivityConfigShock = x;
         },
         enumerable: true,
         configurable: true
@@ -267,7 +267,7 @@ var CPDU_ParamConfirmedUlBitmap = /** @class */ (function (_super) {
         this.Position = ((x >> constants_1.E_UPDUType.POSITION) & 1) === 1;
         this.EnergyStatus = ((x >> constants_1.E_UPDUType.ENERGY_STATUS) & 1) === 1;
         this.HeartBeat = ((x >> constants_1.E_UPDUType.HEART_BEAT) & 1) === 1;
-        this.ActivityOrConfig = ((x >> constants_1.E_UPDUType.ACTIVITY_CONFIG_SHOCKDETECT) & 1) === 1;
+        this.ActivityConfigShock = ((x >> constants_1.E_UPDUType.ACTIVITY_CONFIG_SHOCKDETECT) & 1) === 1;
         this.Shutdown = ((x >> constants_1.E_UPDUType.SHUTDOWN) & 1) === 1;
     };
     CPDU_ParamConfirmedUlBitmap.prototype.toValue = function () {
@@ -276,7 +276,7 @@ var CPDU_ParamConfirmedUlBitmap = /** @class */ (function (_super) {
         y |= this.Position ? (1 << constants_1.E_UPDUType.POSITION) : 0;
         y |= this.EnergyStatus ? (1 << constants_1.E_UPDUType.ENERGY_STATUS) : 0;
         y |= this.HeartBeat ? (1 << constants_1.E_UPDUType.HEART_BEAT) : 0;
-        y |= this.ActivityOrConfig ? (1 << constants_1.E_UPDUType.ACTIVITY_CONFIG_SHOCKDETECT) : 0;
+        y |= this.ActivityConfigShock ? (1 << constants_1.E_UPDUType.ACTIVITY_CONFIG_SHOCKDETECT) : 0;
         y |= this.Shutdown ? (1 << constants_1.E_UPDUType.SHUTDOWN) : 0;
         return y;
     };
@@ -737,12 +737,10 @@ var CPDU_Parameter = /** @class */ (function (_super) {
                 assert.ok((paramKey === 'CONFIG_FLAGS'), ERR_MSG);
                 this._props.value = x;
             }
-            else if ((typeof x === 'string')) {
-                assert.ok((paramKey === 'BLE_VERSION') || (paramKey === 'FIRMWARE_VERSION'), ERR_MSG);
-                this._props.value = x;
-            }
-            else if (typeof x === 'number') {
-                assert.ok(x === Math.floor(x));
+            else if (!isNaN(x)) {
+                if (typeof x === 'string')
+                    x = +x;
+                assert.ok(x === Math.floor(x), ERR_MSG);
                 switch (this.id) {
                     case constants_1.E_ParameterId.GEOLOC_SENSOR:
                         assert.ok(x in constants_1.E_Param_GeolocSensor, ERR_MSG);
@@ -773,6 +771,10 @@ var CPDU_Parameter = /** @class */ (function (_super) {
                         }
                         this._props.value = x;
                 }
+            }
+            else if ((typeof x) === 'string') {
+                assert.ok((paramKey === 'BLE_VERSION') || (paramKey === 'FIRMWARE_VERSION'), ERR_MSG);
+                this._props.value = x;
             }
             else {
                 throw (new Error(ERR_MSG));

@@ -12,7 +12,7 @@ let configReport = new UPDU_ConfigReport ({
     header: new CPDU_Header({
         type:         E_UPDUType.ACTIVITY_CONFIG_SHOCKDETECT,
         status:       new CPDU_Status({
-            operatingMode:           E_OperatingMode.ACTIVITY_TRACKING,
+            operatingMode:           E_OperatingMode.ACTIVITY_MONITORING,
             sosState:                false,
             trackingState:           false,
             movingState:             true,

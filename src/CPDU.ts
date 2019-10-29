@@ -174,7 +174,7 @@ export interface I_CPDU_ParamConfirmedUlBitmap { // 2 bytes
     Position:           boolean,                // bit 3, E_UPDUType.POSITION
     EnergyStatus:       boolean,                // bit 4, E_UPDUType.ENERGY_STATUS
     HeartBeat:          boolean,                // bit 5, E_UPDUType.HEART_BEAT
-    ActivityOrConfig:   boolean,                // bit 7, E_UPDUType.ACTIVITY_OR_CONFIG
+    ActivityConfigShock:   boolean,                // bit 7, E_UPDUType.ACTIVITY_OR_CONFIG
     Shutdown:           boolean,                // bit 9, E_UPDUType.SHUTDOWN
 }
 export class CPDU_ParamConfirmedUlBitmap extends PDUTemplate<I_CPDU_ParamConfirmedUlBitmap> implements I_CPDU_ParamConfirmedUlBitmap {
@@ -211,12 +211,12 @@ export class CPDU_ParamConfirmedUlBitmap extends PDUTemplate<I_CPDU_ParamConfirm
         return this._props.HeartBeat;
     }
 
-    // *** ActivityOrConfig ***
-    set ActivityOrConfig(x:boolean) {
-        this._props.ActivityOrConfig = x;
+    // *** ActivityConfigShock ***
+    set ActivityConfigShock(x:boolean) {
+        this._props.ActivityConfigShock = x;
     }
-    get ActivityOrConfig():boolean {
-        return this._props.ActivityOrConfig;
+    get ActivityConfigShock():boolean {
+        return this._props.ActivityConfigShock;
     }
 
     // *** Shutdown ***
@@ -233,18 +233,18 @@ export class CPDU_ParamConfirmedUlBitmap extends PDUTemplate<I_CPDU_ParamConfirm
         this.Position            = ((x >> E_UPDUType.POSITION      ) & 1) === 1;
         this.EnergyStatus        = ((x >> E_UPDUType.ENERGY_STATUS ) & 1) === 1;
         this.HeartBeat           = ((x >> E_UPDUType.HEART_BEAT    ) & 1) === 1;
-        this.ActivityOrConfig    = ((x >> E_UPDUType.ACTIVITY_CONFIG_SHOCKDETECT) & 1) === 1;
+        this.ActivityConfigShock = ((x >> E_UPDUType.ACTIVITY_CONFIG_SHOCKDETECT) & 1) === 1;
         this.Shutdown            = ((x >> E_UPDUType.SHUTDOWN      ) & 1) === 1;
     }
 
     toValue():number {
         let y: number = 0;
-        y |= this.FramePending      ? ( 1 << E_UPDUType.FRAME_PENDING )      : 0; 
-        y |= this.Position          ? ( 1 << E_UPDUType.POSITION )           : 0; 
-        y |= this.EnergyStatus      ? ( 1 << E_UPDUType.ENERGY_STATUS )      : 0; 
-        y |= this.HeartBeat         ? ( 1 << E_UPDUType.HEART_BEAT )         : 0;
-        y |= this.ActivityOrConfig  ? ( 1 << E_UPDUType.ACTIVITY_CONFIG_SHOCKDETECT ) : 0;
-        y |= this.Shutdown          ? ( 1 << E_UPDUType.SHUTDOWN )           : 0;
+        y |= this.FramePending        ? ( 1 << E_UPDUType.FRAME_PENDING )      : 0; 
+        y |= this.Position            ? ( 1 << E_UPDUType.POSITION )           : 0; 
+        y |= this.EnergyStatus        ? ( 1 << E_UPDUType.ENERGY_STATUS )      : 0; 
+        y |= this.HeartBeat           ? ( 1 << E_UPDUType.HEART_BEAT )         : 0;
+        y |= this.ActivityConfigShock ? ( 1 << E_UPDUType.ACTIVITY_CONFIG_SHOCKDETECT ) : 0;
+        y |= this.Shutdown            ? ( 1 << E_UPDUType.SHUTDOWN )           : 0;
         return y;
     }
 
@@ -684,11 +684,9 @@ export class CPDU_Parameter extends PDUTemplate<I_CPDU_Parameter> implements I_C
         } else if (x instanceof CPDU_ParamConfigFlags) {
             assert.ok((paramKey === 'CONFIG_FLAGS'), ERR_MSG);
             this._props.value = x;
-        } else if ((typeof x === 'string')) {
-            assert.ok((paramKey === 'BLE_VERSION') || (paramKey === 'FIRMWARE_VERSION'), ERR_MSG);
-            this._props.value = x;
-        } else if (typeof x === 'number') {
-            assert.ok( x === Math.floor(x) );
+        } else if (!isNaN(x)) {
+            if (typeof x === 'string') x = +x;
+            assert.ok( x === Math.floor(x), ERR_MSG);
             switch (this.id) {
                 case E_ParameterId.GEOLOC_SENSOR:
                     assert.ok(x in E_Param_GeolocSensor, ERR_MSG);
@@ -719,6 +717,9 @@ export class CPDU_Parameter extends PDUTemplate<I_CPDU_Parameter> implements I_C
                     }
                     this._props.value = x;
             }
+        } else if ( (typeof x) === 'string' ) {
+            assert.ok( (paramKey === 'BLE_VERSION') || (paramKey === 'FIRMWARE_VERSION'), ERR_MSG);
+            this._props.value = x;
         } else {
             throw (new Error(ERR_MSG));
         }

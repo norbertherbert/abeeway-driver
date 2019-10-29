@@ -26,12 +26,12 @@ msg = new DPDU_SetParam({
         new CPDU_Parameter({
             id: E_ParameterId.CONFIRMED_UL_BITMAP,
             value: new CPDU_ParamConfirmedUlBitmap({
-                FramePending:     false,
-                Position:         true,
-                EnergyStatus:     false,
-                HeartBeat:        true,
-                ActivityOrConfig: false,
-                Shutdown:         true,
+                FramePending:        false,
+                Position:            true,
+                EnergyStatus:        false,
+                HeartBeat:           true,
+                ActivityConfigShock: false,
+                Shutdown:            true,
             })
         }),
         new CPDU_Parameter({

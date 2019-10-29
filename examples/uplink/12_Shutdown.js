@@ -9,7 +9,7 @@ let shutdown = new UPDU_Shutdown ({
     header: new CPDU_Header({
         type:         E_UPDUType.SHUTDOWN,
         status:       new CPDU_Status({
-            operatingMode:           E_OperatingMode.ACTIVITY_TRACKING,
+            operatingMode:           E_OperatingMode.ACTIVITY_MONITORING,
             sosState:                false,
             trackingState:           false,
             movingState:             true,

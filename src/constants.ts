@@ -35,7 +35,7 @@ export enum E_OperatingMode {
     MOTION_TRACKING              = 0x01,
     PERMANENT_TRACKING           = 0x02,
     START_END_TRACKING           = 0x03,
-    ACTIVITY_TRACKING            = 0x04,
+    ACTIVITY_MONITORING          = 0x04,
     OFF                          = 0x05,
 }
 

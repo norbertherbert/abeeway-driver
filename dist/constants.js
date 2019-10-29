@@ -37,7 +37,7 @@ var E_OperatingMode;
     E_OperatingMode[E_OperatingMode["MOTION_TRACKING"] = 1] = "MOTION_TRACKING";
     E_OperatingMode[E_OperatingMode["PERMANENT_TRACKING"] = 2] = "PERMANENT_TRACKING";
     E_OperatingMode[E_OperatingMode["START_END_TRACKING"] = 3] = "START_END_TRACKING";
-    E_OperatingMode[E_OperatingMode["ACTIVITY_TRACKING"] = 4] = "ACTIVITY_TRACKING";
+    E_OperatingMode[E_OperatingMode["ACTIVITY_MONITORING"] = 4] = "ACTIVITY_MONITORING";
     E_OperatingMode[E_OperatingMode["OFF"] = 5] = "OFF";
 })(E_OperatingMode = exports.E_OperatingMode || (exports.E_OperatingMode = {}));
 var E_PositionInformation;

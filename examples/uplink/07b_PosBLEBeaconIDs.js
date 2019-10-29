@@ -10,7 +10,7 @@ let posBLEBeaconIDs = new UPDU_PosBLEBeaconIDs ({
     header: new CPDU_Header({
         type:         E_UPDUType.POSITION,
         status:       new CPDU_Status({
-            operatingMode:           E_OperatingMode.ACTIVITY_TRACKING,
+            operatingMode:           E_OperatingMode.ACTIVITY_MONITORING,
             sosState:                false,
             trackingState:           false,
             movingState:             false,
