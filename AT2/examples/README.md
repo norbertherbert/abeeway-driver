@@ -1,21 +1,18 @@
 # How to try the examples
 
-## Install and build the driver
+Make sure that you are in the `AT2` folder
 
 ```bash
-npm install
-npm build
+cd AT2
 ```
 
-The artifacts will be created in the /dist folder
-
-## Try out the nodejs module
+Try out the nodejs module
 
 ```bash
 node examples/driver-as-nodejs-module.js
 ```
 
-## Try out the browser module
+Try out the browser module
 
 ```bash
 # Run the development server
