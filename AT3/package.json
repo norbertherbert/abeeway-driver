@@ -1,0 +1,15 @@
+{
+  "name": "asset-tracker-3",
+  "version": "3.2.24",
+  "description": "abeeway asset tracker AT3 js driver",
+  "scripts": {
+    "build": "webpack",
+    "serve": "webpack serve --port 8080 --mode development"
+  },
+  "devDependencies": {
+    "path": "^0.12.7",
+    "webpack": "^5.105.4",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.3"
+  }
+}
