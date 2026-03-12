@@ -1,12 +1,12 @@
 # Asset Tracker Driver v3
 
-Make sure that you are in the `AT3` folder
+Make sure you are in the `AT3` folder:
 
 ```bash
 cd AT3
 ```
 
-Install dependencies
+Install dependencies:
 
 ```bash
 npm install
@@ -14,33 +14,26 @@ npm install
 
 ## Build
 
-Build all drivers (UMD + ESM):
+Build all artifacts:
 
 ```bash
 npm run build
 ```
 
-Build the ChirpStack codec bundle only:
+The build outputs are written to the `/dist` folder:
 
-```bash
-npm run build:chirpstack
-```
-
-The artifacts will be created in the `/dist` folder:
-
-| File | Format | Usage |
-|---|---|---|
-| `abw-at3-drv.js` | UMD | Node.js / browser |
-| `abw-at3-drv-min.js` | UMD minified | Node.js / browser |
-| `abw-at3-drv.mjs` | ESM | ES modules |
-| `abw-at3-drv-min.mjs` | ESM minified | ES modules |
-| `abw-at3-drv-chirpstack.js` | UMD + global shim | ChirpStack codec |
+| File | Format | Intended usage |
+| --- | --- | --- |
+| `abw-at3-drv.js` | UMD, minified | General-purpose build for CommonJS/Node.js and direct browser script usage |
+| `abw-at3-drv-src.js` | UMD, non-minified | Same as above, but easier to inspect and debug |
+| `abw-at3-drv.mjs` | ESM, minified | ES module build for `import`-based usage in browsers or modern runtimes |
+| `abw-at3-drv-chirpstack.js` | UMD, minified, with ChirpStack global function shim | ChirpStack codec script |
 
 ## ChirpStack Integration
 
 Upload `dist/abw-at3-drv-chirpstack.js` to ChirpStack:
 
-```
+```txt
 Device Profiles → <your profile> → Codec → Custom JavaScript codec functions → paste → Submit
 ```
 

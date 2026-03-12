@@ -4,10 +4,12 @@
 
 Use the compiled artifacts from the `AT2/dist` folder:
 
-- `abw-at2-drv.js` - CommonJS module
-- `abw-at2-drv-min.js` - Minimized CommonJS module
-- `abw-at2-drv.mjs` - ECMAScript module (for browsers)
-- `abw-at2-drv-min.js` - ECMAScript module (for browsers)
+| File | Format | Intended usage |
+| --- | --- | --- |
+| `abw-at2-drv.js` | UMD, minified | General-purpose build for CommonJS/Node.js and direct browser script usage |
+| `abw-at2-drv-src.js` | UMD, non-minified | Same as above, but easier to inspect and debug |
+| `abw-at2-drv.mjs` | ESM, minified | ES module build for `import`-based usage in browsers or modern runtimes |
+| `abw-at2-drv-chirpstack.js` | UMD, minified, with ChirpStack global function shim | ChirpStack codec script |
 
 See example usage patterns in the `AT2/examples` folder
 
@@ -15,9 +17,11 @@ See example usage patterns in the `AT2/examples` folder
 
 Use the compiled artifacts from the `AT2/dist` folder:
 
-- `abw-at3-drv.js` - CommonJS module
-- `abw-at3-drv-min.js` - Minimized CommonJS module
-- `abw-at3-drv.mjs` - ECMAScript module (for browsers)
-- `abw-at3-drv-min.js` - ECMAScript module (for browsers)
+| File | Format | Intended usage |
+| --- | --- | --- |
+| `abw-at3-drv.js` | UMD, minified | General-purpose build for CommonJS/Node.js and direct browser script usage |
+| `abw-at3-drv-src.js` | UMD, non-minified | Same as above, but easier to inspect and debug |
+| `abw-at3-drv.mjs` | ESM, minified | ES module build for `import`-based usage in browsers or modern runtimes |
+| `abw-at3-drv-chirpstack.js` | UMD, minified, with ChirpStack global function shim | ChirpStack codec script |
 
 See example usage patterns in the `AT3/examples` folder

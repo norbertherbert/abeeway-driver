@@ -1,4 +1,4 @@
-const driver = require("../dist/abw-at3-drv-min.js");
+const driver = require("../dist/abw-at3-drv.js");
 
 function hexToBytes(str){
     var result = [];

@@ -1,15 +1,17 @@
 # How to try the examples
 
-Make sure that you are in the `AT2` folder
-
-```bash
-cd AT2
-```
-
 Try out the nodejs module
 
 ```bash
+cd AT2
 node examples/driver-as-nodejs-module.js
+```
+
+Try out the chirpstack module
+
+```bash
+cd AT2
+node examples/driver-as-chirpstack-module.js
 ```
 
 Try out the browser module

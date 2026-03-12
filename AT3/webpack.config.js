@@ -1,10 +1,26 @@
 var path = require('path');
+var webpack = require('webpack');
 
 var devServer = {
   static: {
     directory: __dirname,
     publicPath: '/',
   },
+};
+
+var umdConfigSrc = {
+  mode: 'production',
+  entry: './src/index.js',
+  output: {
+    path: path.resolve(__dirname, './dist'),
+    library: 'driver',
+    filename: 'abw-at3-drv-src.js',
+    libraryTarget: 'umd',
+    globalObject: 'this',
+  },
+  optimization: {
+    minimize: false,
+  }
 };
 
 var umdConfig = {
@@ -18,21 +34,6 @@ var umdConfig = {
     globalObject: 'this',
   },
   optimization: {
-    minimize: false,
-  }
-};
-
-var umdConfigMin = {
-  mode: 'production',
-  entry: './src/index.js',
-  output: {
-    path: path.resolve(__dirname, './dist'),
-    library: 'driver',
-    filename: 'abw-at3-drv-min.js',
-    libraryTarget: 'umd',
-    globalObject: 'this',
-  },
-  optimization: {
     minimize: true,
   }
 };
@@ -40,6 +41,7 @@ var umdConfigMin = {
 var esmConfig = {
   mode: 'production',
   entry: './src/index.esm.js',
+  devServer: devServer,
   experiments: {
     outputModule: true,
   },
@@ -52,28 +54,30 @@ var esmConfig = {
     },
   },
   optimization: {
-    minimize: false,
+    minimize: true,
   }
 };
 
-var esmConfigMin = {
+var umdConfigChirpstack = {
   mode: 'production',
-  entry: './src/index.esm.js',
-  devServer: devServer,
-  experiments: {
-    outputModule: true,
-  },
+  entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, './dist'),
-    filename: 'abw-at3-drv-min.mjs',
-    module: true,
-    library: {
-      type: 'module',
-    },
+    filename: 'abw-at3-drv-chirpstack.js',
+    library: 'driver',
+    libraryTarget: 'umd',
+    globalObject: 'this',
   },
+  plugins: [
+    new webpack.BannerPlugin({
+      banner: ';var decodeUplink=function(i){return driver.decodeUplink({bytes:i.bytes,fPort:i.fPort,recvTime:i.recvTime||new Date().toISOString()});};var decodeDownlink=function(i){return driver.decodeDownlink(i);};var encodeDownlink=function(i){return driver.encodeDownlink(i);};',
+      raw: true,
+      footer: true,
+    }),
+  ],
   optimization: {
     minimize: true,
   }
 };
 
-module.exports = [umdConfig, umdConfigMin, esmConfig, esmConfigMin];
+module.exports = [umdConfigSrc, umdConfig, esmConfig, umdConfigChirpstack];
