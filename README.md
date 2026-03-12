@@ -15,7 +15,7 @@ See example usage patterns in the `AT2/examples` folder
 
 ## AT3: Asset Tracker Driver v3
 
-Use the compiled artifacts from the `AT2/dist` folder:
+Use the compiled artifacts from the `AT3/dist` folder:
 
 | File | Format | Intended usage |
 | --- | --- | --- |

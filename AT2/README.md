@@ -40,26 +40,3 @@ Device Profiles → <your profile> → Codec → Custom JavaScript codec functio
 This bundle exposes `decodeUplink`, `decodeDownlink`, and `encodeDownlink` as global
 functions, as required by ChirpStack's JavaScript codec interface.
 
-### Test locally
-
-```bash
-node -e "
-const driver = require('./dist/abw-at2-drv.js');
-const bytes = Array.from(Buffer.from('<payload_hex>', 'hex'));
-const result = driver.decodeUplink({ bytes, fPort: 18 });
-console.log(JSON.stringify(result, null, 2));
-"
-```
-
-### Test in ChirpStack runtime (goja)
-
-```bash
-node -e "
-const vm = require('vm');
-const fs = require('fs');
-const ctx = vm.createContext({});
-vm.runInContext(fs.readFileSync('./dist/abw-at2-drv-chirpstack.js', 'utf8'), ctx);
-const bytes = Array.from(Buffer.from('<payload_hex>', 'hex'));
-console.log(JSON.stringify(ctx.decodeUplink({ bytes, fPort: 18 }), null, 2));
-"
-```
