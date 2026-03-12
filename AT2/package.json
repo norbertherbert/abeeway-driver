@@ -4,6 +4,7 @@
   "description": "abeeway asset tracker AT2 js driver",
   "scripts": {
     "build": "webpack",
+    "build:chirpstack": "webpack --config webpack.chirpstack.config.js",
     "serve": "webpack serve --port 8080 --mode development"
   },
   "devDependencies": {
