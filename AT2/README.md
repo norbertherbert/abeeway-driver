@@ -1,14 +1,9 @@
 # Asset Tracker Driver v2
 
-Make sure you are in the `AT2` folder:
+## Install
 
 ```bash
 cd AT2
-```
-
-Install dependencies:
-
-```bash
 npm install
 ```
 
@@ -17,6 +12,7 @@ npm install
 Build all artifacts:
 
 ```bash
+cd AT2
 npm run build
 ```
 
@@ -31,7 +27,7 @@ The build outputs are written to the `/dist` folder:
 
 ## ChirpStack Integration
 
-To use the driver in ChirpStack, paste the contents of `dist/abw-at2-drv-chirpstack.js` into:
+Upload `dist/abw-at3-drv-chirpstack.js` to ChirpStack:
 
 ```txt
 Device Profiles → <your profile> → Codec → Custom JavaScript codec functions → paste → Submit
@@ -39,4 +35,3 @@ Device Profiles → <your profile> → Codec → Custom JavaScript codec functio
 
 This bundle exposes `decodeUplink`, `decodeDownlink`, and `encodeDownlink` as global
 functions, as required by ChirpStack's JavaScript codec interface.
-

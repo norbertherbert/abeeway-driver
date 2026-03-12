@@ -1,14 +1,9 @@
 # Asset Tracker Driver v3
 
-Make sure you are in the `AT3` folder:
+## Install
 
 ```bash
 cd AT3
-```
-
-Install dependencies:
-
-```bash
 npm install
 ```
 
@@ -17,6 +12,7 @@ npm install
 Build all artifacts:
 
 ```bash
+cd AT3
 npm run build
 ```
 
