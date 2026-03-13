@@ -4,8 +4,6 @@
 
 Published builds are attached to [GitHub Releases](https://github.com/norbertherbert/abeeway-driver/releases) tagged as `at2-v<version>`.
 
-For local development, build the package with `npm ci && npm run build` inside `AT2`. The compiled artifacts are written to `AT2/dist`:
-
 | File | Format | Intended usage |
 | --- | --- | --- |
 | `abw-at2-drv.js` | UMD, minified | General-purpose build for CommonJS/Node.js and direct browser script usage |
@@ -13,13 +11,13 @@ For local development, build the package with `npm ci && npm run build` inside `
 | `abw-at2-drv.mjs` | ESM, minified | ES module build for `import`-based usage in browsers or modern runtimes |
 | `abw-at2-drv-chirpstack.js` | UMD, minified, with ChirpStack global function shim | ChirpStack codec script |
 
+For local development, build the package with `npm ci && npm run build` inside `AT2`. The compiled artifacts are written to `AT2/dist`.
+
 See example usage patterns in the `AT2/examples` folder
 
 ## AT3: Asset Tracker Driver v3
 
 Published builds are attached to [GitHub Releases](https://github.com/norbertherbert/abeeway-driver/releases) tagged as `at3-v<version>`.
-
-For local development, build the package with `npm ci && npm run build` inside `AT3`. The compiled artifacts are written to `AT3/dist`:
 
 | File | Format | Intended usage |
 | --- | --- | --- |
@@ -27,6 +25,8 @@ For local development, build the package with `npm ci && npm run build` inside `
 | `abw-at3-drv-src.js` | UMD, non-minified | Same as above, but easier to inspect and debug |
 | `abw-at3-drv.mjs` | ESM, minified | ES module build for `import`-based usage in browsers or modern runtimes |
 | `abw-at3-drv-chirpstack.js` | UMD, minified, with ChirpStack global function shim | ChirpStack codec script |
+
+For local development, build the package with `npm ci && npm run build` inside `AT3`. The compiled artifacts are written to `AT3/dist`
 
 See example usage patterns in the `AT3/examples` folder
 
