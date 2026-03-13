@@ -2,7 +2,7 @@
 
 ## AT2: Asset Tracker Driver v2
 
-Published builds are attached to GitHub Releases tagged as `at2-v<version>`.
+Published builds are attached to [GitHub Releases](https://github.com/norbertherbert/abeeway-driver/releases) tagged as `at2-v<version>`.
 
 For local development, build the package with `npm ci && npm run build` inside `AT2`. The compiled artifacts are written to `AT2/dist`:
 
@@ -17,7 +17,7 @@ See example usage patterns in the `AT2/examples` folder
 
 ## AT3: Asset Tracker Driver v3
 
-Published builds are attached to GitHub Releases tagged as `at3-v<version>`.
+Published builds are attached to [GitHub Releases](https://github.com/norbertherbert/abeeway-driver/releases) tagged as `at3-v<version>`.
 
 For local development, build the package with `npm ci && npm run build` inside `AT3`. The compiled artifacts are written to `AT3/dist`:
 
